@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议纪要 — 社保公积金缴纳规则与员工关系系统现状梳理</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8effd;
+    --primary-dark: #0f3a8e;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #10b981;
+    --info: #3b82f6;
+    --warn: #f59e0b;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.06);
+    --radius: 10px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* ── Header ─────────────────────────────────────── */
+  .header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1a56db 40%, #2563eb 100%);
+    color: #fff;
+    padding: 48px 0 42px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.12) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,.06) 0%, transparent 50%);
+  }
+  .header-inner {
+    max-width: 960px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1;
+  }
+  .header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: .5px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    margin-bottom: 20px;
+    line-height: 1.35;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px 32px;
+    font-size: 14px;
+    opacity: .92;
+  }
+  .meta-grid dt { color: rgba(255,255,255,.65); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+  .meta-grid dd { font-weight: 500; }
+
+  /* ── Layout ─────────────────────────────────────── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  .content { padding: 36px 0 64px; }
+
+  /* ── Section ────────────────────────────────────── */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .section-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    background: #fafbfc;
+  }
+  .section-head .icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .section-head h2 {
+    font-size: 17px; font-weight: 650; color: var(--text);
+  }
+  .section-body { padding: 22px 24px 24px; }
+
+  /* ── Icon colors ────────────────────────────────── */
+  .ic-blue   { background: #dbeafe; color: #2563eb; }
+  .ic-green  { background: #d1fae5; color: #059669; }
+  .ic-purple { background: #ede9fe; color: #7c3aed; }
+  .ic-orange { background: #ffedd5; color: #ea580c; }
+  .ic-pink   { background: #fce7f3; color: #db2777; }
+  .ic-teal   { background: #ccfbf1; color: #0d9488; }
+  .ic-red    { background: #fee2e2; color: #dc2626; }
+  .ic-slate  { background: #f1f5f9; color: #475569; }
+
+  /* ── Tags ───────────────────────────────────────── */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.7;
+    vertical-align: middle;
+  }
+  .tag-high   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .tag-medium { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+  .tag-low    { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+  .tag-info   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .tag-ok     { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+  .tag-warn   { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+  .tag-danger { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+  /* ── Sub-items ──────────────────────────────────── */
+  .sub-title {
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--primary);
+    margin: 18px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sub-title:first-child { margin-top: 0; }
+  .sub-title::before {
+    content: '';
+    width: 4px; height: 16px;
+    background: var(--primary);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .item-list { padding-left: 18px; margin: 6px 0 12px; }
+  .item-list li { margin-bottom: 5px; color: #334155; }
+  .item-list li strong { color: var(--text); }
+  p.detail { color: #475569; margin: 6px 0 10px; font-size: 14.5px; }
+
+  /* ── Highlights / callouts ──────────────────────── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .callout-warn  { background: #fffbeb; border-left: 4px solid #f59e0b; }
+  .callout-danger { background: #fef2f2; border-left: 4px solid #ef4444; }
+  .callout-info  { background: #eff6ff; border-left: 4px solid #3b82f6; }
+  .callout-ok    { background: #ecfdf5; border-left: 4px solid #10b981; }
+
+  /* ── Table ──────────────────────────────────────── */
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    background: #f1f5f9;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 650;
+    color: #334155;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #f8fafc; }
+
+  /* ── Analysis cards ─────────────────────────────── */
+  .focus-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .focus-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #fafbfc, #fff);
+    position: relative;
+  }
+  .focus-card .num {
+    position: absolute;
+    top: -10px; left: 16px;
+    background: var(--primary);
+    color: #fff;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .focus-card h4 { font-size: 14px; font-weight: 650; margin-bottom: 6px; color: var(--text); }
+  .focus-card p  { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ── Footer ─────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Responsive ─────────────────────────────────── */
+  @media (max-width: 640px) {
+    .header { padding: 32px 0 28px; }
+    .header h1 { font-size: 22px; }
+    .section-body { padding: 16px; }
+    .section-head { padding: 14px 16px; }
+    .meta-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <span class="badge">📋 会议纪要</span>
+    <h1>社保公积金缴纳规则与员工关系系统现状梳理</h1>
+    <dl class="meta-grid">
+      <div><dt>会议日期</dt><dd>2026 年 4 月 22 日</dd></div>
+      <div><dt>会议地点</dt><dd>玉环基地</dd></div>
+      <div><dt>记录人</dt><dd>项目组 · 璐璐（北森）</dd></div>
+      <div><dt>参会人员</dt><dd>娜娜 · 婷婷 · 林红 · 黄主任 · 小方 等</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="content">
+<div class="container">
+
+<!-- ══════════════ 1. 会议概要 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-blue">📌</div>
+    <h2>会议概要</h2>
+  </div>
+  <div class="section-body">
+    <p class="detail">本次会议聚焦<strong>社保与公积金缴纳规则的系统化落地</strong>、<strong>员工关系系统（NC / 北森）的现状摸底</strong>以及<strong>薪酬计算、二次入职、跨基地协同</strong>等 HR 基础流程的标准化。与会方围绕制造业一线场景下的计件分摊、工伤参保时效、黑名单管理等痛点进行了深入讨论，明确了当前流程中的合规风险点与系统缺失环节，并就下一步数字化改造路径达成初步共识。</p>
+    <div class="callout callout-info">
+      💡 <strong>一句话概括：</strong>制度碎片化 + 系统断点多 → 需要以北森平台为锚点，串联社保、薪酬、入转调离全链路。
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 2. 社保与公积金缴纳规则 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-green">🏦</div>
+    <h2>社保与公积金缴纳规则</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">缴纳时间节点</div>
+    <ul class="item-list">
+      <li><strong>社保：</strong>每月 <span class="tag tag-info">25 日</span> 前完成当月参保操作，逾期不可补缴</li>
+      <li><strong>公积金：</strong>每月 <span class="tag tag-info">10 日</span> 前完成当月汇缴</li>
+    </ul>
+
+    <div class="sub-title">跨基地参保机制</div>
+    <ul class="item-list">
+      <li>集团下辖 <strong>6 家子公司</strong>，员工跨基地调动时需协调两地社保对接</li>
+      <li>当前操作方式：<strong>邮件人工对接</strong>，无系统化流转</li>
+    </ul>
+    <div class="callout callout-warn">
+      ⚠️ <strong>合规风险：</strong>邮件对接存在时效延误与信息遗漏风险，建议后续嵌入入职/调动流程节点，系统自动触发参保/停保。
+    </div>
+
+    <div class="sub-title">缴费基数规则</div>
+    <ul class="item-list">
+      <li><strong>五险：</strong>按当地最低基数 <span class="tag tag-warn">60%</span> 为下限缴纳</li>
+      <li><strong>公积金：</strong>按<strong>职级分档</strong>确定缴存比例与基数，非统一比例</li>
+    </ul>
+
+    <div class="sub-title">工伤险特殊要求</div>
+    <ul class="item-list">
+      <li>台州地区工伤险：<span class="tag tag-danger">次日生效，不可回溯</span></li>
+      <li>新入职员工须在入职当天完成工伤险参保操作，否则出现工伤由企业全额承担</li>
+      <li><strong>学生工：</strong>仅需缴纳单工伤险种</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ 3. 社保/公积金操作流程 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-purple">🔄</div>
+    <h2>社保 / 公积金操作流程</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">日参保</div>
+    <ul class="item-list">
+      <li>6 个分公司的参保数据通过 <strong>Excel 汇总</strong>后统一操作</li>
+      <li>须<strong>提前一天</strong>准备次日参保名单</li>
+    </ul>
+
+    <div class="sub-title">月度核对</div>
+    <ul class="item-list">
+      <li><strong>社保：</strong>每月 <span class="tag tag-info">23–24 日</span> 核对当月参保人员名单与基数</li>
+      <li><strong>公积金：</strong>每月 <span class="tag tag-info">8–9 日</span> 核对汇缴明细</li>
+    </ul>
+
+    <div class="sub-title">日退保</div>
+    <ul class="item-list">
+      <li>离职员工当日触发退保操作，与离职业务流程联动</li>
+      <li>当前依赖人工判断时间节点，建议系统自动校验</li>
+    </ul>
+
+    <div class="sub-title">异地缴纳未来方案</div>
+    <ul class="item-list">
+      <li>目标：将异地社保/公积金缴纳<strong>嵌入入职流程</strong>，作为必填节点</li>
+      <li>由系统根据员工属地自动分配参保机构与操作人</li>
+    </ul>
+    <div class="callout callout-ok">
+      ✅ <strong>改进方向：</strong>北森平台可配置入职流程节点，自动触发参保任务并推送至对应经办人。
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 4. 员工关系系统现状 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-orange">🖥️</div>
+    <h2>员工关系系统现状</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">NC 系统数据维护状态</div>
+    <ul class="item-list">
+      <li><span class="tag tag-ok">在用</span> 部分基础人事数据仍在 NC 中维护</li>
+      <li><span class="tag tag-warn">部分使用</span> 模块间数据不同步，存在手工补录</li>
+      <li><span class="tag tag-medium">未用</span> 部分子公司尚未上线 NC 人事模块</li>
+      <li><span class="tag tag-danger">缺失</span> 关键字段缺失（如参保属地、工种分类）</li>
+    </ul>
+
+    <div class="sub-title">员工自助端功能</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>角色</th><th>可查看</th><th>可操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>普通员工</strong></td><td>个人信息、薪资单、考勤记录</td><td>信息变更申请、请假/加班申报</td></tr>
+          <tr><td><strong>部门负责人</strong></td><td>部门花名册、下属考勤、绩效</td><td>审批下属申请、批量考勤确认</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-title">角色权限体系</div>
+    <ul class="item-list">
+      <li><span class="tag tag-info">员工</span> → <span class="tag tag-info">经理</span> → <span class="tag tag-info">部门负责人</span> → <span class="tag tag-info">副负责人</span> → <span class="tag tag-info">分管领导</span></li>
+      <li>权限逐级递增：分管领导可查看全公司报表，部门负责人仅限本部门</li>
+      <li>当前角色定义与 OA 审批流存在不一致，需统一梳理</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ 5. 薪酬计算相关讨论 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-pink">💰</div>
+    <h2>薪酬计算相关讨论</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">人员分类争议</div>
+    <ul class="item-list">
+      <li>当前体系下 <strong>计时工</strong> 与 <strong>计件工</strong> 薪酬逻辑完全割裂，两套规则并行</li>
+      <li>部分岗位存在"计时+计件"混合模式，规则交叉导致核算困难</li>
+    </ul>
+
+    <div class="sub-title">集体计件分摊 <span class="tag tag-high">核心诉求</span></div>
+    <p class="detail">一线制造团队采用集体计件模式，需将团队总产量/金额分摊到个人：</p>
+    <div class="callout callout-info">
+      <strong>计算公式：</strong><br>
+      个人积分 = 工时 × 考核分<br>
+      个人占比 = 个人积分 ÷ 团队总积分<br>
+      个人计件工资 = 团队总额 × 个人占比
+    </div>
+    <ul class="item-list">
+      <li>需在系统中支持<strong>团队维度</strong>的计件录入与自动分摊</li>
+      <li>考核分由班组长线下评定，需录入系统参与计算</li>
+    </ul>
+
+    <div class="sub-title">一线管理工资</div>
+    <ul class="item-list">
+      <li>一线班组长/主管工资 = 基本工资 + 管理津贴 + 团队计件提成</li>
+      <li>提成比例与团队绩效挂钩，需系统化关联</li>
+    </ul>
+
+    <div class="sub-title">工时计算</div>
+    <ul class="item-list">
+      <li>讨论采用 <strong>标准工时</strong> 替代实际打卡工时，以减少考勤异常对薪酬的影响</li>
+      <li>标准工时 = 固定排班时长（如每日 8 小时），扣除法定假期</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ 6. 二次入职与黑名单管理 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-red">🚫</div>
+    <h2>二次入职与黑名单管理</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">当前流程</div>
+    <ul class="item-list">
+      <li>二次入职（返聘）通过 <strong>OA 返聘申请单</strong>发起</li>
+      <li>需原部门负责人 + HR 双重审批</li>
+      <li>无系统自动校验历史离职原因</li>
+    </ul>
+
+    <div class="sub-title">待建立规则</div>
+    <ul class="item-list">
+      <li><strong>"三进三出"黑名单：</strong>同一员工累计入职 3 次且离职 3 次 → 纳入黑名单，禁止再次入职</li>
+      <li>离职后 <span class="tag tag-warn">3 个月</span>（主动离职）/ <span class="tag tag-danger">6 个月</span>（被动离职）内不可二次入职</li>
+    </ul>
+
+    <div class="sub-title">跨基地挖人管控</div>
+    <ul class="item-list">
+      <li><strong>薪酬不倒挂：</strong>跨基地调动后薪资不得高于同岗位同级别水平</li>
+      <li><strong>职级不跳升：</strong>调动不可跨级晋升，须逐级晋升</li>
+      <li><strong>违规影响评优：</strong>违反上述规则的接收方部门，取消当年度评优资格</li>
+      <li><strong>培训费用补偿：</strong>被挖人部门可申请培训成本补偿</li>
+      <li><span class="tag tag-danger">5 级以上</span>人员跨基地调动需<strong>集团审批</strong></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ 7. 报表与数据看板 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-teal">📊</div>
+    <h2>报表与数据看板</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">月度四大报表</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>报表名称</th><th>主要内容</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><strong>花名册</strong></td><td>全员基础信息、部门、岗位、入职日期</td></tr>
+          <tr><td>2</td><td><strong>人员构成</strong></td><td>按部门/职级/工种/学历/司龄的分布统计</td></tr>
+          <tr><td>3</td><td><strong>关键指标</strong></td><td>在编率、流失率、人效比、人工成本</td></tr>
+          <tr><td>4</td><td><strong>异动表</strong></td><td>月度入职/离职/调动/晋升/降级明细</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-title">流失率计算方法</div>
+    <div class="callout callout-info">
+      <strong>月初月末平均法：</strong><br>
+      月流失率 = 当月离职人数 ÷（月初在编人数 + 月末在编人数）÷ 2 × 100%
+    </div>
+
+    <div class="sub-title">BI360 整合需求</div>
+    <ul class="item-list">
+      <li>当前报表依赖手工 Excel 汇总，效率低且易出错</li>
+      <li>目标：将上述四大报表数据源整合至 <strong>BI360 看板</strong>，实现自动刷新</li>
+      <li>需北森系统输出标准化数据接口</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ 8. 其他需求 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-slate">📎</div>
+    <h2>其他需求</h2>
+  </div>
+  <div class="section-body">
+    <ul class="item-list">
+      <li><strong>工伤信息管理：</strong>建立工伤事故台账，关联参保信息与赔付进度，实现全流程追踪</li>
+      <li><strong>信息审核联动：</strong>
+        <ul style="margin-top:4px;">
+          <li>退休预警：系统自动计算退休倒计时，提前 6 个月推送提醒</li>
+          <li>财务归属：员工调动时自动更新财务成本中心</li>
+          <li>薪酬类别：岗位变动后联动调整薪酬方案</li>
+        </ul>
+      </li>
+      <li><strong>调动流程权限交接：</strong>跨部门/基地调动时，系统自动回收原权限并分配新权限（含 OA、门禁、系统账号）</li>
+      <li><strong>新员工入职体验：</strong>优化入职报到流程，减少纸质表单，推动电子签与线上入职引导</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ 9. 待办事项 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-blue">✅</div>
+    <h2>待办事项</h2>
+  </div>
+  <div class="section-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>事项</th><th>责任人</th><th>优先级</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>梳理 6 家子公司社保/公积金经办人与流程节点</td><td>娜娜</td><td><span class="tag tag-high">高</span></td></tr>
+          <tr><td>2</td><td>在北森系统中配置工伤险参保时效校验规则</td><td>璐璐（北森）</td><td><span class="tag tag-high">高</span></td></tr>
+          <tr><td>3</td><td>设计集体计件分摊计算方案并确认系统可实现性</td><td>婷婷 + 璐璐</td><td><span class="tag tag-high">高</span></td></tr>
+          <tr><td>4</td><td>制定"三进三出"黑名单规则并嵌入 OA 审批流程</td><td>林红</td><td><span class="tag tag-medium">中</span></td></tr>
+          <tr><td>5</td><td>跨基地挖人管控规则文件化并提交黄主任审批</td><td>林红</td><td><span class="tag tag-medium">中</span></td></tr>
+          <tr><td>6</td><td>统一角色权限体系，对齐 NC / OA / 北森三端定义</td><td>小方 + 璐璐</td><td><span class="tag tag-medium">中</span></td></tr>
+          <tr><td>7</td><td>四大月度报表模板标准化并对接 BI360 数据接口</td><td>婷婷</td><td><span class="tag tag-medium">中</span></td></tr>
+          <tr><td>8</td><td>二次入职流程增加历史离职原因自动校验节点</td><td>璐璐（北森）</td><td><span class="tag tag-low">低</span></td></tr>
+          <tr><td>9</td><td>新员工入职电子签与线上引导方案调研</td><td>小方</td><td><span class="tag tag-low">低</span></td></tr>
+          <tr><td>10</td><td>退休预警机制需求文档撰写</td><td>娜娜</td><td><span class="tag tag-low">低</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ 10. 会议分析 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-purple">🔍</div>
+    <h2>会议分析</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">核心主旨</div>
+    <p class="detail">本次会议本质上是一次<strong>"现状盘点 + 数字化改造立项"</strong>。组织在快速增长过程中积累了大量线下流程和手工操作，如今正试图以北森系统为核心平台，将社保、薪酬、入转调离等 HR 基础模块系统化、标准化。会议的潜台词是：<strong>合规压力在增大，手工模式已到极限，必须上系统。</strong></p>
+
+    <div class="sub-title">逻辑分析</div>
+    <p class="detail">议题从"社保怎么缴"→"流程怎么跑"→"系统怎么建"→"数据怎么看"层层递进，体现出一条清晰的<strong>从制度到流程到系统到数据</strong>的逻辑链。其中最棘手的是<strong>集体计件分摊</strong>——这既是业务痛点，也是系统难点，直接决定了薪酬模块能否上线。</p>
+
+    <div class="sub-title">关键重点</div>
+    <div class="focus-cards">
+      <div class="focus-card">
+        <div class="num">1</div>
+        <h4>合规红线：工伤险时效</h4>
+        <p>台州工伤险次日生效、不可回溯，意味着任何参保延迟都可能导致企业全额赔付。这是最高优先级的系统改造项。</p>
+      </div>
+      <div class="focus-card">
+        <div class="num">2</div>
+        <h4>核心难点：集体计件分摊</h4>
+        <p>涉及团队维度的数据采集、积分计算、按比例分摊，是薪酬模块能否落地的关键瓶颈。</p>
+      </div>
+      <div class="focus-card">
+        <div class="num">3</div>
+        <h4>制度缺口：黑名单与跨基地管控</h4>
+        <p>二次入职和挖人管控目前依赖人工判断，缺乏系统化规则引擎。规则越晚建立，历史数据越难清理。</p>
+      </div>
+      <div class="focus-card">
+        <div class="num">4</div>
+        <h4>数据断点：多系统并存</h4>
+        <p>NC / OA / Excel / 北森四套系统数据不互通，角色权限定义不统一。这是系统整合的最大障碍。</p>
+      </div>
+      <div class="focus-card">
+        <div class="num">5</div>
+        <h4>效率瓶颈：手工 Excel 依赖</h4>
+        <p>6 家子公司社保数据靠 Excel 汇总，月度报表靠手工编制。BI360 整合需求的本质是"先把数据源理顺"。</p>
+      </div>
+    </div>
+
+    <div class="sub-title">潜台词与趋势</div>
+    <ul class="item-list">
+      <li><strong>黄主任的信号：</strong>强调合规与标准化，暗示集团层面对 HR 数字化投入的预算可能释放，但需要拿出可落地的方案</li>
+      <li><strong>小方的顾虑：</strong>多系统并存下的数据治理成本，担心"上了新系统反而更乱"</li>
+      <li><strong>北森方的机会：</strong>璐璐在多个议题上主动提出"系统可配置"，意在将北森定位为唯一主平台</li>
+      <li><strong>趋势判断：</strong>下一步大概率会启动<strong>社保模块优先上线</strong>（合规驱动），薪酬模块作为二期重点（业务驱动），报表看板作为三期目标（管理驱动）</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+</main>
+
+<footer class="footer">
+  <p>📋 本会议纪要由项目组整理 · 2026 年 4 月 22 日 · 如有异议请于 3 个工作日内反馈</p>
+</footer>
+
+</body>
+</html>
