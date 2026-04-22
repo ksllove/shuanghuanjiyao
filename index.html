@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>会议纪要管理</title>
+<title>会议纪要</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#1e1e2e;height:100vh;overflow:hidden}
@@ -20,62 +20,34 @@
   .sb-ls{flex:1;overflow-y:auto;padding:2px 8px}
   .sb-ls::-webkit-scrollbar{width:3px}
   .sb-ls::-webkit-scrollbar-thumb{background:#45475a;border-radius:3px}
-  .itm{padding:9px 11px;border-radius:6px;cursor:pointer;margin-bottom:1px;border-left:3px solid transparent;position:relative;transition:background .1s}
+  .itm{padding:9px 11px;border-radius:6px;cursor:pointer;margin-bottom:1px;border-left:3px solid transparent;transition:background .1s}
   .itm:hover{background:#313244}
   .itm.on{background:#45475a;border-left-color:#89b4fa}
-  .itm .tt{font-size:12.5px;font-weight:600;color:#cdd6f4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:20px}
+  .itm .tt{font-size:12.5px;font-weight:600;color:#cdd6f4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .itm .mm{font-size:10.5px;color:#6c7086;margin-top:2px}
-  .itm .dl{position:absolute;right:6px;top:50%;transform:translateY(-50%);opacity:0;font-size:12px;color:#f38ba8;cursor:pointer;transition:opacity .1s}
-  .itm:hover .dl{opacity:.5}
-  .itm .dl:hover{opacity:1}
-  .sb-ft{padding:10px 12px;border-top:1px solid #313244}
-  .sb-ft button{width:100%;padding:8px;border:none;border-radius:6px;font-size:12.5px;font-weight:600;cursor:pointer;background:#89b4fa;color:#1e1e2e}
-  .sb-ft button:hover{background:#74c7ec}
+  .sb-ft{padding:10px 12px;border-top:1px solid #313244;text-align:center}
+  .sb-ft a{color:#6c7086;font-size:11px;text-decoration:none}
+  .sb-ft a:hover{color:#89b4fa}
 
   .mn{flex:1;overflow-y:auto}
   .mn-in{max-width:900px;margin:0 auto;padding:24px 30px 60px}
   .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;color:#585b70;gap:8px}
   .empty .ei{font-size:48px;opacity:.3}
   .empty p{font-size:14px}
-  .empty .eh{font-size:12px;color:#adb5bd}
 
   .vh{margin-bottom:16px}
   .vh h2{font-size:19px;font-weight:700;margin-bottom:6px}
   .vm{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:#585b70}
   .vm span{display:flex;align-items:center;gap:3px}
-  .vt{display:flex;gap:6px;margin-bottom:14px}
-  .vt button{padding:4px 10px;border:1px solid #dce0e8;border-radius:6px;background:#fff;font-size:11.5px;cursor:pointer;color:#585b70}
-  .vt button:hover{background:#f0f0f0}
 
   .hc{background:#fff;border-radius:10px;border:1px solid #dce0e8;overflow:hidden}
   .hc iframe{width:100%;border:none;display:block;min-height:400px}
 
-  .lk{margin-top:18px}
-  .lk h3{font-size:11px;font-weight:600;color:#585b70;margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
-  .lt{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#e8f0fe;color:#1a73e8;border-radius:5px;font-size:12px;cursor:pointer;margin:0 4px 4px 0}
-  .lt:hover{background:#d4dcff}
+  .loading{text-align:center;padding:40px;color:#6c7086}
+  .loading .sp{display:inline-block;width:20px;height:20px;border:2px solid #313244;border-top-color:#89b4fa;border-radius:50%;animation:spin .6s linear infinite;margin-bottom:8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* Upload */
-  .uz{border:2px dashed #dce0e8;border-radius:10px;padding:28px;text-align:center;cursor:pointer;margin-bottom:16px;transition:all .15s}
-  .uz:hover,.uz.dg{border-color:#89b4fa;background:#f0f4ff}
-  .uz .ui{font-size:30px;opacity:.4;margin-bottom:6px}
-  .uz p{font-size:13px;color:#585b70}
-  .uz .uh{font-size:11px;color:#adb5bd;margin-top:3px}
-  .fls{margin-top:10px}
-  .fl{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#e8f0fe;border-radius:5px;font-size:12px;color:#1a73e8;margin:3px}
-  .fl .fx{cursor:pointer;color:#f38ba8;font-weight:700}
-  .fg{margin-bottom:12px}
-  .fg label{display:block;font-size:11.5px;font-weight:600;margin-bottom:3px;color:#585b70}
-  .fg input{width:100%;padding:8px 10px;border:1px solid #dce0e8;border-radius:6px;font-size:13px;font-family:inherit;outline:none}
-  .fg input:focus{border-color:#89b4fa}
-  .fr{display:flex;gap:12px}
-  .fr .fg{flex:1}
-  .ea{display:flex;gap:8px;margin-top:14px}
-  .ea button{padding:7px 16px;border:none;border-radius:6px;font-size:12.5px;font-weight:600;cursor:pointer}
-  .bs{background:#89b4fa;color:#1e1e2e}.bs:hover{background:#74c7ec}
-  .bg{background:#f0f0f0;color:#585b70}.bg:hover{background:#e2e8f0}
-  .ed{max-width:700px}
-  .ed h2{font-size:17px;margin-bottom:16px}
+  .error{padding:16px;background:#45475a;border-radius:8px;color:#f38ba8;font-size:13px;margin:20px;text-align:center}
 
   @media(max-width:768px){.sb{width:220px;min-width:220px}.mn-in{padding:14px}}
 </style>
@@ -85,277 +57,113 @@
   <aside class="sb">
     <div class="sb-hd"><h1>📋 会议纪要</h1><span class="n" id="cnt"></span></div>
     <div class="sb-ct"><input id="sq" placeholder="搜索…"></div>
-    <div class="sb-ls" id="ml"></div>
-    <div class="sb-ft"><button id="btnUp">⬆ 导入 HTML 会议纪要</button></div>
+    <div class="sb-ls" id="ml"><div class="loading"><div class="sp"></div><br>加载中…</div></div>
+    <div class="sb-ft"><a href="admin.html">⚙️ 管理后台</a></div>
   </aside>
   <section class="mn" id="mc">
     <div class="empty">
-      <div class="ei">📝</div><p>选择或导入一条会议纪要</p><div class="eh">导入 HTML 文件即可管理与跳转</div>
+      <div class="ei">📝</div>
+      <p>选择一条会议纪要</p>
     </div>
   </section>
 </div>
 
 <script>
-const STORE = 'mm5';
-let DATA = [];
-let activeId = null;
+const API = 'https://api.github.com';
+const OWNER = 'ksllove';
+const REPO = 'shuanghuanjiyao';
+const BRANCH = 'main';
 
-function load() { try { DATA = JSON.parse(localStorage.getItem(STORE)) || []; } catch { DATA = []; } }
-function save() { localStorage.setItem(STORE, JSON.stringify(DATA)); }
-function gid() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-function byId(id) { return DATA.find(m => m.id === id); }
+let FILES = []; // [{name, download_url, path, size, sha}]
+let activeFile = null;
+
 function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 
-// ═══ Sidebar ═══
+// Load file list from GitHub
+async function loadFiles() {
+  try {
+    const res = await fetch(`${API}/repos/${OWNER}/${REPO}/contents/?ref=${BRANCH}`);
+    if (!res.ok) throw new Error('加载失败');
+    const items = await res.json();
+    FILES = items
+      .filter(f => f.name.endsWith('.html') && f.name !== 'index.html' && f.name !== 'admin.html')
+      .sort((a, b) => b.name.localeCompare(a.name));
+    renderList();
+  } catch (e) {
+    document.getElementById('ml').innerHTML = `<div class="error">加载失败: ${esc(e.message)}<br><br><button onclick="loadFiles()" style="padding:6px 16px;border:none;border-radius:6px;background:#89b4fa;color:#1e1e2e;cursor:pointer">重试</button></div>`;
+  }
+}
+
 function renderList(q) {
   q = (q || '').toLowerCase();
-  const list = DATA.filter(m => m.title.toLowerCase().includes(q))
-    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  document.getElementById('cnt').textContent = '· ' + DATA.length;
+  const list = FILES.filter(f => f.name.toLowerCase().includes(q));
+  document.getElementById('cnt').textContent = '· ' + FILES.length;
   const el = document.getElementById('ml');
-  if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:24px 0;color:#6c7086;font-size:12px">暂无会议</div>'; return; }
-  el.innerHTML = list.map(m => `
-    <div class="itm ${m.id === activeId ? 'on' : ''}" data-id="${m.id}">
-      <div class="tt">${esc(m.title)}</div>
-      <div class="mm">${esc(m.date || '')}${m.fileName ? ' · ' + esc(m.fileName) : ''}</div>
-      <span class="dl" data-del="${m.id}">✕</span>
+  if (!list.length) {
+    el.innerHTML = '<div style="text-align:center;padding:24px 0;color:#6c7086;font-size:12px">暂无会议纪要</div>';
+    return;
+  }
+  el.innerHTML = list.map(f => `
+    <div class="itm ${f.name === activeFile ? 'on' : ''}" data-file="${esc(f.name)}">
+      <div class="tt">${esc(f.name.replace(/\.html?$/i, ''))}</div>
+      <div class="mm">${(f.size / 1024).toFixed(1)} KB</div>
     </div>`).join('');
 }
 
-// ═══ View ═══
-function viewMeeting(id) {
-  activeId = id;
+async function viewFile(name) {
+  activeFile = name;
   renderList(document.getElementById('sq').value);
-  const m = byId(id);
-  if (!m) return;
+  const mc = document.getElementById('mc');
+  mc.innerHTML = '<div class="loading"><div class="sp"></div><br>加载中…</div>';
+  mc.scrollTop = 0;
 
-  const linked = (m.links || []).map(l => byId(l)).filter(Boolean);
-  const backlinks = DATA.filter(o => o.id !== id && (o.links || []).includes(id));
+  try {
+    const file = FILES.find(f => f.name === name);
+    if (!file) throw new Error('文件不存在');
+    const res = await fetch(file.download_url);
+    if (!res.ok) throw new Error('读取失败');
+    const html = await res.text();
 
-  document.getElementById('mc').innerHTML = `
-    <div class="mn-in">
-      <div class="vh">
-        <h2>${esc(m.title)}</h2>
-        <div class="vm">
-          ${m.date ? `<span>📅 ${esc(m.date)}</span>` : ''}
-          ${m.fileName ? `<span>📎 ${esc(m.fileName)}</span>` : ''}
+    const title = name.replace(/\.html?$/i, '');
+
+    mc.innerHTML = `
+      <div class="mn-in">
+        <div class="vh">
+          <h2>${esc(title)}</h2>
+          <div class="vm">
+            <span>📎 ${esc(name)}</span>
+            <span>📏 ${(file.size / 1024).toFixed(1)} KB</span>
+          </div>
         </div>
-      </div>
-      <div class="vt">
-        <button onclick="editTitle('${id}')">✏️ 改标题</button>
-        <button onclick="openInTab('${id}')">↗ 新窗口打开</button>
-      </div>
-      <div class="hc"><iframe id="ifr" srcdoc="${srcdoc(m.html)}" onload="fitIframe(this,'${id}')"></iframe></div>
-      ${linked.length || backlinks.length ? `
-        <div class="lk">
-          ${linked.length ? `<h3>🔗 关联</h3><div>${linked.map(l => `<span class="lt" data-nav="${l.id}">📄 ${esc(l.title)}</span>`).join('')}</div>` : ''}
-          ${backlinks.length ? `<h3 style="margin-top:10px">↩ 被引用</h3><div>${backlinks.map(l => `<span class="lt" data-nav="${l.id}">📄 ${esc(l.title)}</span>`).join('')}</div>` : ''}
-        </div>` : ''}
-    </div>`;
-  document.getElementById('mc').scrollTop = 0;
+        <div class="hc"><iframe id="ifr" srcdoc="${srcdoc(html)}" onload="fitIframe(this)"></iframe></div>
+      </div>`;
+  } catch (e) {
+    mc.innerHTML = `<div class="error">加载失败: ${esc(e.message)}</div>`;
+  }
 }
 
 function srcdoc(html) {
   return html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function fitIframe(iframe, mid) {
+function fitIframe(iframe) {
   try {
     const doc = iframe.contentDocument || iframe.contentWindow.document;
     const resize = () => { iframe.style.height = Math.max(400, doc.body.scrollHeight + 20) + 'px'; };
     resize();
     new ResizeObserver(resize).observe(doc.body);
-    doc.addEventListener('click', function(e) {
-      const a = e.target.closest('a');
-      if (!a) return;
-      const href = a.getAttribute('href') || '';
-      const m1 = href.match(/^#?meeting:(.+)/);
-      if (m1) {
-        e.preventDefault();
-        const t = DATA.find(x => x.id === m1[1].trim() || x.title === m1[1].trim());
-        if (t) viewMeeting(t.id);
-        return;
-      }
-      if (href.startsWith('#') && href.length > 1) {
-        const el = doc.getElementById(href.slice(1));
-        if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
-      }
-    });
-  } catch (e) {}
+  } catch(e) {}
 }
 
-function openInTab(id) {
-  const m = byId(id);
-  if (!m) return;
-  const blob = new Blob([m.html], { type: 'text/html' });
-  window.open(URL.createObjectURL(blob), '_blank');
-}
-
-// ═══ Edit Title Only ═══
-function editTitle(id) {
-  const m = byId(id);
-  if (!m) return;
-  document.getElementById('mc').innerHTML = `
-    <div class="mn-in">
-      <div class="ed">
-        <h2>✏️ 修改标题</h2>
-        <div class="fg"><label>会议标题</label><input id="edTitle" value="${esc(m.title)}"></div>
-        <div class="fr">
-          <div class="fg"><label>日期</label><input type="date" id="edDate" value="${m.date || ''}"></div>
-          <div class="fg"><label>关联会议</label>
-            <div style="margin-top:4px">${DATA.filter(o => o.id !== id).map(o =>
-              `<label style="display:block;font-size:12px;margin:2px 0;cursor:pointer">
-                <input type="checkbox" class="lkcb" value="${o.id}" ${(m.links||[]).includes(o.id)?'checked':''}> ${esc(o.title)}
-              </label>`).join('') || '<span style="font-size:12px;color:#adb5bd">暂无其他会议</span>'}
-          </div>
-        </div>
-        <div class="ea">
-          <button class="bs" id="edSave">保存</button>
-          <button class="bg" onclick="viewMeeting('${id}')">取消</button>
-        </div>
-      </div>
-    </div>`;
-  document.getElementById('edSave').addEventListener('click', () => {
-    m.title = document.getElementById('edTitle').value.trim() || m.title;
-    m.date = document.getElementById('edDate').value;
-    m.links = Array.from(document.querySelectorAll('.lkcb:checked')).map(cb => cb.value);
-    save();
-    viewMeeting(id);
-  });
-}
-
-// ═══ Upload ═══
-function showUpload() {
-  activeId = null;
-  renderList(document.getElementById('sq').value);
-  document.getElementById('mc').innerHTML = `
-    <div class="mn-in">
-      <div class="ed">
-        <h2>📁 导入 HTML 会议纪要</h2>
-        <div class="uz" id="dropZone">
-          <div class="ui">📄</div>
-          <p>点击选择或拖拽 HTML 文件到此处</p>
-          <div class="uh">支持 .html / .htm，可批量上传</div>
-          <div class="fls" id="fileList"></div>
-        </div>
-        <div class="fr">
-          <div class="fg"><label>日期</label><input type="date" id="upDate" value="${new Date().toISOString().slice(0,10)}"></div>
-        </div>
-        <div class="ea">
-          <button class="bs" id="doImport" disabled>导入</button>
-          <button class="bg" onclick="showEmpty()">取消</button>
-        </div>
-      </div>
-    </div>`;
-
-  const zone = document.getElementById('dropZone');
-  const fi = document.createElement('input');
-  fi.type = 'file'; fi.accept = '.html,.htm'; fi.multiple = true; fi.style.display = 'none';
-  zone.appendChild(fi);
-
-  let pending = [];
-
-  zone.addEventListener('click', () => fi.click());
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dg'); });
-  zone.addEventListener('dragleave', () => zone.classList.remove('dg'));
-  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dg'); addFiles(e.dataTransfer.files); });
-  fi.addEventListener('change', e => { addFiles(e.target.files); fi.value = ''; });
-
-  function addFiles(files) {
-    const arr = Array.from(files).filter(f => /\.html?$/i.test(f.name));
-    if (!arr.length) return;
-    pending = pending.concat(arr);
-    render();
-  }
-
-  function render() {
-    document.getElementById('fileList').innerHTML = pending.map((f, i) =>
-      `<span class="fl">📄 ${esc(f.name)} <span class="fx" data-rm="${i}">✕</span></span>`
-    ).join('');
-    document.getElementById('doImport').disabled = pending.length === 0;
-  }
-
-  document.getElementById('fileList').addEventListener('click', e => {
-    const rm = e.target.dataset.rm;
-    if (rm !== undefined) { pending.splice(+rm, 1); render(); }
-  });
-
-  document.getElementById('doImport').addEventListener('click', async function() {
-    this.textContent = '导入中…';
-    this.disabled = true;
-    const date = document.getElementById('upDate').value;
-    for (const f of pending) {
-      const content = await f.text();
-      DATA.push({
-        id: gid(),
-        title: extractTitle(content) || f.name.replace(/\.html?$/i, ''),
-        date,
-        fileName: f.name,
-        html: content,
-        links: []
-      });
-    }
-    save();
-    viewMeeting(DATA[DATA.length - 1].id);
-  });
-}
-
-function extractTitle(html) {
-  const patterns = [/<title[^>]*>([^<]+)<\/title>/i, /<h1[^>]*>([\s\S]*?)<\/h1>/i, /<h2[^>]*>([\s\S]*?)<\/h2>/i];
-  for (const p of patterns) {
-    const m = html.match(p);
-    if (m) { const t = m[1].replace(/<[^>]+>/g, '').trim(); if (t) return t; }
-  }
-  return null;
-}
-
-// ═══ Delete & Empty ═══
-function deleteMeeting(id) {
-  if (!confirm('确定删除？')) return;
-  DATA = DATA.filter(m => m.id !== id);
-  DATA.forEach(m => { m.links = (m.links || []).filter(l => l !== id); });
-  save(); activeId = null; showEmpty();
-}
-
-function showEmpty() {
-  activeId = null;
-  document.getElementById('mc').innerHTML = `
-    <div class="empty"><div class="ei">📝</div><p>选择或导入一条会议纪要</p><div class="eh">导入 HTML 文件即可管理与跳转</div></div>`;
-  renderList(document.getElementById('sq').value);
-}
-
-// ═══ Events ═══
+// Events
 document.addEventListener('click', e => {
-  const item = e.target.closest('.itm[data-id]');
-  if (item && !e.target.closest('.dl')) { viewMeeting(item.dataset.id); return; }
-  const del = e.target.closest('.dl[data-del]');
-  if (del) { deleteMeeting(del.dataset.del); return; }
-  const nav = e.target.closest('[data-nav]');
-  if (nav) { viewMeeting(nav.dataset.nav); return; }
+  const item = e.target.closest('.itm[data-file]');
+  if (item) viewFile(item.dataset.file);
 });
-
-document.getElementById('btnUp').addEventListener('click', showUpload);
 document.getElementById('sq').addEventListener('input', e => renderList(e.target.value));
 
-// ═══ Init ═══
-load();
-if (!DATA.length) {
-  Promise.all(['会议要点.html', '会议要点-2.html'].map(name =>
-    fetch('files/' + encodeURIComponent(name))
-      .then(r => r.ok ? r.text() : null)
-      .then(html => {
-        if (!html) return;
-        DATA.push({
-          id: gid(),
-          title: extractTitle(html) || name.replace(/\.html?$/i, ''),
-          date: new Date().toISOString().slice(0, 10),
-          fileName: name, html, links: []
-        });
-      }).catch(() => {})
-  )).then(() => { if (DATA.length) save(); renderList(); });
-} else {
-  renderList();
-}
+// Init
+loadFiles();
 </script>
 </body>
 </html>
