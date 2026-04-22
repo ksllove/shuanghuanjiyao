@@ -2,744 +2,804 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>会议纪要</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📋 会议纪要管理</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
 <style>
+:root{
+  --bg:#f8f9fa;--surface:#fff;--sidebar:#1a1b26;--sidebar-hover:#24283b;--sidebar-active:#414868;
+  --text:#1a1b26;--text2:#565869;--text-muted:#9aa5ce;--accent:#7aa2f7;--accent2:#bb9af7;
+  --border:#e0e4ed;--danger:#f7768e;--success:#9ece6a;--warn:#e0af68;
+  --radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 30px rgba(0,0,0,.12);
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#1e1e2e;height:100vh;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
+button{font-family:inherit;cursor:pointer}
+input,textarea{font-family:inherit}
+
+/* ─── Layout ─── */
 .app{display:flex;height:100vh}
-.sb{width:300px;min-width:300px;background:#1e1e2e;color:#cdd6f4;display:flex;flex-direction:column}
-.sb-hd{padding:16px;border-bottom:1px solid #313244;display:flex;align-items:center;gap:8px}
-.sb-hd h1{font-size:15px;font-weight:700}
-.sb-hd .n{font-size:11px;color:#6c7086;margin-left:auto}
-.sb-ct{padding:8px 12px}
-.sb-ct input{width:100%;padding:7px 10px;background:#313244;border:1px solid #45475a;border-radius:6px;font-size:12.5px;color:#cdd6f4;outline:none}
-.sb-ct input::placeholder{color:#6c7086}
-.sb-ct input:focus{border-color:#89b4fa}
-.sb-ls{flex:1;overflow-y:auto;padding:2px 8px}
-.sb-ls::-webkit-scrollbar{width:3px}
-.sb-ls::-webkit-scrollbar-thumb{background:#45475a;border-radius:3px}
-.itm{padding:9px 11px;border-radius:6px;cursor:pointer;margin-bottom:1px;border-left:3px solid transparent;transition:background .1s}
-.itm:hover{background:#313244}
-.itm.on{background:#45475a;border-left-color:#89b4fa}
-.itm .tt{font-size:12.5px;font-weight:600;color:#cdd6f4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.itm .mm{font-size:10.5px;color:#6c7086;margin-top:2px}
-.sb-ft{padding:10px 12px;border-top:1px solid #313244;display:flex;gap:6px}
-.sb-ft button{flex:1;padding:8px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
-.btn-manage{background:#313244;color:#cdd6f4}.btn-manage:hover{background:#45475a}
-.btn-new{background:#89b4fa;color:#1e1e2e;display:none}.btn-new:hover{background:#74c7ec}
-.sb-ft.admin .btn-manage{background:#f38ba8;color:#1e1e2e}
-.sb-ft.admin .btn-new{display:block}
-.mn{flex:1;overflow-y:auto}
-.mn-in{max-width:900px;margin:0 auto;padding:24px 30px 60px}
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;color:#585b70;gap:8px}
-.empty .ei{font-size:48px;opacity:.3}
-.empty p{font-size:14px}
-.vh{margin-bottom:16px}
-.vh h2{font-size:19px;font-weight:700;margin-bottom:6px}
-.vm{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:#585b70}
-.vm span{display:flex;align-items:center;gap:3px}
-.vt{display:flex;gap:6px;margin-bottom:14px}
-.vt button{padding:4px 10px;border:1px solid #dce0e8;border-radius:6px;background:#fff;font-size:11.5px;cursor:pointer;color:#585b70}
-.vt button:hover{background:#f0f0f0}
-.vt button.btn-del:hover{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
-.hc{background:#fff;border-radius:10px;border:1px solid #dce0e8;overflow:hidden}
-.hc iframe{width:100%;border:none;display:block;min-height:400px}
-.loading{text-align:center;padding:40px;color:#6c7086}
-.loading .sp{display:inline-block;width:20px;height:20px;border:2px solid #313244;border-top-color:#89b4fa;border-radius:50%;animation:spin .6s linear infinite;margin-bottom:8px}
+
+/* ─── Sidebar ─── */
+.sidebar{width:320px;min-width:320px;background:var(--sidebar);display:flex;flex-direction:column;user-select:none}
+.sidebar-head{padding:20px 18px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar-head h1{font-size:17px;font-weight:700;color:#c0caf5;display:flex;align-items:center;gap:8px}
+.sidebar-head .badge{font-size:11px;color:#565869;background:rgba(255,255,255,.06);padding:2px 8px;border-radius:10px;font-weight:500}
+.search-box{padding:10px 14px}
+.search-box input{width:100%;padding:8px 12px 8px 34px;background:rgba(255,255,255,.06);border:1px solid transparent;border-radius:8px;font-size:13px;color:#c0caf5;outline:none;transition:border .15s}
+.search-box input::placeholder{color:#565869}
+.search-box input:focus{border-color:var(--accent);background:rgba(255,255,255,.08)}
+.search-wrap{position:relative}
+.search-wrap::before{content:'🔍';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none}
+.file-list{flex:1;overflow-y:auto;padding:4px 8px}
+.file-list::-webkit-scrollbar{width:4px}
+.file-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+.file-item{padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:2px;border-left:3px solid transparent;transition:all .12s;display:flex;align-items:center;gap:10px}
+.file-item:hover{background:var(--sidebar-hover)}
+.file-item.active{background:var(--sidebar-active);border-left-color:var(--accent)}
+.file-item .fi-icon{font-size:18px;opacity:.6;flex-shrink:0}
+.file-item .fi-info{flex:1;min-width:0}
+.file-item .fi-name{font-size:13px;font-weight:600;color:#c0caf5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-item .fi-meta{font-size:11px;color:#565869;margin-top:2px}
+.sidebar-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px}
+.sidebar-footer button{flex:1;padding:9px;border:none;border-radius:8px;font-size:12px;font-weight:600;transition:all .12s}
+.btn-admin{background:rgba(255,255,255,.06);color:#a9b1d6}.btn-admin:hover{background:rgba(255,255,255,.1)}
+.btn-admin.is-admin{background:rgba(247,118,142,.15);color:var(--danger)}
+.btn-new{background:var(--accent);color:#1a1b26;display:none}.btn-new:hover{opacity:.85}
+.sidebar-footer.has-admin .btn-new{display:block}
+
+/* ─── Main ─── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.main-head{padding:16px 28px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;min-height:60px}
+.main-head h2{font-size:18px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main-actions{display:flex;gap:6px}
+.main-actions button{padding:6px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;font-weight:500;color:var(--text2);transition:all .12s}
+.main-actions button:hover{background:var(--bg);border-color:#ccc}
+.main-actions .btn-del:hover{background:#fff0f0;border-color:var(--danger);color:var(--danger)}
+.main-body{flex:1;overflow-y:auto;padding:24px 28px 60px}
+.main-body::-webkit-scrollbar{width:6px}
+.main-body::-webkit-scrollbar-thumb{background:#ddd;border-radius:6px}
+
+/* ─── Empty ─── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-muted);gap:12px}
+.empty-state .es-icon{font-size:56px;opacity:.25}
+.empty-state p{font-size:15px;font-weight:500}
+.empty-state .es-sub{font-size:13px;opacity:.6}
+
+/* ─── Meeting Content ─── */
+.meeting-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden}
+.meeting-card iframe{width:100%;border:none;display:block;min-height:400px}
+.meeting-meta{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--text2);margin-bottom:16px}
+.meeting-meta span{display:flex;align-items:center;gap:4px}
+
+/* ─── Loading ─── */
+.loader{text-align:center;padding:50px 20px;color:var(--text-muted)}
+.loader .spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.error{padding:16px;background:#45475a;border-radius:8px;color:#f38ba8;font-size:13px;margin:20px;text-align:center}
-.error .retry-btn{margin-top:10px;padding:6px 16px;border:none;border-radius:6px;background:#89b4fa;color:#1e1e2e;cursor:pointer;font-weight:600;font-size:13px}
-.error .retry-btn:hover{background:#74c7ec}
-.error .hint{font-size:11px;color:#6c7086;margin-top:8px}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50;backdrop-filter:blur(3px)}
-.mo.show{display:flex}
-.md{background:#fff;border-radius:16px;padding:28px;width:520px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.md h2{font-size:17px;margin-bottom:4px}
-.md .sub{font-size:13px;color:#666;margin-bottom:16px}
-.md .err{color:#f38ba8;font-size:12px;margin-bottom:8px;min-height:18px}
-.md input[type=password],.md input[type=text]{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;font-family:inherit}
-.md input:focus{border-color:#89b4fa}
-.md textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;font-family:'Menlo','Consolas',monospace;resize:vertical;min-height:180px;margin-bottom:10px}
-.md textarea:focus{border-color:#89b4fa}
-.md .fg{margin-bottom:12px}
-.md .fg label{display:block;font-size:12px;font-weight:600;color:#475569;margin-bottom:4px}
-.md .ma{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
-.md .ma button{padding:8px 20px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
-.btn-p{background:#89b4fa;color:#1e1e2e}.btn-p:hover{background:#74c7ec}
-.btn-g{background:#f1f5f9;color:#475569}.btn-g:hover{background:#e2e8f0}
-.btn-g:disabled,.btn-p:disabled{opacity:.5;cursor:not-allowed}
-.uz{border:2px dashed #dce0e8;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:10px}
-.uz:hover,.uz.dg{border-color:#89b4fa;background:#f0f4ff}
-.uz .ui{font-size:28px;opacity:.4;margin-bottom:4px}
-.uz p{font-size:13px;color:#585b70}
-.uz .uh{font-size:11px;color:#adb5bd;margin-top:4px}
-.fls{margin-bottom:12px}
-.fl{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:13px}
-.fl .fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fl .fsize{color:#94a3b8;font-size:11px;white-space:nowrap}
-.fl .frm{cursor:pointer;color:#f38ba8;font-weight:700;padding:0 4px;border:none;background:none;font-size:14px}
-.fl .frm:hover{color:#dc2626}
-.fl .st{font-size:11px;white-space:nowrap}
-.fl .st.ok{color:#10b981}
-.fl .st.er{color:#ef4444}
-.fl .st.ld{color:#3b82f6}
-.toast{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:500;z-index:999;animation:si .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.15)}
-.toast.ok{background:#10b981}.toast.err{background:#ef4444}.toast.info{background:#3b82f6}
-@keyframes si{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.hidden{display:none!important}
-.offline-bar{background:#f38ba8;color:#1e1e2e;text-align:center;padding:6px;font-size:12px;font-weight:600;display:none}
-.offline-bar.show{display:block}
-.skeleton{padding:9px 11px;margin-bottom:1px}
-.skeleton .sk-bar{height:12px;border-radius:4px;background:#313244;margin-bottom:6px}
-.skeleton .sk-bar.short{width:60%}
-@media(max-width:768px){.sb{width:220px;min-width:220px}.mn-in{padding:14px}}
-@media(max-width:480px){.app{flex-direction:column}.sb{width:100%;min-width:100%;height:auto;max-height:45vh}.sb-ls{max-height:30vh}.mn{min-height:55vh}}
+.loader p{font-size:13px;margin-top:8px}
+
+/* ─── Skeleton ─── */
+.skel{padding:12px;margin:0 8px 4px;border-radius:8px}
+.skel-bar{height:13px;border-radius:4px;background:rgba(255,255,255,.05);margin-bottom:7px}
+.skel-bar.sm{width:55%}
+
+/* ─── Error ─── */
+.error-box{background:#fff5f5;border:1px solid #fecaca;border-radius:var(--radius);padding:20px;text-align:center;color:var(--danger);margin:20px}
+.error-box p{font-size:14px;margin-bottom:4px}
+.error-box .err-hint{font-size:12px;color:var(--text2);margin-bottom:12px}
+.error-box button{padding:8px 20px;border:none;border-radius:8px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;cursor:pointer}
+
+/* ─── Modal ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border-radius:16px;padding:28px;width:520px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:modalIn .2s ease}
+@keyframes modalIn{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+.modal h2{font-size:18px;font-weight:700;margin-bottom:4px}
+.modal .modal-sub{font-size:13px;color:var(--text2);margin-bottom:18px}
+.modal .form-group{margin-bottom:14px}
+.modal label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.modal input[type=text],.modal input[type=password],.modal textarea{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;outline:none;transition:border .15s}
+.modal input:focus,.modal textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(122,162,247,.15)}
+.modal textarea{font-family:'Menlo','Consolas','Liberation Mono',monospace;font-size:13px;resize:vertical;min-height:200px}
+.modal .err-msg{color:var(--danger);font-size:12px;min-height:18px;margin-bottom:8px}
+.modal .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.modal .modal-actions button{padding:9px 22px;border:none;border-radius:8px;font-size:13px;font-weight:600;transition:all .12s}
+.btn-primary{background:var(--accent);color:#1a1b26}.btn-primary:hover{opacity:.85}
+.btn-secondary{background:var(--bg);color:var(--text2)}.btn-secondary:hover{background:#eee}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+
+/* ─── Upload Zone ─── */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:28px;text-align:center;cursor:pointer;transition:all .15s}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(122,162,247,.04)}
+.upload-zone .uz-icon{font-size:32px;opacity:.3;margin-bottom:6px}
+.upload-zone p{font-size:13px;color:var(--text2)}
+.upload-zone .uz-hint{font-size:11px;color:var(--text-muted);margin-top:4px}
+
+/* ─── File Queue ─── */
+.file-queue{margin-top:12px}
+.fq-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border-radius:8px;margin-bottom:6px;font-size:13px}
+.fq-item .fq-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fq-item .fq-size{color:var(--text-muted);font-size:11px;white-space:nowrap}
+.fq-item .fq-status{font-size:11px;white-space:nowrap}
+.fq-item .fq-status.ok{color:var(--success)}.fq-item .fq-status.er{color:var(--danger)}.fq-item .fq-status.ld{color:var(--accent)}
+.fq-item .fq-rm{cursor:pointer;color:var(--danger);font-weight:700;border:none;background:none;font-size:15px;padding:0 2px}
+.fq-item .fq-rm:hover{color:#e03050}
+
+/* ─── Toast ─── */
+.toast{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:500;z-index:200;animation:toastIn .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.toast.ok{background:var(--success)}.toast.err{background:var(--danger)}.toast.info{background:var(--accent)}
+@keyframes toastIn{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+
+/* ─── Offline ─── */
+.offline{position:fixed;top:0;left:0;right:0;background:var(--danger);color:#fff;text-align:center;padding:6px;font-size:12px;font-weight:600;z-index:300;display:none}
+.offline.show{display:block}
+
+/* ─── Rate limit ─── */
+.rate-warn{background:rgba(224,175,104,.1);border:1px solid rgba(224,175,104,.3);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--warn);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* ─── Responsive ─── */
+@media(max-width:768px){
+  .sidebar{width:240px;min-width:240px}
+  .main-body{padding:16px}
+}
+@media(max-width:520px){
+  .app{flex-direction:column}
+  .sidebar{width:100%;min-width:100%;height:48vh;flex-shrink:0}
+  .main{min-height:52vh}
+  .main-head{padding:12px 16px}
+  .main-body{padding:12px}
+}
 </style>
 </head>
 <body>
 
-<div class="offline-bar" id="offlineBar">⚠️ 网络连接异常</div>
+<div class="offline" id="offlineBar">⚠️ 网络已断开</div>
 
 <div class="app">
-  <aside class="sb">
-    <div class="sb-hd"><h1>📋 会议纪要</h1><span class="n" id="cnt"></span></div>
-    <div class="sb-ct"><input id="sq" placeholder="搜索…" autocomplete="off"></div>
-    <div class="sb-ls" id="ml">
-      <div class="loading"><div class="sp"></div><br>加载中…</div>
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <h1>📋 会议纪要 <span class="badge" id="fileCount">0</span></h1>
     </div>
-    <div class="sb-ft" id="sbFt">
-      <button class="btn-manage" id="btnManage">⚙️ 管理</button>
-      <button class="btn-new" id="btnNew">➕ 新建</button>
+    <div class="search-box">
+      <div class="search-wrap">
+        <input id="searchInput" placeholder="搜索会议纪要…" autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+    <div class="file-list" id="fileList"></div>
+    <div class="sidebar-footer" id="sidebarFooter">
+      <button class="btn-admin" id="btnAdmin">🔐 管理登录</button>
+      <button class="btn-new" id="btnNew">＋ 新建</button>
     </div>
   </aside>
-  <section class="mn" id="mc">
-    <div class="empty"><div class="ei">📝</div><p>选择一条会议纪要</p></div>
-  </section>
+
+  <main class="main" id="mainArea">
+    <div class="main-head hidden" id="mainHead">
+      <h2 id="mainTitle"></h2>
+      <div class="main-actions hidden" id="mainActions">
+        <button onclick="editCurrent()">✏️ 编辑</button>
+        <button class="btn-del" onclick="deleteCurrent()">🗑 删除</button>
+      </div>
+    </div>
+    <div class="main-body" id="mainBody">
+      <div class="empty-state">
+        <div class="es-icon">📋</div>
+        <p>会议纪要管理系统</p>
+        <div class="es-sub">选择左侧文件查看，或登录后新建</div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<!-- Login Modal -->
-<div class="mo" id="loginMo">
-  <div class="md">
+<!-- Login -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
     <h2>🔐 管理员登录</h2>
-    <p class="sub">输入 GitHub Token 进入管理模式</p>
-    <div class="err" id="loginErr"></div>
-    <input type="password" id="loginToken" placeholder="GitHub Personal Access Token" autocomplete="off">
-    <div class="ma">
-      <button class="btn-p" id="doLogin">登录</button>
-      <button class="btn-g" id="cancelLogin">取消</button>
+    <p class="modal-sub">输入 GitHub Personal Access Token</p>
+    <div class="err-msg" id="loginErr"></div>
+    <div class="form-group">
+      <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('loginModal')">取消</button>
+      <button class="btn-primary" id="btnLogin">登录</button>
     </div>
   </div>
 </div>
 
-<!-- New Modal -->
-<div class="mo" id="newMo">
-  <div class="md">
-    <h2>➕ 新建会议纪要</h2>
-    <label class="uz" id="upZone" for="fileInput">
-      <div class="ui">📄</div>
-      <p>点击选择或拖拽 HTML 文件到此处</p>
-      <div class="uh">支持批量选择，.html / .htm 格式</div>
-    </label>
-    <input type="file" id="fileInput" accept=".html,.htm" multiple style="display:none">
-    <div class="fls" id="fileList"></div>
-    <div class="fg" id="nameBlock">
-      <label>文件名 <span style="color:#94a3b8;font-weight:400">（可选，留空用上传文件名）</span></label>
-      <input type="text" id="newName" placeholder="例：2024-04-22-项目评审会">
+<!-- New -->
+<div class="modal-overlay" id="newModal">
+  <div class="modal">
+    <h2>＋ 新建会议纪要</h2>
+    <div class="form-group">
+      <label class="upload-zone" id="uploadZone" for="fileInput">
+        <div class="uz-icon">📄</div>
+        <p>点击选择或拖拽 HTML 文件</p>
+        <div class="uz-hint">支持批量，.html / .htm</div>
+      </label>
+      <input type="file" id="fileInput" accept=".html,.htm" multiple style="display:none">
     </div>
-    <div class="fg" id="contentBlock">
-      <label>内容 (HTML)</label>
-      <textarea id="newContent" rows="8" placeholder="粘贴 HTML 内容，或直接上传文件…"></textarea>
+    <div class="file-queue" id="fileQueue"></div>
+    <div id="manualInput">
+      <div class="form-group">
+        <label>文件名 <span style="font-weight:400;color:var(--text-muted)">（可选）</span></label>
+        <input type="text" id="newName" placeholder="例：2024-04-22-项目评审会">
+      </div>
+      <div class="form-group">
+        <label>内容 (HTML)</label>
+        <textarea id="newContent" rows="8" placeholder="粘贴 HTML 内容…"></textarea>
+      </div>
     </div>
-    <div class="ma">
-      <button class="btn-p" id="saveNew">保存</button>
-      <button class="btn-g" id="cancelNew">取消</button>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('newModal')">取消</button>
+      <button class="btn-primary" id="btnSave">保存</button>
     </div>
   </div>
 </div>
 
-<!-- Edit Modal -->
-<div class="mo" id="editMo">
-  <div class="md">
+<!-- Edit -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
     <h2>✏️ 编辑会议纪要</h2>
-    <div class="fg"><label>文件名</label><input type="text" id="editName"></div>
-    <div class="fg"><label>内容 (HTML)</label><textarea id="editContent" rows="16"></textarea></div>
-    <div class="ma">
-      <button class="btn-p" id="saveEdit">保存修改</button>
-      <button class="btn-g" id="cancelEdit">取消</button>
+    <div class="form-group">
+      <label>文件名</label>
+      <input type="text" id="editName">
+    </div>
+    <div class="form-group">
+      <label>内容 (HTML)</label>
+      <textarea id="editContent" rows="16"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('editModal')">取消</button>
+      <button class="btn-primary" id="btnEditSave">保存修改</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  配置
-// ═══════════════════════════════════════════════════════════════
-const OWNER      = 'ksllove';
-const REPO       = 'shuanghuanjiyao';
-const BRANCH     = 'main';
-const TOKEN_KEY  = 'gh_token';
-const CACHE_KEY  = 'gh_jiyao_cache';
-const CACHE_TTL  = 5 * 60 * 1000;   // 5 分钟
+// ═══════════════════════════════════════════════════════════
+//  CONFIG — 改这里就行
+// ═══════════════════════════════════════════════════════════
+const CONFIG = {
+  owner:  'ksllove',
+  repo:   'shuanghuanjiyao',
+  branch: 'main',
+  tokenKey:    'jiyao_token',
+  cacheKey:    'jiyao_cache_v2',
+  cacheTTL:    5 * 60 * 1000,
+  fetchTimeout: 8000,
+  maxRetries:  2,
+};
 
-// 加载渠道优先级（国内优先用 jsdelivr）
-const LOAD_CHANNELS = [
-  {
-    name: 'jsdelivr',
-    listUrl:  `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/`,
-    fileUrl:  (name) => `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/${name}`,
-    parse: parseJsDelivrTree,
-  },
-  {
-    name: 'github-api',
-    listUrl: `https://api.github.com/repos/${OWNER}/${REPO}/contents/?ref=${BRANCH}`,
-    fileUrl: (name) => `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${name}`,
-    parse: parseGitHubApi,
-  },
-];
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+const S = {
+  token: '',
+  isAdmin: false,
+  files: [],
+  active: null,
+  editing: null,
+  queue: [],         // upload queue
+};
 
-let TOKEN = '';
-let isAdmin = false;
-let FILES = [];
-let activeFile = null;
-let editingFile = null;
-let pending = [];
-let currentChannel = null;
-
-// ═══════════════════════════════════════════════════════════════
-//  工具函数
-// ═══════════════════════════════════════════════════════════════
-function $(id) { return document.getElementById(id); }
-function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+// ═══════════════════════════════════════════════════════════
+//  UTIL
+// ═══════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const esc = s => { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const delay = ms => new Promise(r => setTimeout(r, ms));
 
 function toast(msg, type = 'ok') {
   const el = document.createElement('div');
   el.className = 'toast ' + type;
   el.textContent = msg;
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 3000);
+  setTimeout(() => el.remove(), 3500);
 }
 
-// 带超时的 fetch
-function fetchTimeout(url, opts = {}, ms = 8000) {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), ms);
-  return fetch(url, { ...opts, signal: ctrl.signal })
-    .finally(() => clearTimeout(timer));
+function openModal(id) { $(id).classList.add('show'); }
+function closeModal(id) { $(id).classList.remove('show'); }
+
+// ═══════════════════════════════════════════════════════════
+//  FETCH WRAPPER — 超时 + 重试
+// ═══════════════════════════════════════════════════════════
+async function safeFetch(url, opts = {}, timeout = CONFIG.fetchTimeout, retries = CONFIG.maxRetries) {
+  for (let i = 0; i <= retries; i++) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), timeout);
+    try {
+      const r = await fetch(url, { ...opts, signal: ctrl.signal });
+      clearTimeout(timer);
+      if (r.ok || r.status === 404 || r.status === 403 || r.status === 401) return r;
+      if (i < retries) { await sleep(1000 * (i + 1)); continue; }
+      return r;
+    } catch (e) {
+      clearTimeout(timer);
+      if (i === retries) throw e;
+      await sleep(1000 * (i + 1));
+    }
+  }
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  缓存
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  CACHE
+// ═══════════════════════════════════════════════════════════
 function getCache() {
   try {
-    const raw = localStorage.getItem(CACHE_KEY);
+    const raw = localStorage.getItem(CONFIG.cacheKey);
     if (!raw) return null;
     const c = JSON.parse(raw);
-    if (Date.now() - c.ts > CACHE_TTL) return null;
-    return c.data;
+    if (Date.now() - c.ts > CONFIG.cacheTTL) return null;
+    return c.files;
   } catch { return null; }
 }
-function setCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
+function setCache(files) {
+  try { localStorage.setItem(CONFIG.cacheKey, JSON.stringify({ ts: Date.now(), files })); } catch {}
 }
-function clearCache() { localStorage.removeItem(CACHE_KEY); }
+function clearCache() { localStorage.removeItem(CONFIG.cacheKey); }
 
-// ═══════════════════════════════════════════════════════════════
-//  数据源解析
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  GITHUB API
+// ═══════════════════════════════════════════════════════════
+const { owner, repo, branch } = CONFIG;
 
-// 解析 GitHub API 返回的文件列表
-function parseGitHubApi(json) {
-  if (!Array.isArray(json)) return [];
-  return json
-    .filter(f => f.name.endsWith('.html') && f.name !== 'index.html')
-    .map(f => ({
-      name: f.name,
-      size: f.size || 0,
-      sha: f.sha,
-      download_url: f.download_url,
-      _channel: 'github-api',
-    }))
-    .sort((a, b) => b.name.localeCompare(a.name));
-}
-
-// 通过 GitHub Tree API 获取文件列表（一个请求搞定）
-async function fetchViaTreeApi() {
-  const url = `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`;
-  const r = await fetchTimeout(url, {
-    headers: { 'Accept': 'application/vnd.github.v3+json' }
-  }, 10000);
-  if (!r.ok) throw new Error('Tree API: ' + r.status);
-  const data = await r.json();
-  if (!data.tree) throw new Error('Tree API 返回异常');
-  return data.tree
-    .filter(f => f.path.endsWith('.html') && f.path !== 'index.html' && f.type === 'blob')
-    .map(f => ({
-      name: f.path,
-      size: f.size || 0,
-      sha: f.sha,
-      download_url: `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${f.path}`,
-      _channel: 'github-api',
-    }))
-    .sort((a, b) => b.name.localeCompare(a.name));
+// 解析文件列表（两种 API 格式统一处理）
+function parseFiles(data) {
+  if (Array.isArray(data)) {
+    // Contents API
+    return data
+      .filter(f => f.name.endsWith('.html') && f.name !== 'index.html')
+      .map(f => ({ name: f.name, size: f.size || 0, sha: f.sha, url: f.download_url }))
+      .sort((a, b) => b.name.localeCompare(a.name));
+  }
+  if (data.tree) {
+    // Tree API
+    return data.tree
+      .filter(f => f.path.endsWith('.html') && f.path !== 'index.html' && f.type === 'blob')
+      .map(f => ({ name: f.path, size: f.size || 0, sha: f.sha,
+        url: `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${f.path}` }))
+      .sort((a, b) => b.name.localeCompare(a.name));
+  }
+  return [];
 }
 
-// jsdelivr 没有 list API，需要从 GitHub API 拿列表，但文件内容走 CDN
-function parseJsDelivrTree(json) {
-  // 这个函数不直接用，而是配合 GitHub API 获取列表后替换 download_url
-  return parseGitHubApi(json);
+// 加载文件列表 — 多源
+async function fetchFileList() {
+  const headers = { 'Accept': 'application/vnd.github.v3+json' };
+
+  // 源1: GitHub Tree API（一个请求搞定）
+  try {
+    const r = await safeFetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`,
+      { headers }, 10000
+    );
+    if (r.ok) {
+      const data = await r.json();
+      const files = parseFiles(data);
+      if (files.length || data.tree) return files;
+    }
+  } catch {}
+
+  // 源2: GitHub Contents API
+  try {
+    const r = await safeFetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/?ref=${branch}`,
+      { headers }, 10000
+    );
+    if (r.ok) return parseFiles(await r.json());
+    if (r.status === 403) throw new Error('rate');
+    if (r.status === 404) throw new Error('notfound');
+  } catch (e) {
+    if (e.message === 'rate') throw new Error('GitHub API 请求次数已达上限，请稍后重试或登录 Token 解除限制');
+    if (e.message === 'notfound') throw new Error('仓库不存在或为私有仓库，请检查仓库设置');
+    throw e;
+  }
+
+  throw new Error('无法加载文件列表，请检查网络连接');
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  核心：多渠道加载
-// ═══════════════════════════════════════════════════════════════
-
-// 检测渠道可用性（并发测试，取最快的成功渠道）
-async function detectChannel() {
-  const tests = [
-    // jsdelivr CDN（国内快）
-    fetchTimeout(`https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/index.html`, {}, 5000)
-      .then(r => { if (r.ok) return 'jsdelivr'; throw 0; })
-      .catch(() => null),
-    // GitHub raw（备用）
-    fetchTimeout(`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/index.html`, {}, 8000)
-      .then(r => { if (r.ok) return 'github-raw'; throw 0; })
-      .catch(() => null),
-  ];
-  const results = await Promise.all(tests);
-  return results.find(Boolean) || 'github-api';
+// 获取文件内容 — 尝试 CDN
+async function fetchFileContent(url) {
+  // 先试 jsdelivr CDN
+  const cdnUrl = url.replace(
+    `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/`,
+    `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/`
+  );
+  try {
+    const r = await safeFetch(cdnUrl, {}, 6000, 1);
+    if (r.ok) return await r.text();
+  } catch {}
+  // 降级原始链接
+  const r = await safeFetch(url, {}, 10000);
+  if (!r.ok) throw new Error('读取失败 (' + r.status + ')');
+  return await r.text();
 }
 
+// 写操作（需要 Token）
+async function ghApi(method, path, body) {
+  const r = await safeFetch(
+    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+    {
+      method,
+      headers: {
+        'Authorization': 'Bearer ' + S.token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json',
+      },
+      body: JSON.stringify(body),
+    },
+    15000, 1
+  );
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.message || '操作失败');
+  return d;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  LOAD FILES
+// ═══════════════════════════════════════════════════════════
 async function loadFiles() {
-  const ml = $('ml');
+  const listEl = $('fileList');
 
-  // 1. 先用缓存
+  // 缓存优先
   const cached = getCache();
   if (cached) {
-    FILES = cached;
+    S.files = cached;
     renderList();
-    // 后台静默刷新
-    loadFilesFromNetwork(true).catch(() => {});
+    loadFromNetwork(true).catch(() => {});
     return;
   }
 
-  // 2. 骨架屏
-  ml.innerHTML =
-    Array.from({ length: 5 }, () =>
-      '<div class="skeleton"><div class="sk-bar"></div><div class="sk-bar short"></div></div>'
-    ).join('') +
-    '<div style="text-align:center;padding:12px;color:#6c7086;font-size:11px" id="loadStatus">正在检测最佳线路…</div>';
+  // 骨架屏
+  listEl.innerHTML = Array.from({ length: 6 },
+    () => '<div class="skel"><div class="skel-bar"></div><div class="skel-bar sm"></div></div>'
+  ).join('') + '<div style="text-align:center;padding:16px;color:#565869;font-size:12px">加载中…</div>';
 
-  await loadFilesFromNetwork(false);
+  await loadFromNetwork(false);
 }
 
-async function loadFilesFromNetwork(silent) {
-  const ml = $('ml');
-  const statusEl = $('loadStatus');
-
+async function loadFromNetwork(silent) {
+  const listEl = $('fileList');
   try {
-    // 1) 检测最快渠道
-    const channel = await detectChannel();
-    currentChannel = channel;
-    if (statusEl) statusEl.textContent = '通过 ' + channel + ' 加载中…';
-
-    let files;
-
-    if (channel === 'jsdelivr') {
-      // jsdelivr 没有 list API，用 GitHub Tree API 拿列表
-      // 但下载链接替换为 jsdelivr CDN
-      try {
-        files = await fetchViaTreeApi();
-        // 替换 download_url 为 jsdelivr CDN
-        files = files.map(f => ({
-          ...f,
-          download_url: `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/${f.name}`,
-          _channel: 'jsdelivr',
-        }));
-      } catch {
-        // Tree API 也挂了，降级到 contents API
-        files = await fetchViaContentsApi();
-      }
-    } else {
-      files = await fetchViaContentsApi();
-    }
-
-    if (!files.length) {
-      ml.innerHTML =
-        '<div class="error">' +
-          '暂无会议纪要文件<br>' +
-          '<div class="hint">上传 .html 文件后会显示在这里</div>' +
-          (isAdmin
-            ? '<button class="retry-btn" onclick="showNew()">➕ 新建第一条</button>'
-            : '<button class="retry-btn" onclick="loadFiles()">🔄 刷新</button>') +
-        '</div>';
-      FILES = [];
-      return;
-    }
-
-    FILES = files;
-    setCache(FILES);
+    S.files = await fetchFileList();
+    setCache(S.files);
     renderList();
     $('offlineBar').classList.remove('show');
-
   } catch (e) {
     if (!silent) {
-      const msg = e.name === 'AbortError'
-        ? '请求超时，网络可能不稳定'
-        : (e.message || '加载失败');
-      ml.innerHTML =
-        '<div class="error">' +
-          esc(msg) +
-          '<div class="hint">💡 国内访问 GitHub 可能不稳定，已自动尝试多个线路</div>' +
-          '<button class="retry-btn" onclick="loadFiles()">🔄 重试</button>' +
+      const isRate = e.message.includes('上限');
+      listEl.innerHTML =
+        '<div class="error-box" style="margin:16px 8px">' +
+          '<p>' + esc(e.message) + '</p>' +
+          (isRate ? '<div class="err-hint">未认证限制 60 次/小时，登录可解除</div>' : '') +
+          '<button onclick="loadFiles()">🔄 重试</button>' +
         '</div>';
     }
   }
 }
 
-// GitHub Contents API（原始方式）
-async function fetchViaContentsApi() {
-  const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/?ref=${BRANCH}`;
-  const r = await fetchTimeout(url, {
-    headers: {
-      'Accept': 'application/vnd.github.v3+json',
-      ...(TOKEN ? { 'Authorization': 'Bearer ' + TOKEN } : {}),
-    }
-  }, 10000);
-
-  if (r.status === 403) throw new Error('API 请求次数已达上限（未认证每小时 60 次），请稍后重试或登录 Token');
-  if (r.status === 404) throw new Error('仓库不存在或为私有仓库');
-  if (!r.ok) throw new Error('GitHub API 错误 (' + r.status + ')');
-
-  const data = await r.json();
-  return parseGitHubApi(data);
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  渲染
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  RENDER LIST
+// ═══════════════════════════════════════════════════════════
 function renderList(q) {
   q = (q || '').toLowerCase();
-  const list = FILES.filter(f => f.name.toLowerCase().includes(q));
-  $('cnt').textContent = '· ' + FILES.length;
-  const el = $('ml');
+  const list = S.files.filter(f => f.name.toLowerCase().includes(q));
+  $('fileCount').textContent = S.files.length;
+  const el = $('fileList');
 
   if (!list.length) {
-    el.innerHTML = '<div style="text-align:center;padding:24px 0;color:#6c7086;font-size:12px">' +
-      (FILES.length ? '无匹配结果' : '暂无会议纪要') + '</div>';
+    el.innerHTML = '<div style="text-align:center;padding:32px 0;color:#565869;font-size:13px">' +
+      (S.files.length ? '无匹配结果' : '暂无文件，登录后可新建') + '</div>';
     return;
   }
 
-  el.innerHTML = list.map(f =>
-    '<div class="itm' + (f.name === activeFile ? ' on' : '') + '" data-file="' + esc(f.name) + '">' +
-      '<div class="tt">' + esc(f.name.replace(/\.html?$/i, '')) + '</div>' +
-      '<div class="mm">' + (f.size / 1024).toFixed(1) + ' KB</div>' +
-    '</div>'
-  ).join('');
+  el.innerHTML = list.map(f => {
+    const dateMatch = f.name.match(/(\d{4}[-/.]\d{1,2}[-/.]\d{1,2})/);
+    const date = dateMatch ? dateMatch[1] : '';
+    const title = f.name.replace(/\.html?$/i, '');
+    return '<div class="file-item' + (f.name === S.active ? ' active' : '') + '" data-name="' + esc(f.name) + '">' +
+      '<div class="fi-icon">📄</div>' +
+      '<div class="fi-info">' +
+        '<div class="fi-name">' + esc(title) + '</div>' +
+        '<div class="fi-meta">' + (date ? date + ' · ' : '') + (f.size / 1024).toFixed(1) + ' KB</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
 }
 
+// ═══════════════════════════════════════════════════════════
+//  VIEW FILE
+// ═══════════════════════════════════════════════════════════
 async function viewFile(name) {
-  activeFile = name;
-  renderList($('sq').value);
-  const mc = $('mc');
-  mc.innerHTML = '<div class="loading"><div class="sp"></div><br>加载中…</div>';
-  mc.scrollTop = 0;
+  S.active = name;
+  renderList($('searchInput').value);
+
+  const head = $('mainHead');
+  const actions = $('mainActions');
+  const body = $('mainBody');
+
+  head.classList.remove('hidden');
+  $('mainTitle').textContent = name.replace(/\.html?$/i, '');
+  actions.classList.toggle('hidden', !S.isAdmin);
+
+  body.innerHTML = '<div class="loader"><div class="spinner"></div><p>加载中…</p></div>';
 
   try {
-    const file = FILES.find(f => f.name === name);
+    const file = S.files.find(f => f.name === name);
     if (!file) throw new Error('文件不存在');
 
-    const r = await fetchTimeout(file.download_url, {}, 10000);
-    if (!r.ok) throw new Error('读取失败 (' + r.status + ')');
-    const html = await r.text();
-    const title = name.replace(/\.html?$/i, '');
+    const html = await fetchFileContent(file.url);
+    const safeHtml = html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-    const safeHtml = html
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    mc.innerHTML =
-      '<div class="mn-in">' +
-        '<div class="vh">' +
-          '<h2>' + esc(title) + '</h2>' +
-          '<div class="vm">' +
-            '<span>📎 ' + esc(name) + '</span>' +
-            '<span>📏 ' + (file.size / 1024).toFixed(1) + ' KB</span>' +
-          '</div>' +
-        '</div>' +
-        (isAdmin
-          ? '<div class="vt">' +
-              '<button onclick="showEdit(\'' + esc(name) + '\')">✏️ 编辑</button>' +
-              '<button class="btn-del" onclick="doDelete(\'' + esc(name) + '\')">🗑 删除</button>' +
-            '</div>'
-          : '') +
-        '<div class="hc">' +
-          '<iframe id="ifr" srcdoc="' + safeHtml + '" sandbox="allow-same-origin" onload="fitIframe(this)"></iframe>' +
-        '</div>' +
+    body.innerHTML =
+      '<div class="meeting-meta">' +
+        '<span>📎 ' + esc(name) + '</span>' +
+        '<span>📏 ' + (file.size / 1024).toFixed(1) + ' KB</span>' +
+      '</div>' +
+      '<div class="meeting-card">' +
+        '<iframe srcdoc="' + safeHtml + '" sandbox="allow-same-origin" onload="fitFrame(this)"></iframe>' +
       '</div>';
+    body.scrollTop = 0;
   } catch (e) {
-    mc.innerHTML =
-      '<div class="error">' +
-        '加载失败: ' + esc(e.message) +
-        '<br><button class="retry-btn" onclick="viewFile(\'' + esc(name) + '\')">重试</button>' +
+    body.innerHTML =
+      '<div class="error-box">' +
+        '<p>加载失败: ' + esc(e.message) + '</p>' +
+        '<button onclick="viewFile(\'' + esc(name) + '\')">🔄 重试</button>' +
       '</div>';
   }
 }
 
-function fitIframe(iframe) {
+function fitFrame(iframe) {
   try {
     const doc = iframe.contentDocument || iframe.contentWindow.document;
-    const rs = () => { iframe.style.height = Math.max(400, doc.body.scrollHeight + 20) + 'px'; };
-    rs();
-    if (window.ResizeObserver) new ResizeObserver(rs).observe(doc.body);
-    else setInterval(rs, 500);
+    const fit = () => { iframe.style.height = Math.max(400, doc.body.scrollHeight + 24) + 'px'; };
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(doc.body);
+    else setInterval(fit, 500);
   } catch {}
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  管理员
-// ═══════════════════════════════════════════════════════════════
-function enterAdmin() {
-  isAdmin = true;
-  $('sbFt').classList.add('admin');
-  $('btnManage').textContent = '🚪 退出管理';
-  if (activeFile) viewFile(activeFile);
-}
-function exitAdmin() {
-  isAdmin = false;
-  localStorage.removeItem(TOKEN_KEY);
-  TOKEN = '';
-  $('sbFt').classList.remove('admin');
-  $('btnManage').textContent = '⚙️ 管理';
-  if (activeFile) viewFile(activeFile);
+// ═══════════════════════════════════════════════════════════
+//  ADMIN
+// ═══════════════════════════════════════════════════════════
+function setAdmin(v) {
+  S.isAdmin = v;
+  const footer = $('sidebarFooter');
+  const btn = $('btnAdmin');
+  const actions = $('mainActions');
+
+  footer.classList.toggle('has-admin', v);
+  btn.classList.toggle('is-admin', v);
+  btn.textContent = v ? '🚪 退出管理' : '🔐 管理登录';
+  actions.classList.toggle('hidden', !v || !S.active);
+
+  if (v) localStorage.setItem(CONFIG.tokenKey, S.token);
+  else { localStorage.removeItem(CONFIG.tokenKey); S.token = ''; }
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  登录
-// ═══════════════════════════════════════════════════════════════
-function showLogin() {
-  $('loginMo').classList.add('show');
+// ═══════════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════════
+$('btnAdmin').onclick = () => {
+  if (S.isAdmin) { setAdmin(false); return; }
   $('loginErr').textContent = '';
   $('loginToken').value = '';
+  openModal('loginModal');
   setTimeout(() => $('loginToken').focus(), 100);
-}
-function hideLogin() { $('loginMo').classList.remove('show'); }
+};
 
-$('doLogin').onclick = async () => {
+$('btnLogin').onclick = async () => {
   const t = $('loginToken').value.trim();
   if (!t) { $('loginErr').textContent = '请输入 Token'; return; }
   $('loginErr').textContent = '验证中…';
   try {
-    const r = await fetchTimeout(`https://api.github.com/repos/${OWNER}/${REPO}`, {
+    const r = await safeFetch(`https://api.github.com/repos/${owner}/${repo}`, {
       headers: { Authorization: 'Bearer ' + t }
-    }, 10000);
+    }, 10000, 0);
     if (!r.ok) { $('loginErr').textContent = 'Token 无效或无权限'; return; }
-    TOKEN = t;
-    localStorage.setItem(TOKEN_KEY, t);
-    hideLogin();
-    enterAdmin();
+    S.token = t;
+    setAdmin(true);
+    closeModal('loginModal');
     clearCache();
     loadFiles();
-    toast('已进入管理模式');
-  } catch { $('loginErr').textContent = '验证失败，请检查网络'; }
+    toast('已进入管理模式 ✅');
+  } catch { $('loginErr').textContent = '网络错误，请重试'; }
 };
-$('loginToken').onkeydown = e => { if (e.key === 'Enter') $('doLogin').click(); };
-$('cancelLogin').onclick = hideLogin;
+$('loginToken').onkeydown = e => { if (e.key === 'Enter') $('btnLogin').click(); };
+$('loginModal').onclick = e => { if (e.target === e.currentTarget) closeModal('loginModal'); };
 
-// ═══════════════════════════════════════════════════════════════
-//  新建（支持批量）
-// ═══════════════════════════════════════════════════════════════
-function showNew() {
-  pending = [];
+// ═══════════════════════════════════════════════════════════
+//  NEW FILE
+// ═══════════════════════════════════════════════════════════
+$('btnNew').onclick = () => {
+  S.queue = [];
   $('newName').value = '';
   $('newContent').value = '';
-  $('fileList').innerHTML = '';
+  $('fileQueue').innerHTML = '';
   $('fileInput').value = '';
-  updateNewUI();
-  $('newMo').classList.add('show');
-}
-function hideNew() { $('newMo').classList.remove('show'); }
+  toggleManualInput();
+  openModal('newModal');
+};
+$('newModal').onclick = e => { if (e.target === e.currentTarget) closeModal('newModal'); };
 
-function updateNewUI() {
-  const has = pending.length > 0;
-  $('nameBlock').style.display = has ? 'none' : '';
-  $('contentBlock').style.display = has ? 'none' : '';
+function toggleManualInput() {
+  $('manualInput').style.display = S.queue.length ? 'none' : '';
 }
 
-$('fileInput').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+// 上传区域
+$('fileInput').onchange = e => { addToQueue(e.target.files); e.target.value = ''; };
+const uz = $('uploadZone');
+uz.ondragover = e => { e.preventDefault(); uz.classList.add('drag'); };
+uz.ondragleave = () => uz.classList.remove('drag');
+uz.ondrop = e => { e.preventDefault(); uz.classList.remove('drag'); addToQueue(e.dataTransfer.files); };
 
-const uz = $('upZone');
-uz.ondragover = e => { e.preventDefault(); uz.classList.add('dg'); };
-uz.ondragleave = () => uz.classList.remove('dg');
-uz.ondrop = e => { e.preventDefault(); uz.classList.remove('dg'); addFiles(e.dataTransfer.files); };
-
-async function addFiles(fileList) {
-  const arr = Array.from(fileList).filter(f => /\.html?$/i.test(f.name));
-  if (!arr.length) { toast('请选择 .html 文件', 'err'); return; }
-  for (const f of arr) {
-    const content = await f.text();
-    pending.push({ name: f.name, content, size: f.size });
+async function addToQueue(fileList) {
+  for (const f of Array.from(fileList).filter(f => /\.html?$/i.test(f.name))) {
+    S.queue.push({ name: f.name, content: await f.text(), size: f.size });
   }
-  renderPending();
+  if (!S.queue.length && fileList.length) { toast('请选择 .html 文件', 'err'); return; }
+  renderQueue();
 }
 
-function renderPending() {
-  $('fileList').innerHTML = pending.map((f, i) =>
-    '<div class="fl">' +
-      '<span class="fname">' + esc(f.name) + '</span>' +
-      '<span class="fsize">' + (f.size / 1024).toFixed(1) + ' KB</span>' +
-      '<span class="st" id="fs' + i + '"></span>' +
-      '<button class="frm" data-rm="' + i + '">✕</button>' +
+function renderQueue() {
+  $('fileQueue').innerHTML = S.queue.map((f, i) =>
+    '<div class="fq-item">' +
+      '<span class="fq-name">' + esc(f.name) + '</span>' +
+      '<span class="fq-size">' + (f.size / 1024).toFixed(1) + ' KB</span>' +
+      '<span class="fq-status" id="fq' + i + '"></span>' +
+      '<button class="fq-rm" data-rm="' + i + '">✕</button>' +
     '</div>'
   ).join('');
-  updateNewUI();
+  toggleManualInput();
 }
 
-$('fileList').onclick = e => {
+$('fileQueue').onclick = e => {
   const btn = e.target.closest('[data-rm]');
   if (!btn) return;
-  pending.splice(+btn.dataset.rm, 1);
-  renderPending();
+  S.queue.splice(+btn.dataset.rm, 1);
+  renderQueue();
 };
 
-$('saveNew').onclick = async () => {
-  if (pending.length) {
+$('btnSave').onclick = async () => {
+  const btn = $('btnSave');
+  btn.disabled = true;
+
+  if (S.queue.length) {
     let ok = 0, fail = 0;
-    for (let i = 0; i < pending.length; i++) {
-      const f = pending[i];
-      const st = $('fs' + i);
-      st.textContent = '上传中…'; st.className = 'st ld';
+    for (let i = 0; i < S.queue.length; i++) {
+      const f = S.queue[i];
+      const st = $('fq' + i);
+      st.textContent = '上传中…'; st.className = 'fq-status ld';
       try {
         await ghApi('PUT', f.name, {
-          message: '新增会议纪要: ' + f.name,
+          message: '新增: ' + f.name,
           content: btoa(unescape(encodeURIComponent(f.content))),
         });
-        st.textContent = '✓'; st.className = 'st ok'; ok++;
+        st.textContent = '✓'; st.className = 'fq-status ok'; ok++;
       } catch (e) {
-        st.textContent = '✗ ' + (e.message || '失败'); st.className = 'st er'; fail++;
+        st.textContent = '✗'; st.className = 'fq-status er'; fail++;
       }
     }
-    toast('上传完成: ' + ok + ' 成功' + (fail ? ', ' + fail + ' 失败' : ''), fail ? 'err' : 'ok');
-    clearCache(); loadFiles(); hideNew();
+    toast(`完成: ${ok} 成功${fail ? ', ' + fail + ' 失败' : ''}`, fail ? 'err' : 'ok');
   } else {
     const name = $('newName').value.trim();
     const content = $('newContent').value.trim();
-    if (!content) { toast('请输入内容', 'err'); return; }
+    if (!content) { toast('请输入内容', 'err'); btn.disabled = false; return; }
     const fileName = (name || new Date().toISOString().slice(0, 10)) + '.html';
     try {
       await ghApi('PUT', fileName, {
-        message: '新增会议纪要: ' + fileName,
+        message: '新增: ' + fileName,
         content: btoa(unescape(encodeURIComponent(content))),
       });
-      toast('保存成功'); clearCache(); loadFiles(); hideNew();
-    } catch (e) { toast('保存失败: ' + e.message, 'err'); }
+      toast('保存成功 ✅');
+    } catch (e) { toast('保存失败: ' + e.message, 'err'); btn.disabled = false; return; }
   }
+
+  clearCache();
+  await loadFiles();
+  closeModal('newModal');
+  btn.disabled = false;
 };
-$('cancelNew').onclick = hideNew;
 
-// ═══════════════════════════════════════════════════════════════
-//  GitHub API（写操作用，需要 Token）
-// ═══════════════════════════════════════════════════════════════
-async function ghApi(method, path, body) {
-  const r = await fetchTimeout(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`, {
-    method,
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN,
-      'Content-Type': 'application/json',
-      'Accept': 'application/vnd.github.v3+json',
-    },
-    body: JSON.stringify(body),
-  }, 15000);
-  const d = await r.json();
-  if (!r.ok) throw new Error(d.message || 'API 错误');
-  return d;
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  编辑
-// ═══════════════════════════════════════════════════════════════
-async function showEdit(name) {
-  editingFile = name;
-  $('editName').value = name;
+// ═══════════════════════════════════════════════════════════
+//  EDIT
+// ═══════════════════════════════════════════════════════════
+async function editCurrent() {
+  if (!S.active) return;
+  S.editing = S.active;
+  $('editName').value = S.active;
   $('editContent').value = '加载中…';
-  $('editMo').classList.add('show');
+  openModal('editModal');
   try {
-    const file = FILES.find(f => f.name === name);
+    const file = S.files.find(f => f.name === S.active);
     if (!file) throw new Error('文件不存在');
-    const r = await fetchTimeout(file.download_url, {}, 10000);
-    if (!r.ok) throw new Error('读取失败');
-    $('editContent').value = await r.text();
-  } catch (e) { $('editContent').value = ''; toast('加载失败: ' + e.message, 'err'); }
+    $('editContent').value = await fetchFileContent(file.url);
+  } catch (e) {
+    $('editContent').value = '';
+    toast('加载失败: ' + e.message, 'err');
+  }
 }
+$('editModal').onclick = e => { if (e.target === e.currentTarget) closeModal('editModal'); };
 
-$('saveEdit').onclick = async () => {
+$('btnEditSave').onclick = async () => {
   const newName = $('editName').value.trim();
   const content = $('editContent').value;
   if (!newName || !content) { toast('文件名和内容不能为空', 'err'); return; }
+  const btn = $('btnEditSave');
+  btn.disabled = true;
   try {
-    if (newName !== editingFile) {
-      const old = FILES.find(f => f.name === editingFile);
-      if (old) await ghApi('DELETE', editingFile, { message: '重命名: ' + editingFile + ' → ' + newName, sha: old.sha });
+    // 重名处理
+    if (newName !== S.editing) {
+      const old = S.files.find(f => f.name === S.editing);
+      if (old) await ghApi('DELETE', S.editing, { message: '重命名 → ' + newName, sha: old.sha });
     }
     let sha;
-    if (newName === editingFile) { const old = FILES.find(f => f.name === editingFile); sha = old ? old.sha : undefined; }
+    if (newName === S.editing) { const old = S.files.find(f => f.name === S.editing); sha = old?.sha; }
     await ghApi('PUT', newName, {
-      message: '更新会议纪要: ' + newName,
+      message: '更新: ' + newName,
       content: btoa(unescape(encodeURIComponent(content))),
       ...(sha ? { sha } : {}),
     });
-    toast('保存成功'); clearCache(); loadFiles();
-    $('editMo').classList.remove('show');
-    if (activeFile === editingFile) viewFile(newName);
+    toast('保存成功 ✅');
+    clearCache();
+    await loadFiles();
+    closeModal('editModal');
+    viewFile(newName);
   } catch (e) { toast('保存失败: ' + e.message, 'err'); }
+  btn.disabled = false;
 };
-$('cancelEdit').onclick = () => $('editMo').classList.remove('show');
 
-// ═══════════════════════════════════════════════════════════════
-//  删除
-// ═══════════════════════════════════════════════════════════════
-async function doDelete(name) {
-  if (!confirm('确定删除「' + name + '」吗？此操作不可撤销。')) return;
+// ═══════════════════════════════════════════════════════════
+//  DELETE
+// ═══════════════════════════════════════════════════════════
+async function deleteCurrent() {
+  if (!S.active) return;
+  if (!confirm('确定删除「' + S.active + '」？不可恢复。')) return;
   try {
-    const file = FILES.find(f => f.name === name);
+    const file = S.files.find(f => f.name === S.active);
     if (!file) throw new Error('文件不存在');
-    await ghApi('DELETE', name, { message: '删除会议纪要: ' + name, sha: file.sha });
-    toast('已删除'); clearCache(); activeFile = null; loadFiles();
-    $('mc').innerHTML = '<div class="empty"><div class="ei">📝</div><p>选择一条会议纪要</p></div>';
+    await ghApi('DELETE', S.active, { message: '删除: ' + S.active, sha: file.sha });
+    toast('已删除 🗑');
+    clearCache();
+    S.active = null;
+    $('mainHead').classList.add('hidden');
+    $('mainBody').innerHTML = '<div class="empty-state"><div class="es-icon">📋</div><p>选择一条会议纪要</p></div>';
+    await loadFiles();
   } catch (e) { toast('删除失败: ' + e.message, 'err'); }
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  事件
-// ═══════════════════════════════════════════════════════════════
-$('btnManage').onclick = () => { if (isAdmin) exitAdmin(); else showLogin(); };
-$('btnNew').onclick = showNew;
-
-$('ml').onclick = e => {
-  const item = e.target.closest('.itm');
-  if (item) viewFile(item.dataset.file);
+// ═══════════════════════════════════════════════════════════
+//  EVENTS
+// ═══════════════════════════════════════════════════════════
+// 侧栏点击（事件委托）
+$('fileList').onclick = e => {
+  const item = e.target.closest('.file-item');
+  if (item) viewFile(item.dataset.name);
 };
 
+// 搜索防抖
 let searchTimer;
-$('sq').oninput = e => { clearTimeout(searchTimer); searchTimer = setTimeout(() => renderList(e.target.value), 200); };
+$('searchInput').oninput = e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => renderList(e.target.value), 150);
+};
 
-document.querySelectorAll('.mo').forEach(mo => {
-  mo.onclick = e => { if (e.target === mo) mo.classList.remove('show'); };
+// 离线检测
+window.addEventListener('online', () => $('offlineBar').classList.remove('show'));
+window.addEventListener('offline', () => {
+  const bar = $('offlineBar');
+  bar.textContent = '⚠️ 网络已断开';
+  bar.classList.add('show');
 });
 
-window.addEventListener('online', () => $('offlineBar').classList.remove('show'));
-window.addEventListener('offline', () => { $('offlineBar').classList.add('show'); $('offlineBar').textContent = '⚠️ 网络已断开'; });
-
-// ═══════════════════════════════════════════════════════════════
-//  初始化
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
 (function init() {
-  const saved = localStorage.getItem(TOKEN_KEY);
-  if (saved) { TOKEN = saved; enterAdmin(); }
+  const saved = localStorage.getItem(CONFIG.tokenKey);
+  if (saved) { S.token = saved; setAdmin(true); }
   loadFiles();
 })();
 </script>
