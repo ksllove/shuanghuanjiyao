@@ -8,14 +8,13 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;height:100vh;overflow:hidden;display:flex}
 
-/* sidebar */
 .side{width:280px;min-width:280px;background:#1a1a2e;color:#ccc;display:flex;flex-direction:column}
 .side h1{font-size:15px;padding:16px;border-bottom:1px solid #2a2a40;color:#eee;display:flex;align-items:center;gap:6px}
 .side h1 small{font-size:11px;color:#666;margin-left:auto;font-weight:400}
 .srch{padding:8px 10px}
 .srch input{width:100%;padding:7px 10px;background:#2a2a40;border:none;border-radius:6px;color:#ccc;font-size:13px;outline:none}
-.srch input:focus{box-shadow:0 0 0 2px #4a6fa5}
 .srch input::placeholder{color:#555}
+.srch input:focus{box-shadow:0 0 0 2px #4a6fa5}
 .list{flex:1;overflow-y:auto;padding:0 6px}
 .list::-webkit-scrollbar{width:3px}
 .list::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
@@ -28,7 +27,6 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .sfoot button{width:100%;padding:9px;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;background:#4a6fa5;color:#fff}
 .sfoot button:hover{background:#5a8fc5}
 
-/* main */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .mtop{padding:12px 20px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;gap:10px;min-height:50px}
 .mtop h2{font-size:16px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -38,26 +36,19 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .mtop .acts .del:hover{background:#fee;color:#e55;border-color:#eaa}
 .mbody{flex:1;overflow-y:auto;padding:20px 24px 50px}
 
-/* card */
 .info{font-size:12px;color:#888;margin-bottom:12px;display:flex;gap:12px}
 .card{background:#fff;border-radius:10px;border:1px solid #ddd;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .card iframe{width:100%;border:none;display:block;min-height:400px}
 
-/* empty */
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#999;gap:8px}
 .empty .ei{font-size:48px;opacity:.2}
-
-/* loading */
 .ld{text-align:center;padding:40px;color:#999}
 .ld .sp{display:inline-block;width:24px;height:24px;border:2.5px solid #ddd;border-top-color:#4a6fa5;border-radius:50%;animation:sp .6s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .ld p{font-size:13px;margin-top:8px}
-
-/* error */
 .err{background:#fff5f5;border:1px solid #fcc;border-radius:8px;padding:16px;text-align:center;color:#c44;margin:10px 0}
 .err button{margin-top:8px;padding:6px 16px;border:none;border-radius:6px;background:#4a6fa5;color:#fff;cursor:pointer;font-size:12px}
 
-/* modal */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:100}
 .ov.show{display:flex}
 .md{background:#fff;border-radius:14px;padding:24px;width:500px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
@@ -73,47 +64,37 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .bs{background:#f0f0f0;color:#555}.bs:hover{background:#e5e5e5}
 .bp:disabled{opacity:.4;cursor:not-allowed}
 
-/* upload */
 .up{border:2px dashed #ccc;border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:.12s}
 .up:hover,.up.dg{border-color:#4a6fa5;background:#f0f4ff}
 .up p{font-size:13px;color:#888}
 .up small{font-size:11px;color:#aaa}
-
-/* queue */
 .qi{display:flex;align-items:center;gap:6px;padding:6px 10px;background:#f8f8f8;border-radius:6px;margin-bottom:4px;font-size:12px}
 .qi .qn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qi .qs{color:#999;font-size:10px}
 .qi .qst{font-size:10px}.qst.ok{color:#4a4}.qst.er{color:#e44}.qst.ld{color:#4a6fa5}
 .qi button{background:none;border:none;color:#e55;cursor:pointer;font-size:14px}
 
-/* toast */
 .toast{position:fixed;bottom:20px;right:20px;padding:8px 16px;border-radius:8px;color:#fff;font-size:12px;font-weight:500;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.15)}
 .toast.ok{background:#4a4}.toast.er{background:#e44}
-
-/* offline */
 .off{position:fixed;top:0;left:0;right:0;background:#e44;color:#fff;text-align:center;padding:5px;font-size:11px;font-weight:600;z-index:300;display:none}
 .off.show{display:block}
-
 @media(max-width:600px){body{flex-direction:column}.side{width:100%;min-width:100%;height:40vh}.main{min-height:60vh}}
 </style>
 </head>
 <body>
-
 <div class="off" id="offBar">⚠️ 网络断开</div>
 
 <aside class="side">
   <h1>📋 会议纪要 <small id="cnt"></small></h1>
   <div class="srch"><input id="sI" placeholder="搜索…" autocomplete="off"></div>
-  <div class="list" id="fL">
-    <div class="ld"><div class="sp"></div><p>加载中…</p></div>
-  </div>
+  <div class="list" id="fL"><div class="ld"><div class="sp"></div><p>加载中…</p></div></div>
   <div class="sfoot"><button id="btnN">＋ 新建会议纪要</button></div>
 </aside>
 
 <main class="main">
   <div class="mtop" id="mT" style="display:none">
     <h2 id="mTi"></h2>
-    <div class="acts" id="mAc">
+    <div class="acts">
       <button onclick="doEdit()">✏️ 编辑</button>
       <button class="del" onclick="doDel()">🗑 删除</button>
     </div>
@@ -159,26 +140,24 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 </div>
 
 <!-- Token -->
-<div class="ov" id="tOv" style="display:flex">
+<div class="ov" id="tOv">
   <div class="md">
-    <h2>🔑 输入 GitHub Token</h2>
-    <p style="font-size:12px;color:#888;margin-bottom:14px">首次使用需要输入 Token，之后自动保存在浏览器中</p>
+    <h2>🔑 需要验证</h2>
+    <p style="font-size:12px;color:#888;margin-bottom:14px">操作需要 GitHub Token（保存在浏览器中，下次不用再输）</p>
     <div class="fg"><input type="password" id="tI" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off"></div>
     <div class="ma">
+      <button class="bs" onclick="closeOv('tOv');_tkRej&&_tkRej()">取消</button>
       <button class="bp" id="btnT">确定</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════
-const OWNER='ksllove', REPO='shuanghuanjiyao', BR='main';
-const TK_KEY='gh_token_v4';
+const OWNER='ksllove',REPO='shuanghuanjiyao',BR='main',TK_KEY='gh_tk_v5';
 const API=`https://api.github.com/repos/${OWNER}/${REPO}`;
-const CDN=`https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BR}`;
-const JSD=`https://data.jsdelivr.com/v1/packages/gh/${OWNER}/${REPO}@${BR}`;
 
-let TOKEN='', FILES=[], ACTIVE=null, EDITING=null, QUEUE=[];
+let TOKEN='',FILES=[],ACTIVE=null,EDITING=null,QUEUE=[];
+let _tkRes=null,_tkRej=null;
 
 const $=id=>document.getElementById(id);
 const esc=s=>{const d=document.createElement('div');d.textContent=s||'';return d.innerHTML};
@@ -186,41 +165,46 @@ function toast(m,t='ok'){const e=document.createElement('div');e.className='toas
 function closeOv(id){$(id).classList.remove('show')}
 function openOv(id){$(id).classList.add('show')}
 
-async function ft(u,o={},ms=8000){
-  const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);
-  try{return await fetch(u,{...o,signal:c.signal})}finally{clearTimeout(t)}
-}
-
-// ═══ TOKEN ═══
-(function initToken(){
+// ═══ Token（仅写操作时弹出）═══
+function needTk(){
+  if(TOKEN)return Promise.resolve();
   const s=localStorage.getItem(TK_KEY);
-  if(s){TOKEN=s;$('tOv').style.display='none';init()}
-})();
-
+  if(s){TOKEN=s;return Promise.resolve()}
+  return new Promise((ok,no)=>{
+    _tkRes=ok;_tkRej=no;$('tI').value='';openOv('tOv');setTimeout(()=>$('tI').focus(),100);
+  });
+}
 $('btnT').onclick=async()=>{
-  const t=$('tI').value.trim();
-  if(!t)return;
+  const t=$('tI').value.trim();if(!t)return;
   try{
-    const r=await ft(`${API}`,{headers:{Authorization:'Bearer '+t}},10000);
+    const r=await fetch(API,{headers:{Authorization:'Bearer '+t}});
     if(!r.ok){toast('Token 无效','er');return}
-    TOKEN=t;localStorage.setItem(TK_KEY,t);
-    $('tOv').style.display='none';init();
+    TOKEN=t;localStorage.setItem(TK_KEY,t);closeOv('tOv');_tkRes&&_tkRes();
   }catch{toast('网络错误','er')}
 };
 $('tI').onkeydown=e=>{if(e.key==='Enter')$('btnT').click()};
 
-// ═══ LOAD ═══
+// ═══ API ═══
+async function gh(method,path,body){
+  const r=await fetch(`${API}/contents/${path}`,{
+    method,headers:{Authorization:'Bearer '+TOKEN,'Content-Type':'application/json',Accept:'application/vnd.github.v3+json'},
+    body:JSON.stringify(body)
+  });
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.message||'操作失败');
+  return d;
+}
+
+// ═══ Load ═══
 async function loadList(){
   const el=$('fL');
   el.innerHTML='<div class="ld"><div class="sp"></div><p>加载中…</p></div>';
   try{
-    // jsdelivr data API
-    const r=await ft(JSD,{},8000);
+    const r=await fetch(`${API}/contents/?ref=${BR}`,{headers:{Accept:'application/vnd.github.v3+json'}});
     if(!r.ok)throw new Error('加载失败 '+r.status);
     const d=await r.json();
-    FILES=(d.files||[])
-      .filter(f=>f.name.endsWith('.html')&&f.name!=='index.html')
-      .map(f=>({name:f.name,size:f.size||0}))
+    FILES=d.filter(f=>f.name.endsWith('.html')&&f.name!=='index.html')
+      .map(f=>({name:f.name,size:f.size,sha:f.sha,url:f.download_url}))
       .sort((a,b)=>b.name.localeCompare(a.name));
     render();
   }catch(e){
@@ -237,46 +221,29 @@ function render(q){
   el.innerHTML=ls.map(f=>'<div class="fi'+(f.name===ACTIVE?' on':'')+'" data-n="'+esc(f.name)+'"><div class="fn">'+esc(f.name.replace(/\.html?$/i,''))+'</div><div class="fm">'+(f.size/1024).toFixed(1)+' KB</div></div>').join('');
 }
 
-// ═══ VIEW ═══
+// ═══ View ═══
 async function view(name){
   ACTIVE=name;render($('sI').value);
-  $('mT').style.display='';
-  $('mTi').textContent=name.replace(/\.html?$/i,'');
+  $('mT').style.display='';$('mTi').textContent=name.replace(/\.html?$/i,'');
   const mb=$('mB');
   mb.innerHTML='<div class="ld"><div class="sp"></div><p>加载中…</p></div>';
   try{
-    // CDN 优先
-    let html;
-    const cdnUrl=`${CDN}/${name}`;
-    try{const r=await ft(cdnUrl,{},6000);if(r.ok)html=await r.text();else throw 0}
-    catch{const r=await ft(`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BR}/${name}`,{},10000);if(!r.ok)throw new Error('读取失败');html=await r.text()}
+    const f=FILES.find(x=>x.name===name);if(!f)throw new Error('文件不存在');
+    const r=await fetch(f.url);if(!r.ok)throw new Error('读取失败');
+    const html=await r.text();
     const safe=html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    mb.innerHTML='<div class="info"><span>📎 '+esc(name)+'</span><span>📏 '+(FILES.find(f=>f.name===name)?.size/1024||0).toFixed(1)+' KB</span></div><div class="card"><iframe srcdoc="'+safe+'" sandbox="allow-same-origin" onload="fit(this)"></iframe></div>';
+    mb.innerHTML='<div class="info"><span>📎 '+esc(name)+'</span><span>📏 '+(f.size/1024).toFixed(1)+' KB</span></div><div class="card"><iframe srcdoc="'+safe+'" sandbox="allow-same-origin" onload="fit(this)"></iframe></div>';
     mb.scrollTop=0;
   }catch(e){mb.innerHTML='<div class="err"><p>'+esc(e.message)+'</p><button onclick="view(\''+esc(name)+'\')">重试</button></div>'}
 }
 
 function fit(ifr){try{const d=ifr.contentDocument||ifr.contentWindow.document;const r=()=>{ifr.style.height=Math.max(400,d.body.scrollHeight+20)+'px'};r();new ResizeObserver(r).observe(d.body)}catch{}}
 
-// ═══ GITHUB API ═══
-async function gh(method,path,body){
-  const r=await ft(`${API}/contents/${path}`,{
-    method,headers:{Authorization:'Bearer '+TOKEN,'Content-Type':'application/json',Accept:'application/vnd.github.v3+json'},
-    body:JSON.stringify(body)
-  },15000);
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.message||'操作失败');
-  return d;
-}
-
-async function getSha(name){
-  const r=await ft(`${API}/contents/${name}`,{headers:{Accept:'application/vnd.github.v3+json'}},10000);
-  if(!r.ok)return null;
-  return (await r.json()).sha;
-}
-
-// ═══ NEW ═══
-$('btnN').onclick=()=>{QUEUE=[];$('nN').value='';$('nC').value='';$('fQ').innerHTML='';$('fIn').value='';togM();openOv('nOv')};
+// ═══ New ═══
+$('btnN').onclick=async()=>{
+  try{await needTk()}catch{return}
+  QUEUE=[];$('nN').value='';$('nC').value='';$('fQ').innerHTML='';$('fIn').value='';togM();openOv('nOv');
+};
 $('nOv').onclick=e=>{if(e.target===e.currentTarget)closeOv('nOv')};
 function togM(){$('mI').style.display=QUEUE.length?'none':''}
 
@@ -308,7 +275,7 @@ $('btnS').onclick=async()=>{
         try{await gh('PUT',f.name,{message:'新增: '+f.name,content:btoa(unescape(encodeURIComponent(f.content)))});st.textContent='✓';st.className='qst ok';ok++}
         catch{st.textContent='✗';st.className='qst er';fail++}
       }
-      toast(`${ok}成功${fail?` ${fail}失败`:''}`,fail?'er':'ok');
+      toast(`${ok}成功${fail?' '+fail+'失败':''}`,fail?'er':'ok');
     }else{
       const nm=$('nN').value.trim(),ct=$('nC').value.trim();
       if(!ct){toast('请输入内容','er');btn.disabled=false;return}
@@ -321,15 +288,15 @@ $('btnS').onclick=async()=>{
   btn.disabled=false;
 };
 
-// ═══ EDIT ═══
+// ═══ Edit ═══
 window.doEdit=async()=>{
-  if(!ACTIVE)return;EDITING=ACTIVE;
-  $('eN').value=ACTIVE;$('eC').value='加载中…';openOv('eOv');
+  if(!ACTIVE)return;
+  try{await needTk()}catch{return}
+  EDITING=ACTIVE;$('eN').value=ACTIVE;$('eC').value='加载中…';openOv('eOv');
   try{
-    let html;
-    try{const r=await ft(`${CDN}/${ACTIVE}`,{},6000);if(r.ok)html=await r.text();else throw 0}
-    catch{const r=await ft(`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BR}/${ACTIVE}`,{},10000);if(!r.ok)throw 0;html=await r.text()}
-    $('eC').value=html;
+    const f=FILES.find(x=>x.name===ACTIVE);if(!f)throw 0;
+    const r=await fetch(f.url);if(!r.ok)throw 0;
+    $('eC').value=await r.text();
   }catch{toast('加载失败','er');$('eC').value=''}
 };
 $('eOv').onclick=e=>{if(e.target===e.currentTarget)closeOv('eOv')};
@@ -339,24 +306,25 @@ $('btnE').onclick=async()=>{
   if(!nm||!ct){toast('不能为空','er');return}
   const btn=$('btnE');btn.disabled=true;
   try{
+    let sha=FILES.find(f=>f.name===nm)?.sha||null;
     if(nm!==EDITING){
-      const sha=await getSha(EDITING);
-      if(sha)await gh('DELETE',EDITING,{message:'重命名 → '+nm,sha});
+      const old=FILES.find(f=>f.name===EDITING);
+      if(old)await gh('DELETE',EDITING,{message:'重命名 → '+nm,sha:old.sha});
+      sha=null;
     }
-    const sha=nm===EDITING?await getSha(EDITING):null;
     await gh('PUT',nm,{message:'更新: '+nm,content:btoa(unescape(encodeURIComponent(ct))),...(sha?{sha}:{})});
     toast('保存成功');await loadList();closeOv('eOv');view(nm);
   }catch(e){toast('失败: '+e.message,'er')}
   btn.disabled=false;
 };
 
-// ═══ DELETE ═══
+// ═══ Delete ═══
 window.doDel=async()=>{
   if(!ACTIVE||!confirm('删除「'+ACTIVE+'」？不可恢复'))return;
+  try{await needTk()}catch{return}
   try{
-    const sha=await getSha(ACTIVE);
-    if(!sha)throw new Error('文件不存在');
-    await gh('DELETE',ACTIVE,{message:'删除: '+ACTIVE,sha});
+    const f=FILES.find(x=>x.name===ACTIVE);if(!f)throw new Error('文件不存在');
+    await gh('DELETE',ACTIVE,{message:'删除: '+ACTIVE,sha:f.sha});
     toast('已删除');ACTIVE=null;
     $('mT').style.display='none';
     $('mB').innerHTML='<div class="empty"><div class="ei">📋</div><p>选择一条会议纪要</p></div>';
@@ -364,14 +332,14 @@ window.doDel=async()=>{
   }catch(e){toast('删除失败: '+e.message,'er')}
 };
 
-// ═══ EVENTS ═══
+// ═══ Events ═══
 $('fL').onclick=e=>{const it=e.target.closest('.fi');if(it)view(it.dataset.n)};
 let st;$('sI').oninput=e=>{clearTimeout(st);st=setTimeout(()=>render(e.target.value),150)};
 window.addEventListener('online',()=>$('offBar').classList.remove('show'));
 window.addEventListener('offline',()=>$('offBar').classList.add('show'));
 
-// ═══ INIT ═══
-function init(){loadList()}
+// ═══ Init ═══
+loadList();
 </script>
 </body>
 </html>
