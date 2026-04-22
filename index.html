@@ -57,7 +57,7 @@
 
   /* Login modal */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;backdrop-filter:blur(3px)}
-  .modal{background:#fff;border-radius:16px;padding:28px;width:440px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal{background:#fff;border-radius:16px;padding:28px;width:520px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
   .modal h2{font-size:17px;margin-bottom:4px}
   .modal .sub{font-size:13px;color:#666;margin-bottom:16px}
   .modal .err{color:#f38ba8;font-size:12px;margin-bottom:8px;min-height:18px}
@@ -78,6 +78,18 @@
   .uz:hover,.uz.dg{border-color:#89b4fa;background:#f0f4ff}
   .uz .ui{font-size:22px;opacity:.4;margin-bottom:4px}
   .uz p{font-size:12px;color:#585b70}
+
+  /* File list */
+  .fls{margin-bottom:12px}
+  .fl{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;font-size:13px}
+  .fl .fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fl .fsize{color:#94a3b8;font-size:11px;white-space:nowrap}
+  .fl .frm{cursor:pointer;color:#f38ba8;font-weight:700;padding:0 4px}
+  .fl .frm:hover{color:#dc2626}
+  .fl .fstatus{font-size:11px;white-space:nowrap}
+  .fl .fstatus.done{color:#10b981}
+  .fl .fstatus.err{color:#ef4444}
+  .fl .fstatus.loading{color:#3b82f6}
 
   /* Toast */
   .toast{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:500;z-index:999;animation:slideIn .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.15)}
@@ -269,46 +281,124 @@ function showLogin() {
   setTimeout(() => document.getElementById('loginToken').focus(), 100);
 }
 
-// ─── New ───
+// ─── New (batch upload) ───
+let pendingFiles = []; // [{name, content, size}]
+
 function showNew() {
+  pendingFiles = [];
   showModal(`
     <h2>➕ 新建会议纪要</h2>
-    <div class="fg"><label>文件名</label><input type="text" id="newName" placeholder="例：2024-04-22-项目评审会"></div>
-    <div class="fg">
+    <div class="uz" id="upZone">
+      <div class="ui">📄</div>
+      <p>拖拽或点击上传 HTML 文件（支持批量）</p>
+    </div>
+    <div class="fls" id="fileList"></div>
+    <div class="fg" id="manualBlock" style="${pendingFiles.length ? 'display:none' : ''}">
+      <label>文件名 <span style="color:#94a3b8;font-weight:400">（可选，留空则使用上传文件名）</span></label>
+      <input type="text" id="newName" placeholder="例：2024-04-22-项目评审会">
+    </div>
+    <div class="fg" id="contentBlock" style="${pendingFiles.length ? 'display:none' : ''}">
       <label>内容 (HTML)</label>
-      <div class="uz" id="upZone"><div class="ui">📄</div><p>拖拽或点击上传 HTML 文件（可选）</p></div>
-      <textarea id="newContent" rows="10"><!DOCTYPE html>
-<html lang="zh-CN">
-<head><meta charset="UTF-8"><title>会议纪要</title></head>
-<body>
-<h1>会议标题</h1>
-<p><strong>日期：</strong>2024-04-22</p>
-<p><strong>参会人：</strong></p>
-<h2>会议内容</h2>
-<ol><li></li></ol>
-<h2>决议事项</h2>
-<ol><li></li></ol>
-</body>
-</html></textarea>
+      <textarea id="newContent" rows="8" placeholder="粘贴 HTML 内容，或直接上传文件…"></textarea>
     </div>
     <div class="ma">
-      <button class="btn-p" id="saveNew">保存</button>
+      <button class="btn-p" id="saveNew" ${!pendingFiles.length ? 'disabled' : ''}>保存</button>
       <button class="btn-g" onclick="hideModal()">取消</button>
     </div>
   `);
-  setupUpload('upZone', 'newContent');
-  document.getElementById('saveNew').onclick = async () => {
-    let name = document.getElementById('newName').value.trim();
-    const content = document.getElementById('newContent').value;
-    if (!name) { toast('请输入文件名', 'err'); return; }
-    if (!name.endsWith('.html')) name += '.html';
-    const btn = document.getElementById('saveNew');
-    btn.textContent = '保存中…'; btn.disabled = true;
-    try {
-      await ghApi('PUT', encodeURIComponent(name), { message: `添加会议纪要: ${name}`, content: btoa(unescape(encodeURIComponent(content))), branch: BRANCH });
-      toast('创建成功！'); hideModal(); await loadFiles();
-    } catch (e) { toast('创建失败: ' + e.message, 'err'); btn.textContent = '保存'; btn.disabled = false; }
+  setupBatchUpload();
+  document.getElementById('saveNew').onclick = saveBatch;
+}
+
+function setupBatchUpload() {
+  const zone = document.getElementById('upZone');
+  const fi = document.createElement('input');
+  fi.type = 'file'; fi.accept = '.html,.htm'; fi.multiple = true; fi.style.display = 'none';
+  zone.appendChild(fi);
+  zone.onclick = () => fi.click();
+  zone.ondragover = e => { e.preventDefault(); zone.classList.add('dg'); };
+  zone.ondragleave = () => zone.classList.remove('dg');
+  zone.ondrop = e => { e.preventDefault(); zone.classList.remove('dg'); addFiles(e.dataTransfer.files); };
+  fi.onchange = e => { addFiles(e.target.files); fi.value = ''; };
+}
+
+async function addFiles(fileList) {
+  const arr = Array.from(fileList).filter(f => /\.html?$/i.test(f.name));
+  if (!arr.length) return;
+  for (const f of arr) {
+    const content = await f.text();
+    pendingFiles.push({ name: f.name, content, size: f.size });
+  }
+  renderPending();
+}
+
+function addManualContent() {
+  const name = document.getElementById('newName').value.trim();
+  const content = document.getElementById('newContent').value.trim();
+  if (!content) { toast('请填写内容或上传文件', 'err'); return; }
+  const fname = name ? (name.endsWith('.html') ? name : name + '.html') : '未命名-' + Date.now() + '.html';
+  pendingFiles.push({ name: fname, content, size: content.length });
+  document.getElementById('newName').value = '';
+  document.getElementById('newContent').value = '';
+  renderPending();
+}
+
+function renderPending() {
+  const list = document.getElementById('fileList');
+  const hasFiles = pendingFiles.length > 0;
+  document.getElementById('manualBlock').style.display = hasFiles ? 'none' : '';
+  document.getElementById('contentBlock').style.display = hasFiles ? 'none' : '';
+  const saveBtn = document.getElementById('saveNew');
+  if (saveBtn) saveBtn.disabled = !hasFiles;
+  if (!hasFiles) { list.innerHTML = ''; return; }
+  list.innerHTML = pendingFiles.map((f, i) => `
+    <div class="fl">
+      <span class="fname">${esc(f.name)}</span>
+      <span class="fsize">${(f.size / 1024).toFixed(1)} KB</span>
+      <span class="fstatus" id="fs${i}"></span>
+      <span class="frm" data-rm="${i}">✕</span>
+    </div>`).join('');
+  list.onclick = e => {
+    const rm = e.target.dataset.rm;
+    if (rm !== undefined) { pendingFiles.splice(+rm, 1); renderPending(); }
   };
+}
+
+async function saveBatch() {
+  // If no uploaded files, try manual content
+  if (!pendingFiles.length) {
+    const name = document.getElementById('newName')?.value.trim();
+    const content = document.getElementById('newContent')?.value.trim();
+    if (!content) { toast('请上传文件或填写内容', 'err'); return; }
+    const fname = (name ? (name.endsWith('.html') ? name : name + '.html') : '未命名-' + Date.now() + '.html');
+    pendingFiles.push({ name: fname, content, size: content.length });
+  }
+  const btn = document.getElementById('saveNew');
+  btn.textContent = '上传中…'; btn.disabled = true;
+  let ok = 0, fail = 0;
+  for (let i = 0; i < pendingFiles.length; i++) {
+    const f = pendingFiles[i];
+    const status = document.getElementById('fs' + i);
+    if (status) { status.textContent = '上传中…'; status.className = 'fstatus loading'; }
+    try {
+      await ghApi('PUT', encodeURIComponent(f.name), {
+        message: `添加会议纪要: ${f.name}`,
+        content: btoa(unescape(encodeURIComponent(f.content))),
+        branch: BRANCH
+      });
+      if (status) { status.textContent = '✓'; status.className = 'fstatus done'; }
+      ok++;
+    } catch (e) {
+      if (status) { status.textContent = '失败'; status.className = 'fstatus err'; }
+      fail++;
+    }
+    // Avoid rate limit
+    if (i < pendingFiles.length - 1) await new Promise(r => setTimeout(r, 300));
+  }
+  if (fail === 0) { toast(`全部 ${ok} 个文件上传成功！`); hideModal(); }
+  else toast(`${ok} 成功，${fail} 失败`, fail > 0 ? 'err' : 'ok');
+  btn.textContent = '保存'; btn.disabled = false;
+  await loadFiles();
 }
 
 // ─── Edit ───
@@ -360,19 +450,6 @@ async function doDelete(name) {
     document.getElementById('mc').innerHTML = '<div class="empty"><div class="ei">📝</div><p>选择一条会议纪要</p></div>';
     await loadFiles();
   } catch (e) { toast('删除失败: ' + e.message, 'err'); }
-}
-
-// ─── Upload helper ───
-function setupUpload(zoneId, textareaId) {
-  const zone = document.getElementById(zoneId);
-  const fi = document.createElement('input');
-  fi.type = 'file'; fi.accept = '.html,.htm'; fi.style.display = 'none';
-  zone.appendChild(fi);
-  zone.onclick = () => fi.click();
-  zone.ondragover = e => { e.preventDefault(); zone.classList.add('dg'); };
-  zone.ondragleave = () => zone.classList.remove('dg');
-  zone.ondrop = async e => { e.preventDefault(); zone.classList.remove('dg'); const f = e.dataTransfer.files[0]; if (f && /\.html?$/i.test(f.name)) { document.getElementById(textareaId).value = await f.text(); toast('文件已导入', 'info'); } };
-  fi.onchange = async e => { const f = e.target.files[0]; if (f) { document.getElementById(textareaId).value = await f.text(); toast('文件已导入', 'info'); } };
 }
 
 // ─── Events ───
