@@ -204,7 +204,18 @@ function hdrs() {
 function apiFetch(url, opts) {
   opts = opts || {};
   opts.headers = hdrs();
-  return fetch(url, opts);
+  return fetch(url, opts).then(function(r) {
+    if (r.status === 401) {
+      TOKEN = '';
+      localStorage.removeItem('gh_token');
+      updateTokenUI();
+      FILES = [];
+      render();
+      toast('⚠️ Token 已过期，请重新输入', 'er');
+      setTimeout(function() { $('tokenInput').focus() }, 500);
+    }
+    return r;
+  });
 }
 
 // ═══ Token 管理 ═══
