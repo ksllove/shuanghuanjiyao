@@ -3,119 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>会议纪要</title>
+<title>HTML 文件管理器</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;height:100vh;overflow:hidden;display:flex}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#0f0f1a;color:#e0e0e0;height:100vh;overflow:hidden;display:flex}
 
-.side{width:280px;min-width:280px;background:#1a1a2e;color:#ccc;display:flex;flex-direction:column}
-.side h1{font-size:15px;padding:16px;border-bottom:1px solid #2a2a40;color:#eee;display:flex;align-items:center;gap:6px}
-.side h1 small{font-size:11px;color:#666;margin-left:auto;font-weight:400}
-.srch{padding:8px 10px}
-.srch input{width:100%;padding:7px 10px;background:#2a2a40;border:none;border-radius:6px;color:#ccc;font-size:13px;outline:none}
+/* ═══ 侧边栏 ═══ */
+.side{width:300px;min-width:300px;background:#16162a;display:flex;flex-direction:column;border-right:1px solid #2a2a45}
+.side h1{font-size:16px;padding:18px 16px;border-bottom:1px solid #2a2a45;color:#fff;display:flex;align-items:center;gap:8px}
+.side h1 .ico{font-size:20px}
+.side h1 small{font-size:11px;color:#666;margin-left:auto;font-weight:400;background:#2a2a45;padding:2px 8px;border-radius:10px}
+.srch{padding:10px 12px}
+.srch input{width:100%;padding:9px 12px;background:#1e1e38;border:1px solid #2a2a45;border-radius:8px;color:#ccc;font-size:13px;outline:none;transition:.2s}
 .srch input::placeholder{color:#555}
-.srch input:focus{box-shadow:0 0 0 2px #4a6fa5}
-.list{flex:1;overflow-y:auto;padding:0 6px}
-.list::-webkit-scrollbar{width:3px}
-.list::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
-.fi{padding:10px 10px;border-radius:6px;cursor:pointer;margin-bottom:1px;border-left:3px solid transparent;transition:.1s}
-.fi:hover{background:#2a2a40}
-.fi.on{background:#3a3a55;border-left-color:#4a6fa5}
+.srch input:focus{border-color:#6c5ce7;box-shadow:0 0 0 3px rgba(108,92,231,.15)}
+.list{flex:1;overflow-y:auto;padding:0 8px}
+.list::-webkit-scrollbar{width:4px}
+.list::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+.fi{padding:12px 14px;border-radius:8px;cursor:pointer;margin-bottom:2px;border-left:3px solid transparent;transition:.15s;position:relative}
+.fi:hover{background:#1e1e38}
+.fi.on{background:#252545;border-left-color:#6c5ce7}
 .fi .fn{font-size:13px;font-weight:600;color:#ddd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fi .fm{font-size:11px;color:#666;margin-top:2px}
-.sfoot{padding:10px;border-top:1px solid #2a2a40}
-.sfoot button{width:100%;padding:9px;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;background:#4a6fa5;color:#fff}
-.sfoot button:hover{background:#5a8fc5}
+.fi .fm{font-size:11px;color:#666;margin-top:3px;display:flex;gap:8px}
+.fi .badge{font-size:9px;padding:1px 6px;border-radius:4px;background:#2a2a45;color:#888}
+.sfoot{padding:12px;border-top:1px solid #2a2a45;display:flex;gap:8px}
+.sfoot button{flex:1;padding:10px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.btn-primary{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1px solid #3a3a55!important;color:#aaa}
+.btn-outline:hover{border-color:#6c5ce7!important;color:#fff}
 
+/* ═══ 主区域 ═══ */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.mtop{padding:12px 20px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;gap:10px;min-height:50px}
-.mtop h2{font-size:16px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mtop .acts{display:flex;gap:5px}
-.mtop .acts button{padding:5px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;font-size:12px;cursor:pointer;color:#555}
-.mtop .acts button:hover{background:#f5f5f5}
-.mtop .acts .del:hover{background:#fee;color:#e55;border-color:#eaa}
-.mbody{flex:1;overflow-y:auto;padding:20px 24px 50px}
+.mtop{padding:14px 24px;background:#16162a;border-bottom:1px solid #2a2a45;display:flex;align-items:center;gap:12px;min-height:54px}
+.mtop h2{font-size:16px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff}
+.mtop .acts{display:flex;gap:6px}
+.mtop .acts button{padding:6px 14px;border:1px solid #3a3a55;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#aaa;transition:.15s}
+.mtop .acts button:hover{background:#252545;color:#fff;border-color:#6c5ce7}
+.mtop .acts .del:hover{background:#3a1a1a;color:#ff6b6b;border-color:#ff6b6b}
 
-.info{font-size:12px;color:#888;margin-bottom:12px;display:flex;gap:12px}
-.card{background:#fff;border-radius:10px;border:1px solid #ddd;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.card iframe{width:100%;border:none;display:block;min-height:400px}
+.mbody{flex:1;overflow-y:auto;padding:24px 28px 60px}
 
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#999;gap:8px}
-.empty .ei{font-size:48px;opacity:.2}
-.ld{text-align:center;padding:40px;color:#999}
+.info{font-size:12px;color:#888;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap}
+.info span{display:flex;align-items:center;gap:4px}
 
-.err{background:#fff5f5;border:1px solid #fcc;border-radius:8px;padding:16px;text-align:center;color:#c44;margin:10px 0}
-.err button{margin-top:8px;padding:6px 16px;border:none;border-radius:6px;background:#4a6fa5;color:#fff;cursor:pointer;font-size:12px}
+.card{background:#1a1a30;border-radius:12px;border:1px solid #2a2a45;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.card iframe{width:100%;border:none;display:block;min-height:400px;background:#fff}
 
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:100}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#666;gap:12px}
+.empty .ei{font-size:64px;opacity:.15}
+.empty p{font-size:15px}
+.empty small{font-size:12px;color:#555}
+
+/* ═══ 弹窗 ═══ */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:100}
 .ov.show{display:flex}
-.md{background:#fff;border-radius:14px;padding:24px;width:500px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.md h2{font-size:16px;margin-bottom:14px;font-weight:700}
-.md .fg{margin-bottom:12px}
-.md label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
-.md input[type=text],.md textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none}
-.md input:focus,.md textarea:focus{border-color:#4a6fa5;box-shadow:0 0 0 3px rgba(74,111,165,.12)}
-.md textarea{font-family:'Menlo','Consolas',monospace;font-size:12px;resize:vertical;min-height:180px}
-.md .ma{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
-.md .ma button{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none}
-.bp{background:#4a6fa5;color:#fff}.bp:hover{background:#5a8fc5}
-.bs{background:#f0f0f0;color:#555}.bs:hover{background:#e5e5e5}
-.bp:disabled{opacity:.4;cursor:not-allowed}
+.md{background:#1a1a30;border:1px solid #2a2a45;border-radius:16px;padding:28px;width:700px;max-width:94vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.4)}
+.md h2{font-size:17px;margin-bottom:18px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.md .fg{margin-bottom:14px}
+.md label{display:block;font-size:12px;font-weight:600;color:#aaa;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.md input[type=text],.md textarea{width:100%;padding:10px 14px;border:1px solid #2a2a45;border-radius:8px;font-size:13px;outline:none;background:#12122a;color:#e0e0e0;transition:.2s}
+.md input:focus,.md textarea:focus{border-color:#6c5ce7;box-shadow:0 0 0 3px rgba(108,92,231,.12)}
+.md textarea{font-family:'JetBrains Mono','Fira Code','Menlo','Consolas',monospace;font-size:12px;resize:vertical;min-height:220px;line-height:1.6;tab-size:2}
+.md .ma{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.md .ma button{padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.15s}
+.bp{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
+.bp:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.bs{background:#252545;color:#aaa;border:1px solid #3a3a55!important}
+.bs:hover{background:#2a2a50;color:#fff}
+.bp:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
-.up{border:2px dashed #ccc;border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:.12s}
-.up:hover,.up.dg{border-color:#4a6fa5;background:#f0f4ff}
-.up p{font-size:13px;color:#888}
-.up small{font-size:11px;color:#aaa}
-.qi{display:flex;align-items:center;gap:6px;padding:6px 10px;background:#f8f8f8;border-radius:6px;margin-bottom:4px;font-size:12px}
-.qi .qn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.qi .qs{color:#999;font-size:10px}
-.qi .qst{font-size:10px}.qst.ok{color:#4a4}.qst.er{color:#e44}.qst.ld{color:#4a6fa5}
-.qi button{background:none;border:none;color:#e55;cursor:pointer;font-size:14px}
+/* ═══ 上传区 ═══ */
+.up{border:2px dashed #3a3a55;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.15s}
+.up:hover,.up.dg{border-color:#6c5ce7;background:#1e1e38}
+.up p{font-size:14px;color:#aaa}
+.up small{font-size:11px;color:#666}
+.qi{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#1e1e38;border-radius:8px;margin-bottom:4px;font-size:12px;border:1px solid #2a2a45}
+.qi .qn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ddd}
+.qi .qs{color:#666;font-size:10px}
+.qi .qst{font-size:10px;font-weight:600}.qst.ok{color:#6c5ce7}.qst.er{color:#ff6b6b}.qst.ld{color:#a855f7}
+.qi button{background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:14px;padding:2px 4px;border-radius:4px}
+.qi button:hover{background:#3a1a1a}
 
-.toast{position:fixed;bottom:20px;right:20px;padding:8px 16px;border-radius:8px;color:#fff;font-size:12px;font-weight:500;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.15)}
-.toast.ok{background:#4a4}.toast.er{background:#e44}
-.off{position:fixed;top:0;left:0;right:0;background:#e44;color:#fff;text-align:center;padding:5px;font-size:11px;font-weight:600;z-index:300;display:none}
+/* ═══ 代码编辑器 ═══ */
+.editor-container{display:flex;gap:0;border:1px solid #2a2a45;border-radius:10px;overflow:hidden;margin-top:8px}
+.editor-wrap{flex:1;display:flex;flex-direction:column;min-height:300px}
+.editor-header{padding:8px 12px;background:#12122a;border-bottom:1px solid #2a2a45;font-size:11px;color:#666;display:flex;align-items:center;justify-content:space-between}
+.editor-header .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
+.code-editor{flex:1;width:100%;padding:14px;background:#0d0d1a;color:#e0e0e0;border:none;outline:none;resize:none;font-family:'JetBrains Mono','Fira Code','Menlo','Consolas',monospace;font-size:12px;line-height:1.7;tab-size:2;overflow:auto}
+.code-editor::-webkit-scrollbar{width:6px}
+.code-editor::-webkit-scrollbar-thumb{background:#333;border-radius:6px}
+.preview-pane{flex:1;border-left:1px solid #2a2a45;display:flex;flex-direction:column}
+.preview-pane .editor-header{cursor:pointer}
+.preview-pane iframe{flex:1;border:none;background:#fff}
+
+/* ═══ 工具栏 ═══ */
+.toolbar{display:flex;gap:6px;align-items:center}
+.toolbar button{padding:4px 10px;background:#1e1e38;border:1px solid #2a2a45;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer;transition:.15s}
+.toolbar button:hover{border-color:#6c5ce7;color:#fff}
+
+/* ═══ Toast ═══ */
+.toast{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:500;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:slideIn .3s ease}
+.toast.ok{background:linear-gradient(135deg,#6c5ce7,#a855f7)}
+.toast.er{background:#ff5f56}
+@keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+.off{position:fixed;top:0;left:0;right:0;background:#ff5f56;color:#fff;text-align:center;padding:6px;font-size:12px;font-weight:600;z-index:300;display:none}
 .off.show{display:block}
-@media(max-width:600px){body{flex-direction:column}.side{width:100%;min-width:100%;height:40vh}.main{min-height:60vh}}
+
+/* ═══ 响应式 ═══ */
+@media(max-width:768px){
+  body{flex-direction:column}
+  .side{width:100%;min-width:100%;height:45vh}
+  .main{min-height:55vh}
+  .md{width:96vw}
+  .editor-container{flex-direction:column}
+  .preview-pane{border-left:none;border-top:1px solid #2a2a45}
+}
 </style>
 </head>
 <body>
 <div class="off" id="offBar">⚠️ 网络断开</div>
 
 <aside class="side">
-  <h1>📋 会议纪要 <small id="cnt"></small></h1>
-  <div class="srch"><input id="sI" placeholder="搜索…" autocomplete="off"></div>
+  <h1><span class="ico">🌐</span> HTML 管理器 <small id="cnt">0</small></h1>
+  <div class="srch"><input id="sI" placeholder="🔍 搜索文件…" autocomplete="off"></div>
   <div class="list" id="fL"></div>
-  <div class="sfoot"><button id="btnN">＋ 新建会议纪要</button></div>
+  <div class="sfoot">
+    <button class="btn-primary" id="btnN">＋ 上传文件</button>
+    <button class="btn-outline" id="btnNew">📝 新建空白</button>
+  </div>
 </aside>
 
 <main class="main">
   <div class="mtop" id="mT" style="display:none">
     <h2 id="mTi"></h2>
     <div class="acts">
-      <button onclick="doEdit()">✏️ 编辑</button>
+      <button onclick="doEdit()">✏️ 编辑代码</button>
+      <button onclick="doPreview()">👁 预览</button>
       <button class="del" onclick="doDel()">🗑 删除</button>
     </div>
   </div>
   <div class="mbody" id="mB">
-    <div class="empty"><div class="ei">📋</div><p>选择一条会议纪要</p></div>
+    <div class="empty">
+      <div class="ei">🌐</div>
+      <p>选择或上传一个 HTML 文件</p>
+      <small>所有文件存储在浏览器本地，无需登录</small>
+    </div>
   </div>
 </main>
 
-<!-- New -->
+<!-- 上传弹窗 -->
 <div class="ov" id="nOv">
   <div class="md">
-    <h2>＋ 新建会议纪要</h2>
+    <h2>📤 上传 HTML 文件</h2>
     <div class="fg">
       <label class="up" id="upZ" for="fIn">
-        <p>📄 点击选择或拖拽 HTML 文件</p><small>支持批量 .html/.htm</small>
+        <p>📄 点击选择或拖拽 HTML 文件到此处</p>
+        <small>支持批量上传 .html / .htm 格式</small>
       </label>
       <input type="file" id="fIn" accept=".html,.htm" multiple style="display:none">
     </div>
     <div id="fQ"></div>
     <div id="mI">
-      <div class="fg"><label>文件名（可选）</label><input type="text" id="nN" placeholder="2024-04-22-项目评审会"></div>
-      <div class="fg"><label>内容 (HTML)</label><textarea id="nC" rows="7" placeholder="粘贴 HTML…"></textarea></div>
+      <div class="fg"><label>文件名（可选，留空用原文件名）</label><input type="text" id="nN" placeholder="例如：2024-04-22-项目评审会"></div>
+      <div class="fg"><label>HTML 内容</label><textarea id="nC" rows="8" placeholder="粘贴 HTML 代码…"></textarea></div>
     </div>
     <div class="ma">
       <button class="bs" onclick="closeOv('nOv')">取消</button>
@@ -124,24 +177,46 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
   </div>
 </div>
 
-<!-- Edit -->
+<!-- 代码编辑器弹窗 -->
 <div class="ov" id="eOv">
-  <div class="md">
-    <h2>✏️ 编辑</h2>
-    <div class="fg"><label>文件名</label><input type="text" id="eN"></div>
-    <div class="fg"><label>内容 (HTML)</label><textarea id="eC" rows="14"></textarea></div>
-    <div class="ma">
+  <div class="md" style="width:95vw;max-width:1400px;height:85vh">
+    <h2>✏️ 代码编辑器 — <span id="eTitle" style="color:#a855f7;font-weight:400"></span></h2>
+    <div class="fg" style="margin-bottom:8px">
+      <label>文件名</label>
+      <input type="text" id="eN" style="max-width:400px">
+    </div>
+    <div class="editor-container" style="flex:1;min-height:0">
+      <div class="editor-wrap">
+        <div class="editor-header">
+          <span><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> HTML</span>
+          <div class="toolbar">
+            <button onclick="fmtCode()">🔧 格式化</button>
+            <button onclick="wrapTag()">🏷 包裹标签</button>
+            <button onclick="insertSnippet()">📝 插入模板</button>
+          </div>
+        </div>
+        <textarea class="code-editor" id="eC" spellcheck="false" placeholder="在此编辑 HTML 代码…"></textarea>
+      </div>
+      <div class="preview-pane">
+        <div class="editor-header" onclick="refreshPreview()">
+          👁 实时预览 <small style="margin-left:auto;color:#6c5ce7">点击刷新</small>
+        </div>
+        <iframe id="previewFrame"></iframe>
+      </div>
+    </div>
+    <div class="ma" style="margin-top:12px">
       <button class="bs" onclick="closeOv('eOv')">取消</button>
-      <button class="bp" id="btnE">保存</button>
+      <button class="bp" onclick="saveEdit()">💾 保存</button>
+      <button class="bp" style="background:linear-gradient(135deg,#27c93f,#6c5ce7)" onclick="saveAndView()">💾 保存并预览</button>
     </div>
   </div>
 </div>
 
 <script>
 // ═══ IndexedDB 存储层 ═══
-const DB_NAME = 'MeetingMinutesDB';
-const DB_VER = 1;
-const STORE = 'minutes';
+const DB_NAME = 'HTMLFileManager';
+const DB_VER = 2;
+const STORE = 'files';
 
 function openDB() {
   return new Promise((ok, no) => {
@@ -161,18 +236,7 @@ async function dbGetAll() {
   const db = await openDB();
   return new Promise((ok, no) => {
     const tx = db.transaction(STORE, 'readonly');
-    const st = tx.objectStore(STORE);
-    const req = st.getAll();
-    req.onsuccess = () => ok(req.result);
-    req.onerror = () => no(req.error);
-  });
-}
-
-async function dbGet(name) {
-  const db = await openDB();
-  return new Promise((ok, no) => {
-    const tx = db.transaction(STORE, 'readonly');
-    const req = tx.objectStore(STORE).get(name);
+    const req = tx.objectStore(STORE).getAll();
     req.onsuccess = () => ok(req.result);
     req.onerror = () => no(req.error);
   });
@@ -200,16 +264,32 @@ async function dbDelete(name) {
 
 // ═══ 工具函数 ═══
 let FILES = [], ACTIVE = null, EDITING = null, QUEUE = [];
+let previewTimer = null;
 
 const $ = id => document.getElementById(id);
 const esc = s => { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML };
+
 function toast(m, t = 'ok') {
   const e = document.createElement('div');
   e.className = 'toast ' + t; e.textContent = m;
-  document.body.appendChild(e); setTimeout(() => e.remove(), 3000);
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 3000);
 }
+
 function closeOv(id) { $(id).classList.remove('show') }
 function openOv(id) { $(id).classList.add('show') }
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function formatDate(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
 
 // ═══ 加载列表 ═══
 async function loadList() {
@@ -217,45 +297,62 @@ async function loadList() {
     const all = await dbGetAll();
     FILES = all.map(f => ({
       name: f.name,
-      size: f.content.length,
-      content: f.content,
+      size: (f.content || '').length,
+      content: f.content || '',
       updated: f.updated || 0
-    })).sort((a, b) => b.name.localeCompare(a.name));
+    })).sort((a, b) => (b.updated || 0) - (a.updated || 0));
     render();
   } catch (e) {
-    $('fL').innerHTML = '<div class="err"><p>' + esc(e.message) + '</p><button onclick="loadList()">🔄 重试</button></div>';
+    $('fL').innerHTML = '<div style="padding:20px;text-align:center">' +
+      '<p style="color:#ff6b6b">加载失败</p>' +
+      '<p style="color:#666;font-size:12px;margin:8px 0">' + esc(e.message) + '</p>' +
+      '<button onclick="loadList()" style="padding:6px 16px;border:1px solid #3a3a55;border-radius:6px;background:transparent;color:#aaa;cursor:pointer">🔄 重试</button></div>';
   }
 }
 
 function render(q) {
   q = (q || '').toLowerCase();
   const ls = FILES.filter(f => f.name.toLowerCase().includes(q));
-  $('cnt').textContent = FILES.length + ' 条';
+  $('cnt').textContent = FILES.length + ' 个文件';
   const el = $('fL');
+
   if (!ls.length) {
-    el.innerHTML = '<div style="text-align:center;padding:24px;color:#666;font-size:12px">' + (FILES.length ? '无匹配' : '暂无文件') + '</div>';
+    el.innerHTML = '<div style="text-align:center;padding:32px 16px;color:#555;font-size:13px">' +
+      (FILES.length ? '🔍 无匹配结果' : '📭 暂无文件<br><small style="color:#444">点击下方按钮上传或新建</small>') + '</div>';
     return;
   }
-  el.innerHTML = ls.map(f =>
-    '<div class="fi' + (f.name === ACTIVE ? ' on' : '') + '" data-n="' + esc(f.name) + '">' +
-    '<div class="fn">' + esc(f.name.replace(/\.html?$/i, '')) + '</div>' +
-    '<div class="fm">' + (f.size / 1024).toFixed(1) + ' KB</div></div>'
-  ).join('');
+
+  el.innerHTML = ls.map(f => {
+    const isActive = f.name === ACTIVE;
+    const ext = f.name.split('.').pop().toLowerCase();
+    const icon = ext === 'htm' || ext === 'html' ? '📄' : '📋';
+    return '<div class="fi' + (isActive ? ' on' : '') + '" data-n="' + esc(f.name) + '">' +
+      '<div class="fn">' + icon + ' ' + esc(f.name.replace(/\.html?$/i, '')) + '</div>' +
+      '<div class="fm"><span>' + formatSize(f.size) + '</span>' +
+      '<span>' + formatDate(f.updated) + '</span>' +
+      '<span class="badge">' + ext.toUpperCase() + '</span></div></div>';
+  }).join('');
 }
 
-// ═══ 查看 ═══
+// ═══ 查看预览 ═══
 function view(name) {
-  ACTIVE = name; render($('sI').value);
+  ACTIVE = name;
+  render($('sI').value);
   $('mT').style.display = '';
   $('mTi').textContent = name.replace(/\.html?$/i, '');
+
   const mb = $('mB');
   const f = FILES.find(x => x.name === name);
   if (!f) {
-    mb.innerHTML = '<div class="err"><p>文件不存在</p></div>';
+    mb.innerHTML = '<div style="padding:40px;text-align:center;color:#ff6b6b">文件不存在</div>';
     return;
   }
+
   const safe = f.content.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  mb.innerHTML = '<div class="info"><span>📎 ' + esc(name) + '</span><span>📏 ' + (f.size / 1024).toFixed(1) + ' KB</span></div>' +
+  mb.innerHTML = '<div class="info">' +
+    '<span>📎 ' + esc(name) + '</span>' +
+    '<span>📏 ' + formatSize(f.size) + '</span>' +
+    '<span>🕐 ' + formatDate(f.updated) + '</span></div>' +
     '<div class="card"><iframe srcdoc="' + safe + '" sandbox="allow-same-origin" onload="fit(this)"></iframe></div>';
   mb.scrollTop = 0;
 }
@@ -263,36 +360,46 @@ function view(name) {
 function fit(ifr) {
   try {
     const d = ifr.contentDocument || ifr.contentWindow.document;
-    const r = () => { ifr.style.height = Math.max(400, d.body.scrollHeight + 20) + 'px' };
-    r(); new ResizeObserver(r).observe(d.body);
+    const r = () => { ifr.style.height = Math.max(400, d.body.scrollHeight + 30) + 'px' };
+    r();
+    new ResizeObserver(r).observe(d.body);
   } catch {}
 }
 
-// ═══ 新建 ═══
+// ═══ 上传 ═══
 $('btnN').onclick = () => {
-  QUEUE = []; $('nN').value = ''; $('nC').value = '';
-  $('fQ').innerHTML = ''; $('fIn').value = ''; togM(); openOv('nOv');
+  QUEUE = [];
+  $('nN').value = '';
+  $('nC').value = '';
+  $('fQ').innerHTML = '';
+  $('fIn').value = '';
+  togM();
+  openOv('nOv');
 };
+
 $('nOv').onclick = e => { if (e.target === e.currentTarget) closeOv('nOv') };
+
 function togM() { $('mI').style.display = QUEUE.length ? 'none' : '' }
 
 $('fIn').onchange = e => { addQ(e.target.files); e.target.value = '' };
+
 const uz = $('upZ');
 uz.ondragover = e => { e.preventDefault(); uz.classList.add('dg') };
 uz.ondragleave = () => uz.classList.remove('dg');
 uz.ondrop = e => { e.preventDefault(); uz.classList.remove('dg'); addQ(e.dataTransfer.files) };
 
 async function addQ(fl) {
-  for (const f of Array.from(fl).filter(x => /\.html?$/i.test(x.name)))
+  for (const f of Array.from(fl).filter(x => /\.html?$/i.test(x.name))) {
     QUEUE.push({ name: f.name, content: await f.text(), size: f.size });
-  if (!QUEUE.length && fl.length) { toast('请选择 .html 文件', 'er'); return }
+  }
+  if (!QUEUE.length && fl.length) { toast('请选择 .html 或 .htm 文件', 'er'); return }
   renderQ();
 }
 
 function renderQ() {
   $('fQ').innerHTML = QUEUE.map((f, i) =>
-    '<div class="qi"><span class="qn">' + esc(f.name) + '</span>' +
-    '<span class="qs">' + (f.size / 1024).toFixed(1) + 'KB</span>' +
+    '<div class="qi"><span class="qn">📄 ' + esc(f.name) + '</span>' +
+    '<span class="qs">' + formatSize(f.size) + '</span>' +
     '<span class="qst" id="qs' + i + '"></span>' +
     '<button onclick="rmQ(' + i + ')">✕</button></div>'
   ).join('');
@@ -301,75 +408,225 @@ function renderQ() {
 window.rmQ = function (i) { QUEUE.splice(i, 1); renderQ() };
 
 $('btnS').onclick = async () => {
-  const btn = $('btnS'); btn.disabled = true;
+  const btn = $('btnS');
+  btn.disabled = true;
   try {
     if (QUEUE.length) {
       let ok = 0, fail = 0;
       for (let i = 0; i < QUEUE.length; i++) {
         const f = QUEUE[i], st = $('qs' + i);
-        st.textContent = '保存…'; st.className = 'qst ld';
+        st.textContent = '保存…';
+        st.className = 'qst ld';
         try {
           await dbPut({ name: f.name, content: f.content, updated: Date.now() });
-          st.textContent = '✓'; st.className = 'qst ok'; ok++;
+          st.textContent = '✓';
+          st.className = 'qst ok';
+          ok++;
         } catch {
-          st.textContent = '✗'; st.className = 'qst er'; fail++;
+          st.textContent = '✗';
+          st.className = 'qst er';
+          fail++;
         }
       }
-      toast(`${ok}成功${fail ? ' ' + fail + '失败' : ''}`, fail ? 'er' : 'ok');
+      toast(ok + ' 个文件保存成功' + (fail ? '，' + fail + ' 个失败' : ''), fail ? 'er' : 'ok');
     } else {
       const nm = $('nN').value.trim(), ct = $('nC').value.trim();
-      if (!ct) { toast('请输入内容', 'er'); btn.disabled = false; return }
+      if (!ct) { toast('请输入 HTML 内容', 'er'); btn.disabled = false; return }
       const fn = (nm || new Date().toISOString().slice(0, 10)) + '.html';
       await dbPut({ name: fn, content: ct, updated: Date.now() });
-      toast('保存成功');
+      toast('「' + fn + '」保存成功');
     }
-    await loadList(); closeOv('nOv');
-  } catch (e) { toast('失败: ' + e.message, 'er') }
+    await loadList();
+    closeOv('nOv');
+  } catch (e) { toast('保存失败: ' + e.message, 'er') }
   btn.disabled = false;
 };
 
-// ═══ 编辑 ═══
+// ═══ 新建空白文件 ═══
+$('btnNew').onclick = () => {
+  EDITING = null;
+  $('eTitle').textContent = '新文件';
+  $('eN').value = '未命名-' + Date.now().toString(36) + '.html';
+  $('eC').value = '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <title>新页面</title>\n  <style>\n    body { font-family: sans-serif; padding: 20px; }\n  </style>\n</head>\n<body>\n  <h1>Hello World</h1>\n  <p>在此编写内容…</p>\n</body>\n</html>';
+  refreshPreview();
+  openOv('eOv');
+  setTimeout(() => $('eC').focus(), 100);
+};
+
+// ═══ 代码编辑器 ═══
 window.doEdit = () => {
   if (!ACTIVE) return;
   EDITING = ACTIVE;
+  $('eTitle').textContent = ACTIVE;
   $('eN').value = ACTIVE;
   const f = FILES.find(x => x.name === ACTIVE);
   $('eC').value = f ? f.content : '';
+  refreshPreview();
   openOv('eOv');
+  setTimeout(() => $('eC').focus(), 100);
 };
+
 $('eOv').onclick = e => { if (e.target === e.currentTarget) closeOv('eOv') };
 
-$('btnE').onclick = async () => {
-  const nm = $('eN').value.trim(), ct = $('eC').value;
-  if (!nm || !ct) { toast('不能为空', 'er'); return }
-  const btn = $('btnE'); btn.disabled = true;
+// 实时预览
+$('eC').addEventListener('input', () => {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(refreshPreview, 500);
+});
+
+function refreshPreview() {
+  const frame = $('previewFrame');
+  const code = $('eC').value;
   try {
-    if (nm !== EDITING) {
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    doc.open();
+    doc.write(code);
+    doc.close();
+  } catch {}
+}
+
+// Tab 键支持
+$('eC').addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const ta = e.target;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    ta.value = ta.value.substring(0, start) + '  ' + ta.value.substring(end);
+    ta.selectionStart = ta.selectionEnd = start + 2;
+  }
+  // Ctrl+S 保存
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveEdit();
+  }
+});
+
+// 保存编辑
+async function saveEdit() {
+  const nm = $('eN').value.trim();
+  const ct = $('eC').value;
+  if (!nm) { toast('文件名不能为空', 'er'); return }
+
+  try {
+    // 如果改了名字，删除旧的
+    if (EDITING && nm !== EDITING) {
       await dbDelete(EDITING);
     }
-    await dbPut({ name: nm, content: ct, updated: Date.now() });
-    toast('保存成功'); await loadList(); closeOv('eOv'); view(nm);
-  } catch (e) { toast('失败: ' + e.message, 'er') }
-  btn.disabled = false;
+    await dbPut({ name: nm.endsWith('.html') ? nm : nm + '.html', content: ct, updated: Date.now() });
+    toast('「' + nm + '」已保存');
+    await loadList();
+    ACTIVE = nm.endsWith('.html') ? nm : nm + '.html';
+    render($('sI').value);
+  } catch (e) { toast('保存失败: ' + e.message, 'er') }
+}
+
+// 保存并预览
+async function saveAndView() {
+  await saveEdit();
+  closeOv('eOv');
+  if (ACTIVE) view(ACTIVE);
+}
+
+// 代码工具
+window.fmtCode = () => {
+  const ta = $('eC');
+  let code = ta.value;
+  // 简单的 HTML 格式化
+  let indent = 0;
+  const lines = code.replace(/>\s*</g, '>\n<').split('\n');
+  const formatted = lines.map(line => {
+    line = line.trim();
+    if (!line) return '';
+    if (line.match(/^<\/\w/)) indent = Math.max(0, indent - 1);
+    const result = '  '.repeat(indent) + line;
+    if (line.match(/^<\w[^>]*[^\/]>.*$/) && !line.match(/^<(br|hr|img|input|meta|link)/i)) indent++;
+    return result;
+  }).join('\n');
+  ta.value = formatted;
+  toast('已格式化');
+};
+
+window.wrapTag = () => {
+  const ta = $('eC');
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  const selected = ta.value.substring(start, end);
+  const tag = prompt('输入标签名（如 div, p, span）:', 'div');
+  if (!tag) return;
+  ta.value = ta.value.substring(0, start) + '<' + tag + '>' + selected + '</' + tag + '>' + ta.value.substring(end);
+  toast('已包裹 <' + tag + '>');
+};
+
+window.insertSnippet = () => {
+  const snippets = {
+    '1': '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>页面标题</title>\n  <style>\n    * { margin: 0; padding: 0; box-sizing: border-box; }\n    body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }\n  </style>\n</head>\n<body>\n  <h1>标题</h1>\n  <p>内容</p>\n</body>\n</html>',
+    '2': '<table style="width:100%;border-collapse:collapse">\n  <thead>\n    <tr><th style="border:1px solid #ddd;padding:8px;background:#f5f5f5">列1</th><th style="border:1px solid #ddd;padding:8px;background:#f5f5f5">列2</th></tr>\n  </thead>\n  <tbody>\n    <tr><td style="border:1px solid #ddd;padding:8px">数据</td><td style="border:1px solid #ddd;padding:8px">数据</td></tr>\n  </tbody>\n</table>',
+    '3': '<div style="max-width:800px;margin:0 auto;padding:20px">\n  <h1 style="margin-bottom:16px">标题</h1>\n  <p style="line-height:1.8;color:#333">正文内容…</p>\n</div>'
+  };
+  const choice = prompt('选择模板:\n1 - 完整 HTML 页面\n2 - 表格\n3 - 内容容器', '1');
+  if (snippets[choice]) {
+    const ta = $('eC');
+    const pos = ta.selectionStart;
+    ta.value = ta.value.substring(0, pos) + snippets[choice] + ta.value.substring(pos);
+    toast('已插入模板');
+  }
+};
+
+// ═══ 预览当前文件 ═══
+window.doPreview = () => {
+  if (!ACTIVE) return;
+  const f = FILES.find(x => x.name === ACTIVE);
+  if (!f) return;
+  const w = window.open('', '_blank');
+  w.document.open();
+  w.document.write(f.content);
+  w.document.close();
 };
 
 // ═══ 删除 ═══
 window.doDel = async () => {
-  if (!ACTIVE || !confirm('删除「' + ACTIVE + '」？不可恢复')) return;
+  if (!ACTIVE) return;
+  if (!confirm('确定删除「' + ACTIVE + '」？此操作不可恢复。')) return;
   try {
     await dbDelete(ACTIVE);
-    toast('已删除'); ACTIVE = null;
+    toast('已删除「' + ACTIVE + '」');
+    ACTIVE = null;
     $('mT').style.display = 'none';
-    $('mB').innerHTML = '<div class="empty"><div class="ei">📋</div><p>选择一条会议纪要</p></div>';
+    $('mB').innerHTML = '<div class="empty"><div class="ei">🌐</div><p>选择或上传一个 HTML 文件</p><small>所有文件存储在浏览器本地，无需登录</small></div>';
     await loadList();
   } catch (e) { toast('删除失败: ' + e.message, 'er') }
 };
 
-// ═══ 事件 ═══
-$('fL').onclick = e => { const it = e.target.closest('.fi'); if (it) view(it.dataset.n) };
-let st; $('sI').oninput = e => { clearTimeout(st); st = setTimeout(() => render(e.target.value), 150) };
+// ═══ 事件绑定 ═══
+$('fL').onclick = e => {
+  const it = e.target.closest('.fi');
+  if (it) view(it.dataset.n);
+};
+
+let searchTimer;
+$('sI').oninput = e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => render(e.target.value), 150);
+};
+
+// 网络状态
 window.addEventListener('online', () => $('offBar').classList.remove('show'));
 window.addEventListener('offline', () => $('offBar').classList.add('show'));
+
+// 快捷键
+document.addEventListener('keydown', e => {
+  // Ctrl+N 新建
+  if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+    e.preventDefault();
+    $('btnNew').click();
+  }
+  // Escape 关闭弹窗
+  if (e.key === 'Escape') {
+    closeOv('nOv');
+    closeOv('eOv');
+  }
+});
 
 // ═══ 初始化 ═══
 loadList();
