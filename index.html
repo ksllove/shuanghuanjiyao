@@ -11,19 +11,17 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .side h1{font-size:16px;padding:18px 16px;border-bottom:1px solid #2a2a45;color:#fff;display:flex;align-items:center;gap:8px}
 .side h1 small{font-size:11px;color:#666;margin-left:auto;font-weight:400;background:#2a2a45;padding:2px 8px;border-radius:10px}
 .srch{padding:10px 12px}
-.srch input{width:100%;padding:9px 12px;background:#1e1e38;border:1px solid #2a2a45;border-radius:8px;color:#ccc;font-size:13px;outline:none;transition:.2s}
+.srch input{width:100%;padding:9px 12px;background:#1e1e38;border:1px solid #2a2a45;border-radius:8px;color:#ccc;font-size:13px;outline:none}
 .srch input::placeholder{color:#555}
 .srch input:focus{border-color:#6c5ce7;box-shadow:0 0 0 3px rgba(108,92,231,.15)}
 .list{flex:1;overflow-y:auto;padding:0 8px}
-.list::-webkit-scrollbar{width:4px}
-.list::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+.list::-webkit-scrollbar{width:4px}.list::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
 .fi{padding:12px 14px;border-radius:8px;cursor:pointer;margin-bottom:2px;border-left:3px solid transparent;transition:.15s}
-.fi:hover{background:#1e1e38}
-.fi.on{background:#252545;border-left-color:#6c5ce7}
+.fi:hover{background:#1e1e38}.fi.on{background:#252545;border-left-color:#6c5ce7}
 .fi .fn{font-size:13px;font-weight:600;color:#ddd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fi .fm{font-size:11px;color:#666;margin-top:3px;display:flex;gap:8px}
+.fi .fm{font-size:11px;color:#666;margin-top:3px}
 .sfoot{padding:12px;border-top:1px solid #2a2a45;display:flex;gap:8px}
-.sfoot button{flex:1;padding:10px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.sfoot button{flex:1;padding:10px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
 .btn-primary{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}
 .btn-primary:hover{filter:brightness(1.1)}
 .btn-outline{background:transparent;border:1px solid #3a3a55!important;color:#aaa}
@@ -32,7 +30,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .mtop{padding:14px 24px;background:#16162a;border-bottom:1px solid #2a2a45;display:flex;align-items:center;gap:12px;min-height:54px}
 .mtop h2{font-size:16px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff}
 .mtop .acts{display:flex;gap:6px}
-.mtop .acts button{padding:6px 14px;border:1px solid #3a3a55;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#aaa;transition:.15s}
+.mtop .acts button{padding:6px 14px;border:1px solid #3a3a55;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#aaa}
 .mtop .acts button:hover{background:#252545;color:#fff;border-color:#6c5ce7}
 .mtop .acts .del:hover{background:#3a1a1a;color:#ff6b6b;border-color:#ff6b6b}
 .mbody{flex:1;overflow-y:auto;padding:24px 28px 60px}
@@ -47,33 +45,31 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .md h2{font-size:17px;margin-bottom:18px;font-weight:700;color:#fff}
 .md .fg{margin-bottom:14px}
 .md label{display:block;font-size:12px;font-weight:600;color:#aaa;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-.md input[type=text],.md textarea{width:100%;padding:10px 14px;border:1px solid #2a2a45;border-radius:8px;font-size:13px;outline:none;background:#12122a;color:#e0e0e0;transition:.2s}
-.md input:focus,.md textarea:focus{border-color:#6c5ce7;box-shadow:0 0 0 3px rgba(108,92,231,.12)}
+.md input[type=text],.md textarea{width:100%;padding:10px 14px;border:1px solid #2a2a45;border-radius:8px;font-size:13px;outline:none;background:#12122a;color:#e0e0e0}
+.md input:focus,.md textarea:focus{border-color:#6c5ce7}
 .md textarea{font-family:'Menlo','Consolas',monospace;font-size:12px;resize:vertical;min-height:220px;line-height:1.6;tab-size:2}
 .md .ma{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
-.md .ma button{padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:.15s}
+.md .ma button{padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none}
 .bp{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}.bp:hover{filter:brightness(1.1)}
 .bs{background:#252545;color:#aaa;border:1px solid #3a3a55!important}.bs:hover{background:#2a2a50;color:#fff}
 .bp:disabled{opacity:.4;cursor:not-allowed}
-.up{border:2px dashed #3a3a55;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.15s}
+.up{border:2px dashed #3a3a55;border-radius:10px;padding:24px;text-align:center;cursor:pointer}
 .up:hover,.up.dg{border-color:#6c5ce7;background:#1e1e38}
-.up p{font-size:14px;color:#aaa}
-.up small{font-size:11px;color:#666}
+.up p{font-size:14px;color:#aaa}.up small{font-size:11px;color:#666}
 .qi{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#1e1e38;border-radius:8px;margin-bottom:4px;font-size:12px;border:1px solid #2a2a45}
 .qi .qn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ddd}
 .qi .qs{color:#666;font-size:10px}
 .qi .qst{font-size:10px;font-weight:600}.qst.ok{color:#6c5ce7}.qst.er{color:#ff6b6b}.qst.ld{color:#a855f7}
 .qi button{background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:14px}
-.editor-wrap{display:flex;gap:0;border:1px solid #2a2a45;border-radius:10px;overflow:hidden;margin-top:8px}
-.ed-pane{flex:1;display:flex;flex-direction:column;min-height:300px}
+.ed-wrap{display:flex;gap:0;border:1px solid #2a2a45;border-radius:10px;overflow:hidden;margin-top:8px}
+.ed-p{flex:1;display:flex;flex-direction:column;min-height:300px}
 .ed-bar{padding:8px 12px;background:#12122a;border-bottom:1px solid #2a2a45;font-size:11px;color:#666;display:flex;align-items:center;justify-content:space-between}
 .ed-bar .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
 .dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
 .code-ed{flex:1;width:100%;padding:14px;background:#0d0d1a;color:#e0e0e0;border:none;outline:none;resize:none;font-family:'Menlo','Consolas',monospace;font-size:12px;line-height:1.7;tab-size:2;overflow:auto}
-.code-ed::-webkit-scrollbar{width:6px}.code-ed::-webkit-scrollbar-thumb{background:#333;border-radius:6px}
-.prev-pane{flex:1;border-left:1px solid #2a2a45;display:flex;flex-direction:column}
-.prev-pane .ed-bar{cursor:pointer}
-.prev-pane iframe{flex:1;border:none;background:#fff}
+.prev-p{flex:1;border-left:1px solid #2a2a45;display:flex;flex-direction:column}
+.prev-p .ed-bar{cursor:pointer}
+.prev-p iframe{flex:1;border:none;background:#fff}
 .tb{display:flex;gap:6px}.tb button{padding:4px 10px;background:#1e1e38;border:1px solid #2a2a45;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}.tb button:hover{border-color:#6c5ce7;color:#fff}
 .toast{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:500;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:si .3s ease}
 .toast.ok{background:linear-gradient(135deg,#6c5ce7,#a855f7)}.toast.er{background:#ff5f56}
@@ -82,14 +78,14 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .off.show{display:block}
 .ld{display:inline-block;width:14px;height:14px;border:2px solid #3a3a55;border-top-color:#6c5ce7;border-radius:50%;animation:sp .6s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.token-bar{padding:10px 12px;border-bottom:1px solid #2a2a45;background:#1a1a30;display:flex;align-items:center;gap:8px}
-.token-bar input{flex:1;padding:6px 10px;background:#12122a;border:1px solid #2a2a45;border-radius:6px;color:#ccc;font-size:11px;outline:none}
-.token-bar input:focus{border-color:#6c5ce7}
-.token-bar button{padding:6px 12px;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-weight:600}
-.token-bar .ok{background:#27c93f;color:#fff}.token-bar .set{background:#6c5ce7;color:#fff}
-.status{font-size:10px;padding:2px 8px;border-radius:4px}
-.status.on{background:#27c93f22;color:#27c93f}.status.off{background:#ff5f5622;color:#ff5f56}
-@media(max-width:768px){body{flex-direction:column}.side{width:100%;min-width:100%;height:45vh}.main{min-height:55vh}.md{width:96vw}.editor-wrap{flex-direction:column}.prev-pane{border-left:none;border-top:1px solid #2a2a45}}
+.tk-bar{padding:10px 12px;border-bottom:1px solid #2a2a45;background:#1a1a30;display:flex;align-items:center;gap:8px}
+.tk-bar input{flex:1;padding:8px 12px;background:#12122a;border:1px solid #2a2a45;border-radius:8px;color:#ccc;font-size:12px;outline:none}
+.tk-bar input:focus{border-color:#6c5ce7}
+.tk-bar button{padding:8px 16px;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;background:#6c5ce7;color:#fff}
+.tk-bar button:hover{filter:brightness(1.1)}
+.st{font-size:10px;padding:3px 10px;border-radius:6px;font-weight:600}
+.st.on{background:#27c93f22;color:#27c93f}.st.off{background:#ff5f5622;color:#ff5f56}
+@media(max-width:768px){body{flex-direction:column}.side{width:100%;min-width:100%;height:45vh}.main{min-height:55vh}.md{width:96vw}.ed-wrap{flex-direction:column}.prev-p{border-left:none;border-top:1px solid #2a2a45}}
 </style>
 </head>
 <body>
@@ -97,16 +93,16 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 
 <aside class="side">
   <h1>🌐 HTML 管理器 <small id="cnt">0</small></h1>
-  <div class="token-bar" id="tokenBar">
-    <input id="tokenInput" type="password" placeholder="GitHub Token (ghp_...)" autocomplete="off">
-    <button class="set" onclick="saveToken()">设置</button>
-    <span class="status off" id="tokenStatus">未连接</span>
+  <div class="tk-bar">
+    <input id="tokenInput" type="text" placeholder="粘贴 GitHub Token (ghp_...)" autocomplete="off">
+    <button onclick="doSaveToken()">连接</button>
+    <span class="st off" id="tokenSt">未连接</span>
   </div>
   <div class="srch"><input id="sI" placeholder="🔍 搜索…" autocomplete="off"></div>
-  <div class="list" id="fL"><div style="text-align:center;padding:40px;color:#555;font-size:13px">请先设置 Token</div></div>
+  <div class="list" id="fL"><div style="text-align:center;padding:40px;color:#555;font-size:13px">设置 Token 后自动加载</div></div>
   <div class="sfoot">
-    <button class="btn-primary" id="btnN">＋ 上传</button>
-    <button class="btn-outline" id="btnNew">📝 新建</button>
+    <button class="btn-primary" onclick="doUpload()">＋ 上传</button>
+    <button class="btn-outline" onclick="doNew()">📝 新建</button>
   </div>
 </aside>
 
@@ -136,7 +132,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
       <div class="fg"><label>文件名</label><input type="text" id="nN" placeholder="留空用原文件名"></div>
       <div class="fg"><label>HTML</label><textarea id="nC" rows="7" placeholder="粘贴 HTML…"></textarea></div>
     </div>
-    <div class="ma"><button class="bs" onclick="closeOv('nOv')">取消</button><button class="bp" id="btnS">保存</button></div>
+    <div class="ma"><button class="bs" onclick="closeOv('nOv')">取消</button><button class="bp" onclick="doSave()">保存</button></div>
   </div>
 </div>
 
@@ -144,299 +140,525 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
   <div class="md" style="width:95vw;max-width:1400px;height:85vh">
     <h2>✏️ <span id="eTitle" style="color:#a855f7;font-weight:400"></span></h2>
     <div class="fg" style="margin-bottom:8px"><label>文件名</label><input type="text" id="eN" style="max-width:400px"></div>
-    <div class="editor-wrap" style="flex:1;min-height:0">
-      <div class="ed-pane">
+    <div class="ed-wrap" style="flex:1;min-height:0">
+      <div class="ed-p">
         <div class="ed-bar"><span><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> HTML</span>
-          <div class="tb"><button onclick="fmtCode()">格式化</button><button onclick="insertTpl()">模板</button></div>
+          <div class="tb"><button onclick="doFmt()">格式化</button></div>
         </div>
         <textarea class="code-ed" id="eC" spellcheck="false"></textarea>
       </div>
-      <div class="prev-pane">
-        <div class="ed-bar" onclick="refreshPrev()">👁 预览 <small style="margin-left:auto;color:#6c5ce7">点击刷新</small></div>
+      <div class="prev-p">
+        <div class="ed-bar" onclick="doRefreshPrev()">👁 预览 <small style="margin-left:auto;color:#6c5ce7">点击刷新</small></div>
         <iframe id="prevFrame"></iframe>
       </div>
     </div>
     <div class="ma" style="margin-top:12px">
       <button class="bs" onclick="closeOv('eOv')">取消</button>
-      <button class="bp" onclick="saveEdit()">💾 保存</button>
+      <button class="bp" onclick="doSaveEdit()">💾 保存</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══ 配置 ═══
-const OWNER='ksllove', REPO='shuanghuanjiyao', BRANCH='master', DIR='files';
-const API='https://api.github.com';
+// ═══ 全局变量 ═══
+var OWNER = 'ksllove';
+var REPO = 'shuanghuanjiyao';
+var BRANCH = 'master';
+var DIR = 'files';
+var API = 'https://api.github.com';
+var TOKEN = localStorage.getItem('gh_token') || '';
+var FILES = [];
+var ACTIVE = null;
+var EDITING = null;
+var QUEUE = [];
+var prevTimer = null;
+
+// ═══ DOM 工具 (必须最先定义) ═══
+function $(id) { return document.getElementById(id) }
+function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML }
+function toast(m, t) {
+  t = t || 'ok';
+  var e = document.createElement('div');
+  e.className = 'toast ' + t;
+  e.textContent = m;
+  document.body.appendChild(e);
+  setTimeout(function() { e.remove() }, 3000);
+}
+function closeOv(id) { $(id).classList.remove('show') }
+function openOv(id) { $(id).classList.add('show') }
+function fmtSz(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+function b64e(s) { return btoa(unescape(encodeURIComponent(s))) }
+function b64d(s) { try { return decodeURIComponent(escape(atob(s))) } catch(e) { return atob(s) } }
+
+// ═══ HTTP 工具 ═══
+function hdrs() {
+  var h = { 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+  if (TOKEN) h['Authorization'] = 'token ' + TOKEN;
+  return h;
+}
+
+function apiFetch(url, opts) {
+  opts = opts || {};
+  opts.headers = hdrs();
+  return fetch(url, opts);
+}
 
 // ═══ Token 管理 ═══
-let TOKEN = localStorage.getItem('gh_token') || '';
-const hdrs = () => TOKEN ? {'Authorization':'token '+TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'} : {'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
-
 function updateTokenUI() {
-  const s = $('tokenStatus');
-  const inp = $('tokenInput');
+  var st = $('tokenSt');
+  var inp = $('tokenInput');
   if (TOKEN) {
-    inp.value = TOKEN.substring(0,8) + '••••••••';
-    s.textContent = '已连接'; s.className = 'status on';
+    inp.value = TOKEN.substring(0, 10) + '••••';
+    st.textContent = '已连接';
+    st.className = 'st on';
   } else {
-    inp.value = ''; inp.placeholder = 'GitHub Token (ghp_...)';
-    s.textContent = '未连接'; s.className = 'status off';
+    inp.value = '';
+    st.textContent = '未连接';
+    st.className = 'st off';
   }
 }
 
-window.saveToken = async function() {
-  const v = $('tokenInput').value.trim();
-  if (!v && TOKEN) { localStorage.removeItem('gh_token'); TOKEN=''; updateTokenUI(); toast('Token 已清除'); return }
-  if (!v) { toast('请输入 Token','er'); return }
-  if (!v.startsWith('ghp_') && !v.startsWith('github_pat_')) { toast('Token 格式不对','er'); return }
+function doSaveToken() {
+  var inp = $('tokenInput');
+  var v = inp.value.trim();
+
+  // 如果已连接且没输入新值，断开
+  if (!v && TOKEN) {
+    TOKEN = '';
+    localStorage.removeItem('gh_token');
+    updateTokenUI();
+    FILES = [];
+    render();
+    toast('已断开');
+    return;
+  }
+
+  if (!v) {
+    toast('请输入 Token', 'er');
+    return;
+  }
+
+  // 去掉可能的空格
+  v = v.replace(/\s/g, '');
+
   TOKEN = v;
   localStorage.setItem('gh_token', TOKEN);
-  // 验证
-  try {
-    const r = await fetch(API+'/user', {headers: hdrs()});
-    if (!r.ok) throw new Error();
-    const d = await r.json();
-    toast('✅ 已连接: '+d.login);
-    updateTokenUI();
-    await loadList();
-  } catch(e) {
-    toast('Token 无效','er');
-    TOKEN=''; localStorage.removeItem('gh_token');
-    updateTokenUI();
-  }
-};
+  toast('正在验证…');
 
-$('tokenInput').addEventListener('keydown', e => { if(e.key==='Enter') saveToken() });
+  apiFetch(API + '/user')
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(d) {
+      toast('✅ 已连接: ' + d.login);
+      updateTokenUI();
+      ensureDir().then(loadList);
+    })
+    .catch(function(e) {
+      toast('Token 无效: ' + e.message, 'er');
+      TOKEN = '';
+      localStorage.removeItem('gh_token');
+      updateTokenUI();
+    });
+}
 
-// ═══ 工具 ═══
-let FILES=[], ACTIVE=null, EDITING=null, QUEUE=[];
-let prevTimer=null;
-const $=id=>document.getElementById(id);
-const esc=s=>{const d=document.createElement('div');d.textContent=s||'';return d.innerHTML};
-function toast(m,t='ok'){const e=document.createElement('div');e.className='toast '+t;e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),3000)}
-function closeOv(id){$(id).classList.remove('show')}
-function openOv(id){$(id).classList.add('show')}
-function fmtSz(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB'}
-function b64e(s){return btoa(unescape(encodeURIComponent(s)))}
-function b64d(s){try{return decodeURIComponent(escape(atob(s)))}catch{return atob(s)}}
+// Enter 键
+document.addEventListener('DOMContentLoaded', function() {
+  $('tokenInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doSaveToken();
+  });
+});
 
 // ═══ GitHub API ═══
-async function apiList() {
-  const r = await fetch(API+'/repos/'+OWNER+'/'+REPO+'/contents/'+DIR+'?ref='+BRANCH+'&_='+Date.now(), {headers: hdrs()});
-  if (r.status===404) return [];  // 目录不存在，返回空
-  if (!r.ok) throw new Error('API '+r.status);
-  return await r.json();
+function apiList() {
+  return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '?ref=' + BRANCH + '&_=' + Date.now())
+    .then(function(r) {
+      if (r.status === 404) return [];
+      if (!r.ok) throw new Error('API ' + r.status);
+      return r.json();
+    });
 }
 
-async function apiGet(name) {
-  const r = await fetch(API+'/repos/'+OWNER+'/'+REPO+'/contents/'+DIR+'/'+encodeURIComponent(name)+'?ref='+BRANCH, {headers: hdrs()});
-  if (!r.ok) throw new Error('获取失败 '+r.status);
-  return await r.json();
+function apiGet(name) {
+  return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '/' + encodeURIComponent(name) + '?ref=' + BRANCH)
+    .then(function(r) {
+      if (!r.ok) throw new Error('获取失败 ' + r.status);
+      return r.json();
+    });
 }
 
-async function apiPut(name, content, sha) {
-  const body = {message:(sha?'更新: ':'新建: ')+name, content:b64e(content), branch:BRANCH};
+function apiPut(name, content, sha) {
+  var body = { message: (sha ? '更新: ' : '新建: ') + name, content: b64e(content), branch: BRANCH };
   if (sha) body.sha = sha;
-  const r = await fetch(API+'/repos/'+OWNER+'/'+REPO+'/contents/'+DIR+'/'+encodeURIComponent(name), {
-    method:'PUT', headers:hdrs(), body:JSON.stringify(body)
+  return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '/' + encodeURIComponent(name), {
+    method: 'PUT',
+    body: JSON.stringify(body)
+  }).then(function(r) {
+    if (!r.ok) return r.json().then(function(e) { throw new Error(e.message || '保存失败 ' + r.status) });
+    return r.json().then(function(d) { return d.content });
   });
-  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.message||'保存失败 '+r.status) }
-  return (await r.json()).content;
 }
 
-async function apiDel(name, sha) {
-  const r = await fetch(API+'/repos/'+OWNER+'/'+REPO+'/contents/'+DIR+'/'+encodeURIComponent(name), {
-    method:'DELETE', headers:hdrs(), body:JSON.stringify({message:'删除: '+name, sha, branch:BRANCH})
+function apiDel(name, sha) {
+  return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '/' + encodeURIComponent(name), {
+    method: 'DELETE',
+    body: JSON.stringify({ message: '删除: ' + name, sha: sha, branch: BRANCH })
+  }).then(function(r) {
+    if (!r.ok) throw new Error('删除失败 ' + r.status);
   });
-  if (!r.ok) throw new Error('删除失败 '+r.status);
 }
 
-// ═══ 确保目录存在 ═══
-async function ensureDir() {
-  try {
-    const items = await apiList();
-    if (items.length > 0) return; // 目录已存在
-  } catch {}
-  // 创建 .gitkeep
-  try {
-    await apiPut('.gitkeep', '', null);
-  } catch {}
+function ensureDir() {
+  return apiList().then(function(items) {
+    if (items.length > 0) return;
+    return apiPut('.gitkeep', '', null).catch(function() {});
+  });
 }
 
 // ═══ 加载列表 ═══
-async function loadList() {
-  if (!TOKEN) return;
-  try {
-    const items = await apiList();
-    FILES = items
-      .filter(i => i.type==='file' && /\.html?$/i.test(i.name) && i.name!=='index.html')
-      .map(i => ({name:i.name, sha:i.sha, size:i.size}))
-      .sort((a,b) => b.name.localeCompare(a.name));
-    render();
-  } catch(e) {
-    $('fL').innerHTML = '<div style="padding:20px;text-align:center;color:#ff6b6b;font-size:13px">'+esc(e.message)+
-      '<br><button onclick="loadList()" style="margin-top:8px;padding:6px 16px;border:1px solid #3a3a55;border-radius:6px;background:transparent;color:#aaa;cursor:pointer">🔄 重试</button></div>';
-    $('cnt').textContent = '错误';
-  }
+function loadList() {
+  if (!TOKEN) return Promise.resolve();
+  return apiList()
+    .then(function(items) {
+      FILES = items
+        .filter(function(i) { return i.type === 'file' && /\.html?$/i.test(i.name) && i.name !== 'index.html' })
+        .map(function(i) { return { name: i.name, sha: i.sha, size: i.size } })
+        .sort(function(a, b) { return b.name.localeCompare(a.name) });
+      render();
+    })
+    .catch(function(e) {
+      $('fL').innerHTML = '<div style="padding:20px;text-align:center;color:#ff6b6b;font-size:13px">' + esc(e.message) + '</div>';
+      $('cnt').textContent = '错误';
+    });
 }
 
 function render(q) {
-  q=(q||'').toLowerCase();
-  const ls=FILES.filter(f=>f.name.toLowerCase().includes(q));
-  $('cnt').textContent=FILES.length+' 个文件';
-  const el=$('fL');
-  if(!ls.length){
-    el.innerHTML='<div style="text-align:center;padding:32px;color:#555;font-size:13px">'+
-      (FILES.length?'无匹配':'暂无文件<br><small style="color:#444">点击上传或新建</small>')+'</div>';
+  q = (q || '').toLowerCase();
+  var ls = FILES.filter(function(f) { return f.name.toLowerCase().indexOf(q) >= 0 });
+  $('cnt').textContent = FILES.length + ' 个文件';
+  var el = $('fL');
+  if (!ls.length) {
+    el.innerHTML = '<div style="text-align:center;padding:32px;color:#555;font-size:13px">' +
+      (FILES.length ? '无匹配' : '暂无文件') + '</div>';
     return;
   }
-  el.innerHTML=ls.map(f=>
-    '<div class="fi'+(f.name===ACTIVE?' on':'')+'" data-n="'+esc(f.name)+'">'+
-    '<div class="fn">📄 '+esc(f.name.replace(/\.html?$/i,''))+'</div>'+
-    '<div class="fm"><span>'+fmtSz(f.size)+'</span></div></div>'
-  ).join('');
+  var html = '';
+  for (var i = 0; i < ls.length; i++) {
+    var f = ls[i];
+    html += '<div class="fi' + (f.name === ACTIVE ? ' on' : '') + '" data-n="' + esc(f.name) + '">' +
+      '<div class="fn">📄 ' + esc(f.name.replace(/\.html?$/i, '')) + '</div>' +
+      '<div class="fm">' + fmtSz(f.size) + '</div></div>';
+  }
+  el.innerHTML = html;
 }
 
 // ═══ 查看 ═══
-async function view(name) {
-  ACTIVE=name; render($('sI').value);
-  $('mT').style.display='';
-  $('mTi').textContent=name.replace(/\.html?$/i,'');
-  const mb=$('mB');
-  mb.innerHTML='<div style="text-align:center;padding:60px"><div class="ld"></div><p style="color:#666;font-size:13px;margin-top:12px">加载中…</p></div>';
-  try{
-    const d=await apiGet(name);
-    const content=b64d(d.content);
-    const safe=content.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    mb.innerHTML='<div class="info"><span>📎 '+esc(name)+'</span><span>📏 '+fmtSz(content.length)+'</span></div>'+
-      '<div class="card"><iframe srcdoc="'+safe+'" sandbox="allow-same-origin" onload="fitIfr(this)"></iframe></div>';
-    mb.scrollTop=0;
-  }catch(e){mb.innerHTML='<div style="padding:40px;text-align:center;color:#ff6b6b">'+esc(e.message)+'</div>'}
+function view(name) {
+  ACTIVE = name;
+  render($('sI').value);
+  $('mT').style.display = '';
+  $('mTi').textContent = name.replace(/\.html?$/i, '');
+  var mb = $('mB');
+  mb.innerHTML = '<div style="text-align:center;padding:60px"><div class="ld"></div><p style="color:#666;font-size:13px;margin-top:12px">加载中…</p></div>';
+
+  apiGet(name)
+    .then(function(d) {
+      var content = b64d(d.content);
+      var safe = content.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      mb.innerHTML = '<div class="info"><span>📎 ' + esc(name) + '</span><span>📏 ' + fmtSz(content.length) + '</span></div>' +
+        '<div class="card"><iframe srcdoc="' + safe + '" sandbox="allow-same-origin" onload="fitIfr(this)"></iframe></div>';
+      mb.scrollTop = 0;
+    })
+    .catch(function(e) {
+      mb.innerHTML = '<div style="padding:40px;text-align:center;color:#ff6b6b">' + esc(e.message) + '</div>';
+    });
 }
-function fitIfr(ifr){try{const d=ifr.contentDocument||ifr.contentWindow.document;const r=()=>{ifr.style.height=Math.max(400,d.body.scrollHeight+30)+'px'};r();new ResizeObserver(r).observe(d.body)}catch{}}
+
+function fitIfr(ifr) {
+  try {
+    var d = ifr.contentDocument || ifr.contentWindow.document;
+    var r = function() { ifr.style.height = Math.max(400, d.body.scrollHeight + 30) + 'px' };
+    r();
+    new ResizeObserver(r).observe(d.body);
+  } catch(e) {}
+}
 
 // ═══ 上传 ═══
-$('btnN').onclick=()=>{QUEUE=[];$('nN').value='';$('nC').value='';$('fQ').innerHTML='';$('fIn').value='';togM();openOv('nOv')};
-$('nOv').onclick=e=>{if(e.target===e.currentTarget)closeOv('nOv')};
-function togM(){$('mI').style.display=QUEUE.length?'none':''}
-$('fIn').onchange=e=>{addQ(e.target.files);e.target.value=''};
-const uz=$('upZ');
-uz.ondragover=e=>{e.preventDefault();uz.classList.add('dg')};
-uz.ondragleave=()=>uz.classList.remove('dg');
-uz.ondrop=e=>{e.preventDefault();uz.classList.remove('dg');addQ(e.dataTransfer.files)};
-async function addQ(fl){
-  for(const f of Array.from(fl).filter(x=>/\.html?$/i.test(x.name)))
-    QUEUE.push({name:f.name,content:await f.text(),size:f.size});
-  if(!QUEUE.length&&fl.length){toast('选 .html 文件','er');return}
-  renderQ();
+function doUpload() {
+  QUEUE = [];
+  $('nN').value = '';
+  $('nC').value = '';
+  $('fQ').innerHTML = '';
+  $('fIn').value = '';
+  togM();
+  openOv('nOv');
 }
-function renderQ(){
-  $('fQ').innerHTML=QUEUE.map((f,i)=>
-    '<div class="qi"><span class="qn">📄 '+esc(f.name)+'</span><span class="qs">'+fmtSz(f.size)+'</span>'+
-    '<span class="qst" id="qs'+i+'"></span><button onclick="rmQ('+i+')">✕</button></div>'
-  ).join('');togM();
-}
-window.rmQ=i=>{QUEUE.splice(i,1);renderQ()};
 
-$('btnS').onclick=async()=>{
-  const btn=$('btnS');btn.disabled=true;
-  try{
-    if(QUEUE.length){
-      let ok=0,fail=0;
-      for(let i=0;i<QUEUE.length;i++){
-        const f=QUEUE[i],st=$('qs'+i);
-        st.textContent='上传…';st.className='qst ld';
-        try{
-          let sha=null;
-          try{const ex=await apiGet(f.name);sha=ex.sha}catch{}
-          await apiPut(f.name,f.content,sha);
-          st.textContent='✓';st.className='qst ok';ok++;
-        }catch(e){st.textContent='✗ '+e.message;st.className='qst er';fail++}
-      }
-      toast(ok+' 个成功'+(fail?'，'+fail+' 失败':''),fail?'er':'ok');
-    }else{
-      const nm=$('nN').value.trim(),ct=$('nC').value.trim();
-      if(!ct){toast('输入内容','er');btn.disabled=false;return}
-      const fn=(nm||new Date().toISOString().slice(0,10))+'.html';
-      let sha=null;try{const ex=await apiGet(fn);sha=ex.sha}catch{}
-      await apiPut(fn,ct,sha);
-      toast('「'+fn+'」已上传');
+function togM() { $('mI').style.display = QUEUE.length ? 'none' : '' }
+
+$('fIn').addEventListener('change', function(e) {
+  addQ(e.target.files);
+  e.target.value = '';
+});
+
+var uz = $('upZ');
+uz.addEventListener('dragover', function(e) { e.preventDefault(); uz.classList.add('dg') });
+uz.addEventListener('dragleave', function() { uz.classList.remove('dg') });
+uz.addEventListener('drop', function(e) {
+  e.preventDefault();
+  uz.classList.remove('dg');
+  addQ(e.dataTransfer.files);
+});
+
+function addQ(fl) {
+  var pending = [];
+  for (var i = 0; i < fl.length; i++) {
+    if (/\.html?$/i.test(fl[i].name)) {
+      pending.push(fl[i]);
     }
-    await loadList();closeOv('nOv');
-  }catch(e){toast('失败: '+e.message,'er')}
-  btn.disabled=false;
-};
+  }
+  if (!pending.length && fl.length) { toast('选 .html 文件', 'er'); return }
+
+  var promises = pending.map(function(f) {
+    return f.text().then(function(text) {
+      QUEUE.push({ name: f.name, content: text, size: f.size });
+    });
+  });
+  Promise.all(promises).then(renderQ);
+}
+
+function renderQ() {
+  var html = '';
+  for (var i = 0; i < QUEUE.length; i++) {
+    var f = QUEUE[i];
+    html += '<div class="qi"><span class="qn">📄 ' + esc(f.name) + '</span><span class="qs">' + fmtSz(f.size) + '</span>' +
+      '<span class="qst" id="qs' + i + '"></span><button onclick="rmQ(' + i + ')">✕</button></div>';
+  }
+  $('fQ').innerHTML = html;
+  togM();
+}
+
+function rmQ(i) { QUEUE.splice(i, 1); renderQ() }
+
+function doSave() {
+  var btn = event.target;
+  btn.disabled = true;
+
+  function finish() { btn.disabled = false }
+
+  if (QUEUE.length) {
+    var ok = 0, fail = 0, total = QUEUE.length, done = 0;
+
+    function next(i) {
+      if (i >= total) {
+        toast(ok + ' 个成功' + (fail ? '，' + fail + ' 失败' : ''), fail ? 'er' : 'ok');
+        loadList().then(function() { closeOv('nOv'); finish() });
+        return;
+      }
+      var f = QUEUE[i];
+      var st = $('qs' + i);
+      st.textContent = '上传…';
+      st.className = 'qst ld';
+
+      apiGet(f.name)
+        .catch(function() { return null })
+        .then(function(existing) {
+          var sha = existing ? existing.sha : null;
+          return apiPut(f.name, f.content, sha);
+        })
+        .then(function() {
+          st.textContent = '✓';
+          st.className = 'qst ok';
+          ok++;
+          next(i + 1);
+        })
+        .catch(function(e) {
+          st.textContent = '✗ ' + e.message;
+          st.className = 'qst er';
+          fail++;
+          next(i + 1);
+        });
+    }
+    next(0);
+  } else {
+    var nm = $('nN').value.trim();
+    var ct = $('nC').value.trim();
+    if (!ct) { toast('输入内容', 'er'); finish(); return }
+    var fn = (nm || new Date().toISOString().slice(0, 10)) + '.html';
+
+    apiGet(fn)
+      .catch(function() { return null })
+      .then(function(existing) {
+        var sha = existing ? existing.sha : null;
+        return apiPut(fn, ct, sha);
+      })
+      .then(function() {
+        toast('「' + fn + '」已上传');
+        return loadList();
+      })
+      .then(function() { closeOv('nOv'); finish() })
+      .catch(function(e) { toast('失败: ' + e.message, 'er'); finish() });
+  }
+}
 
 // ═══ 新建 ═══
-$('btnNew').onclick=()=>{
-  EDITING=null;$('eTitle').textContent='新文件';
-  $('eN').value='未命名-'+Date.now().toString(36)+'.html';
-  $('eC').value='<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <title>新页面</title>\n</head>\n<body>\n  <h1>Hello</h1>\n</body>\n</html>';
-  refreshPrev();openOv('eOv');setTimeout(()=>$('eC').focus(),100);
-};
+function doNew() {
+  EDITING = null;
+  $('eTitle').textContent = '新文件';
+  $('eN').value = '未命名-' + Date.now().toString(36) + '.html';
+  $('eC').value = '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <title>新页面</title>\n</head>\n<body>\n  <h1>Hello</h1>\n</body>\n</html>';
+  doRefreshPrev();
+  openOv('eOv');
+  setTimeout(function() { $('eC').focus() }, 100);
+}
 
 // ═══ 编辑器 ═══
-window.doEdit=async()=>{
-  if(!ACTIVE)return;
-  EDITING=ACTIVE;$('eTitle').textContent=ACTIVE;$('eN').value=ACTIVE;
-  $('eC').value='加载中…';
-  try{const d=await apiGet(ACTIVE);$('eC').value=b64d(d.content);$('eC').dataset.sha=d.sha;refreshPrev()}
-  catch(e){$('eC').value='/* '+e.message+' */'}
-  openOv('eOv');setTimeout(()=>$('eC').focus(),100);
-};
-$('eOv').onclick=e=>{if(e.target===e.currentTarget)closeOv('eOv')};
-$('eC').addEventListener('input',()=>{clearTimeout(prevTimer);prevTimer=setTimeout(refreshPrev,500)});
-function refreshPrev(){const f=$('prevFrame'),c=$('eC').value;try{const d=f.contentDocument||f.contentWindow.document;d.open();d.write(c);d.close()}catch{}}
-$('eC').addEventListener('keydown',e=>{
-  if(e.key==='Tab'){e.preventDefault();const t=e.target,s=t.selectionStart,en=t.selectionEnd;t.value=t.value.substring(0,s)+'  '+t.value.substring(en);t.selectionStart=t.selectionEnd=s+2}
-  if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveEdit()}
+function doEdit() {
+  if (!ACTIVE) return;
+  EDITING = ACTIVE;
+  $('eTitle').textContent = ACTIVE;
+  $('eN').value = ACTIVE;
+  $('eC').value = '加载中…';
+
+  apiGet(ACTIVE)
+    .then(function(d) {
+      $('eC').value = b64d(d.content);
+      $('eC').dataset.sha = d.sha;
+      doRefreshPrev();
+    })
+    .catch(function(e) { $('eC').value = '/* ' + e.message + ' */' });
+
+  openOv('eOv');
+  setTimeout(function() { $('eC').focus() }, 100);
+}
+
+$('eC').addEventListener('input', function() {
+  clearTimeout(prevTimer);
+  prevTimer = setTimeout(doRefreshPrev, 500);
 });
-async function saveEdit(){
-  const nm=$('eN').value.trim(),ct=$('eC').value;
-  if(!nm){toast('文件名空','er');return}
-  try{
-    const fn=nm.endsWith('.html')?nm:nm+'.html';
-    let sha=$('eC').dataset.sha||null;
-    if(EDITING&&fn!==EDITING){try{const old=await apiGet(EDITING);await apiDel(EDITING,old.sha)}catch{};sha=null}
-    const r=await apiPut(fn,ct,sha);
-    $('eC').dataset.sha=r.sha;
-    toast('「'+fn+'」已保存');await loadList();ACTIVE=fn;render($('sI').value);
-  }catch(e){toast('保存失败: '+e.message,'er')}
+
+function doRefreshPrev() {
+  var f = $('prevFrame');
+  var c = $('eC').value;
+  try { var d = f.contentDocument || f.contentWindow.document; d.open(); d.write(c); d.close() } catch(e) {}
+}
+
+$('eC').addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    var t = e.target, s = t.selectionStart, en = t.selectionEnd;
+    t.value = t.value.substring(0, s) + '  ' + t.value.substring(en);
+    t.selectionStart = t.selectionEnd = s + 2;
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    doSaveEdit();
+  }
+});
+
+function doSaveEdit() {
+  var nm = $('eN').value.trim();
+  var ct = $('eC').value;
+  if (!nm) { toast('文件名空', 'er'); return }
+
+  var fn = nm.endsWith('.html') ? nm : nm + '.html';
+  var sha = $('eC').dataset.sha || null;
+
+  Promise.resolve()
+    .then(function() {
+      if (EDITING && fn !== EDITING) {
+        return apiGet(EDITING).then(function(old) { return apiDel(EDITING, old.sha) }).catch(function() {});
+      }
+    })
+    .then(function() {
+      if (EDITING && fn !== EDITING) sha = null;
+      return apiPut(fn, ct, sha);
+    })
+    .then(function(r) {
+      $('eC').dataset.sha = r.sha;
+      toast('「' + fn + '」已保存');
+      return loadList();
+    })
+    .then(function() {
+      ACTIVE = fn;
+      render($('sI').value);
+    })
+    .catch(function(e) { toast('保存失败: ' + e.message, 'er') });
 }
 
 // ═══ 工具 ═══
-window.fmtCode=()=>{
-  const ta=$('eC');let code=ta.value,indent=0;
-  ta.value=code.replace(/>\s*</g,'>\n<').split('\n').map(l=>{l=l.trim();if(!l)return'';if(l.match(/^<\/\w/))indent=Math.max(0,indent-1);const r='  '.repeat(indent)+l;if(l.match(/^<\w[^>]*[^\/]>.*$/)&&!l.match(/^<(br|hr|img|input|meta|link)/i))indent++;return r}).join('\n');
+function doFmt() {
+  var ta = $('eC');
+  var code = ta.value;
+  var indent = 0;
+  ta.value = code.replace(/>\s*</g, '>\n<').split('\n').map(function(l) {
+    l = l.trim();
+    if (!l) return '';
+    if (l.match(/^<\/\w/)) indent = Math.max(0, indent - 1);
+    var r = '  '.repeat(indent) + l;
+    if (l.match(/^<\w[^>]*[^\/]>.*$/) && !l.match(/^<(br|hr|img|input|meta|link)/i)) indent++;
+    return r;
+  }).join('\n');
   toast('已格式化');
-};
-window.insertTpl=()=>{
-  const s={'1':'<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="UTF-8">\n  <title>标题</title>\n</head>\n<body>\n  <h1>内容</h1>\n</body>\n</html>'};
-  const c=prompt('模板: 1=完整页面','1');
-  if(s[c]){const ta=$('eC'),p=ta.selectionStart;ta.value=ta.value.substring(0,p)+s[c]+ta.value.substring(p);toast('已插入')}
-};
-window.doPreview=async()=>{
-  if(!ACTIVE)return;
-  try{const d=await apiGet(ACTIVE);const w=window.open('','_blank');w.document.open();w.document.write(b64d(d.content));w.document.close()}catch(e){toast('失败','er')}
-};
-window.doDel=async()=>{
-  if(!ACTIVE||!confirm('删除「'+ACTIVE+'」？'))return;
-  try{const d=await apiGet(ACTIVE);await apiDel(ACTIVE,d.sha);toast('已删除');ACTIVE=null;$('mT').style.display='none';$('mB').innerHTML='<div class="empty"><div class="ei">🌐</div><p>选择或上传文件</p></div>';await loadList()}catch(e){toast('删除失败','er')}
-};
+}
+
+function doPreview() {
+  if (!ACTIVE) return;
+  apiGet(ACTIVE).then(function(d) {
+    var w = window.open('', '_blank');
+    w.document.open();
+    w.document.write(b64d(d.content));
+    w.document.close();
+  }).catch(function() { toast('失败', 'er') });
+}
+
+function doDel() {
+  if (!ACTIVE || !confirm('删除「' + ACTIVE + '」？')) return;
+  apiGet(ACTIVE).then(function(d) {
+    return apiDel(ACTIVE, d.sha);
+  }).then(function() {
+    toast('已删除');
+    ACTIVE = null;
+    $('mT').style.display = 'none';
+    $('mB').innerHTML = '<div class="empty"><div class="ei">🌐</div><p>选择或上传文件</p></div>';
+    return loadList();
+  }).catch(function() { toast('删除失败', 'er') });
+}
 
 // ═══ 事件 ═══
-$('fL').onclick=e=>{const it=e.target.closest('.fi');if(it) view(it.dataset.n)};
-let st;$('sI').oninput=e=>{clearTimeout(st);st=setTimeout(()=>render(e.target.value),150)};
-window.addEventListener('online',()=>$('offBar').classList.remove('show'));
-window.addEventListener('offline',()=>$('offBar').classList.add('show'));
-document.addEventListener('keydown',e=>{
-  if((e.ctrlKey||e.metaKey)&&e.key==='n'){e.preventDefault();$('btnNew').click()}
-  if(e.key==='Escape'){closeOv('nOv');closeOv('eOv')}
+$('fL').addEventListener('click', function(e) {
+  var it = e.target.closest('.fi');
+  if (it) view(it.dataset.n);
 });
+
+var searchTimer;
+$('sI').addEventListener('input', function(e) {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function() { render(e.target.value) }, 150);
+});
+
+window.addEventListener('online', function() { $('offBar').classList.remove('show') });
+window.addEventListener('offline', function() { $('offBar').classList.add('show') });
+
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); doNew() }
+  if (e.key === 'Escape') { closeOv('nOv'); closeOv('eOv') }
+});
+
+// 关闭弹窗
+$('nOv').addEventListener('click', function(e) { if (e.target === this) closeOv('nOv') });
+$('eOv').addEventListener('click', function(e) { if (e.target === this) closeOv('eOv') });
 
 // ═══ 初始化 ═══
 updateTokenUI();
-if (TOKEN) { ensureDir().then(loadList) }
+if (TOKEN) {
+  ensureDir().then(loadList);
+}
 </script>
 </body>
 </html>
