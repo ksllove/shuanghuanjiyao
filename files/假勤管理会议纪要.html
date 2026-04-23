@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考勤与休假管理系统调研会议纪要汇编</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8effc;
+    --accent: #059669;
+    --accent-light: #d1fae5;
+    --warn: #d97706;
+    --warn-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --gray-900: #111827;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding: 48px 32px;
+    background: linear-gradient(135deg, #1e3a5f 0%, #1a56db 100%);
+    border-radius: 16px;
+    color: #fff;
+    box-shadow: 0 4px 24px rgba(26,86,219,0.25);
+  }
+  .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
+  .header .subtitle { font-size: 1rem; opacity: 0.85; }
+  .header .meta { margin-top: 16px; font-size: 0.9rem; opacity: 0.7; }
+
+  /* TOC */
+  .toc {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 36px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .toc h2 { font-size: 1.2rem; color: var(--primary); margin-bottom: 16px; border-bottom: 2px solid var(--primary-light); padding-bottom: 8px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: var(--primary); text-decoration: none; font-weight: 500; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* Meeting section */
+  .meeting {
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 32px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .meeting-header {
+    padding: 20px 28px;
+    background: var(--primary-light);
+    border-left: 5px solid var(--primary);
+  }
+  .meeting-header h2 { font-size: 1.3rem; color: var(--primary); }
+  .meeting-header .info { font-size: 0.85rem; color: var(--gray-500); margin-top: 4px; }
+  .meeting-body { padding: 24px 28px; }
+
+  /* Section */
+  .section { margin-bottom: 28px; }
+  .section:last-child { margin-bottom: 0; }
+  .section h3 {
+    font-size: 1.1rem;
+    color: var(--gray-900);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section h3 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px; height: 26px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section h4 {
+    font-size: 1rem;
+    color: var(--gray-700);
+    margin: 14px 0 8px;
+  }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 6px; font-size: 0.95rem; }
+
+  /* Highlight boxes */
+  .box {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 0.93rem;
+  }
+  .box-blue { background: var(--primary-light); border-left: 4px solid var(--primary); }
+  .box-green { background: var(--accent-light); border-left: 4px solid var(--accent); }
+  .box-yellow { background: var(--warn-light); border-left: 4px solid var(--warn); }
+  .box-red { background: var(--danger-light); border-left: 4px solid var(--danger); }
+  .box strong { display: block; margin-bottom: 4px; }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+  th, td {
+    border: 1px solid var(--gray-200);
+    padding: 10px 14px;
+    text-align: left;
+  }
+  th {
+    background: var(--gray-100);
+    font-weight: 600;
+    color: var(--gray-700);
+  }
+  tr:nth-child(even) td { background: var(--gray-50); }
+
+  /* Action items */
+  .action {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--warn-light);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.93rem;
+  }
+  .action .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--gray-500);
+    font-size: 0.85rem;
+    margin-top: 24px;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; }
+    .container { max-width: 100%; padding: 0; }
+    .meeting { box-shadow: none; border: 1px solid var(--gray-200); }
+    .header { border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ==================== HEADER ==================== -->
+<div class="header">
+  <h1>📋 假勤管理调研会议纪</h1>
+  <div class="subtitle">双环本部 HR 系统升级项目 · 考勤假勤模块</div>
+  <div class="meta">会议日期：2026年4月22日 </div>
+</div>
+
+<!-- ==================== TOC ==================== -->
+<div class="toc">
+  <h2>📑 目录</h2>
+  <ol>
+    <li><a href="#m1">考勤与休假管理制度梳理会议</a> </li>
+    <li><a href="#m2">假勤模块管理问题讨论</a> </li>
+    <li><a href="#m3">考勤排班及权限管理讨论</a> </li>
+    <li><a href="#m4">月报统计逻辑讨论</a></li>
+    <li><a href="#actions">待办事项汇总</a></li>
+  </ol>
+</div>
+
+
+
+
+<!-- ==================== MEETING 1 ==================== -->
+<div class="meeting" id="m1">
+  <div class="meeting-header">
+    <h2>一、考勤与休假管理制度梳理</h2>
+  </div>
+  <div class="meeting-body">
+
+    <div class="section">
+      <h3><span class="num">1</span>调研概况</h3>
+      <p>本次调研围绕当前考勤管理流程、系统痛点及未来优化方向展开讨论。</p>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">2</span>基本情况与现状</h3>
+
+      <h4>2.1 考勤管理架构</h4>
+      <ul>
+        <li><strong>权限集中化：</strong>考勤主责人梅梅统一管理全集团班次库及核心权限，各分公司人事助理负责本单位异常处理、催促及计件员工考勤数据维护。</li>
+        <li><strong>操作模式：</strong>分子公司人事可代员工发起请假、加班等单据，并处理排班及考勤数据催办；班次调整、考勤方案配置等全局性操作仅由梅梅执行；职能部门文员不参与考勤操作，仅配合提供异常打卡说明单等材料。</li>
+      </ul>
+
+      <h4>2.2 考勤执行规则</h4>
+      <ul>
+        <li><strong>不考勤人员范围：</strong>保安、驻外人员（含售后、销售主管等）、九级以上高管、司机。通过"考勤档案"字段标识"手工考勤"，入职时由招聘或分公司助理维护。</li>
+        <li><strong>打卡方式：</strong>
+          <ul>
+            <li>职能办公楼：支持企业微信定位打卡或大华考勤机打卡（二选一），定位范围300米</li>
+            <li>工厂区域：除部分办公室人员外，均强制使用大华考勤机打卡</li>
+            <li>因精度问题，靠近食堂/宿舍的工厂已取消定位打卡</li>
+          </ul>
+        </li>
+        <li><strong>考勤周期：</strong>员工需在每月1-4日处理上月考勤异常，5日9点冻结月报用于算薪。当前依赖线下Excel分发月报至各部门确认，缺乏线上异常提醒机制。</li>
+      </ul>
+
+      <h4>2.3 休假管理现状</h4>
+      <table>
+        <tr><th>假别</th><th>规则要点</th><th>当前问题</th></tr>
+        <tr><td>事假</td><td>无年度额度限制，需遵循"前置假"规则（有年假余额者优先休年假）</td><td>年假最小单位0.5天，员工仅需1-2小时事假时产生矛盾</td></tr>
+        <tr><td>病假</td><td>线上线下并行，最小单位0.5天，按司龄计算医疗期</td><td>系统不支持附件上传，需线下提交证明后线上补录</td></tr>
+        <tr><td>婚假</td><td>本部政策：登记后3个月内休3天</td><td>待确认是否改为1年</td></tr>
+        <tr><td>陪产假</td><td>男性可休3天，司龄3年以上可休5天</td><td></td></tr>
+        <tr><td>丧假</td><td>司龄3年以下3天，3年以上5天</td><td>需提交附件，需支持补交机制</td></tr>
+        <tr><td>年假</td><td>按司龄（非工龄）计算，以12月31日为节点；上年度累计病假+事假超限取消当年年假；仅合同制员工享受（剔除幸福工作坊），退休返聘享受</td><td>手工计算，无法系统化配置</td></tr>
+      </table>
+
+      <h4>2.4 加班与出差管理</h4>
+      <ul>
+        <li><strong>加班：</strong>仅允许上级派工，员工不可自行提交。职能人员加班转调休（最小单位0.5天）；工厂特定岗位（仓管、机修、电工等）直接核算加班费。</li>
+        <li><strong>出差与公出：</strong>
+          <ul>
+            <li>出差：当前在每刻系统申请，需同步至HR系统</li>
+            <li>公出（当前为短期出差）：应走HR系统流程，但员工多用签卡替代，管理缺位</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">3</span>存在问题与诉求</h3>
+      <div class="box box-red">
+        <strong>🔴 系统功能缺陷</strong>
+        <ul>
+          <li>大华考勤机数据每日18点同步，存在延迟；数据漏采频发，需人工导出整理后重新导入</li>
+          <li>员工调动后历史考勤数据无法跨组织查看；NC系统权限绑定组织架构，文员无法查看所辖部门考勤数据</li>
+          <li>年假、病假等规则无法系统化配置，依赖手工计算；哺乳假、产检假等假期无线上流程</li>
+        </ul>
+      </div>
+      <div class="box box-yellow">
+        <strong>⚠️ 业务流程痛点</strong>
+        <ul>
+          <li>考勤月报效率低：线下分发、确认、公示流程冗长，缺乏线上自助查询及异常预警</li>
+          <li>加班管理粗放：调休假无池化管理，加班费核算依赖分公司提报，准确性存疑</li>
+          <li>RBA审核压力：需隐藏真实工时（如12小时班次显示为8小时），系统无法区分标准工时与实际工时</li>
+        </ul>
+      </div>
+    </div>
+
+   
+  </div>
+</div>
+
+<!-- ==================== MEETING 2 ==================== -->
+<div class="meeting" id="m2">
+  <div class="meeting-header">
+    <h2>二、假勤模块管理问题讨论</h2>
+  </div>
+  <div class="meeting-body">
+
+    <div class="section">
+      <h3><span class="num">1</span>考勤管理</h3>
+
+      <h4>1.1 角色分工与权限</h4>
+      <ul>
+        <li>职能考勤由梅梅负责，各工厂人事助理协助处理异常、催促</li>
+        <li>分公司人事助理可代员工发起请假、加班等单据，排班由工厂人事助理负责，班次调整由总部统一管控</li>
+        <li><strong>权限调整：</strong>后续将授权文员查看指定部门考勤数据，由管理员灵活分配</li>
+      </ul>
+
+      <h4>1.2 考勤异常处理与月报流程</h4>
+      <div class="box box-green">
+        <strong>✅ 新系统优化方向</strong>
+        <ul>
+          <li><strong>异常提醒：</strong>系统实现按日提醒昨日异常 + 考勤期间累计异常 + 月报封存前提醒</li>
+          <li><strong>月报发布：</strong>1号发布月报 → 员工线上查看应出勤/实际出勤 → 1-2号补缺查漏 → 2号封存月报</li>
+          <li><strong>取消线下：</strong>不再线下去Excel分发给文员，文员线上查看自己负责部门的月报数据</li>
+          <li><strong>时间压缩：</strong>当前1-4号处理异常，目标压缩至1-2号，3号封存</li>
+        </ul>
+      </div>
+
+      <h4>1.3 考勤数据同步问题</h4>
+      <ul>
+        <li><strong>数据漏采：</strong>NC与大华考勤机对接常采漏数据，需手动导入，已安排分公司助理学习操作</li>
+        <li><strong>同步延迟：</strong>大华数据一般次日早上才能看到，打卡数据18点同步一次</li>
+        <li><strong>调动后数据断层：</strong>员工在工厂间调动后，前期数据在原组织单元查看受限，需逐一切换组织查看</li>
+        <li><strong>打卡权限痛点：</strong>员工调动后，大华考勤机、企微打卡、门禁、餐卡权限均需手工维护，体验差且易遗漏</li>
+      </ul>
+
+      <h4>1.4 不考勤人员</h4>
+      <table>
+        <tr><th>类别</th><th>判定方式</th><th>备注</th></tr>
+        <tr><td>保安</td><td>岗位名称</td><td>建议后续也纳入打卡管理</td></tr>
+        <tr><td>驻外人员</td><td>岗位（售后服务）+ 部门长确认名单</td><td>销售驻外由部门长线下提供名单</td></tr>
+        <tr><td>九级以上高管</td><td>职级</td><td>不打卡则无加班认定</td></tr>
+        <tr><td>司机</td><td>岗位名称</td><td>类似驻外概念</td></tr>
+      </table>
+      <p>入职时维护"考勤档案"字段（机器考勤/手工考勤），由招聘或分公司助理负责。新系统将通过标识自动归入不考勤方案。</p>
+
+      <h4>1.5 打卡方式</h4>
+      <ul>
+        <li><strong>职能办公楼：</strong>企微定位打卡 + 大华考勤机打卡任选一（需打4次卡——因宿舍/食堂在园区内）</li>
+        <li><strong>工厂办公室：</strong>企微定位打卡</li>
+        <li><strong>工厂车间：</strong>大华考勤机打卡</li>
+        <li><strong>定位精度：</strong>300米范围，靠近食堂/宿舍的区域已取消定位打卡</li>
+        <li><strong>建议：</strong>后续可考虑使用北森APP打卡（精度更可控），但当前无需改变模式，仅切换取数来源</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">2</span>休假管理</h3>
+
+      <h4>2.1 事假</h4>
+      <ul>
+        <li>无额度限制，但需走审批流</li>
+        <li><strong>前置假规则：</strong>有年假余额者优先休年假，但年假最小0.5天，员工仅需1-2小时事假时产生矛盾</li>
+        <li><strong>讨论结论：</strong>维持前置假控制，制度导向为必须先用完年假；系统需提供可维护事假额度的功能以备未来管理需要</li>
+      </ul>
+
+      <h4>2.2 病假</h4>
+      <ul>
+        <li>需上传附件（医院证明），线上审批生效</li>
+        <li><strong>请假条件：</strong>根据司龄计算医疗期额度（参照国家规定但按司龄而非工龄）</li>
+        <li><strong>当前痛点：</strong>线下审核资料和考勤较繁琐，附件不认可（如诊所证明）需驳回</li>
+        <li><strong>病假工资：</strong>单独按补贴标准计算，不纳入标准工时统计</li>
+      </ul>
+
+      <h4>2.3 婚假</h4>
+      <ul>
+        <li>本部政策：结婚登记后<strong>3个月内</strong>可休3天（待确认是否改为1年，国家法定为1年）</li>
+        <li>需维护结婚登记日期，员工提假时系统自动校验有效期</li>
+        <li>如未维护结婚日期，流程无法提交</li>
+      </ul>
+
+      <h4>2.4 陪产假 & 丧假</h4>
+      <table>
+        <tr><th>假别</th><th>天数</th><th>条件</th><th>附件要求</th></tr>
+        <tr><td>陪产假</td><td>3天（司龄3年以上5天待确认）</td><td>男性可休</td><td>需提交附件</td></tr>
+        <tr><td>丧假</td><td>3年以下3天 / 3年以上5天</td><td>按司龄判定</td><td>需提交附件，支持补交</td></tr>
+      </table>
+
+      <h4>2.5 年假</h4>
+      <div class="box box-blue">
+        <strong>📌 年假计算规则</strong>
+        <ul>
+          <li><strong>额度计算：</strong>按司龄（非工龄），以每年1月1日为节点判定是否满一年，不折算</li>
+          <li><strong>释放时间：</strong>每年1月1日统一释放，过程中不变（例如：2月1日入职的员工，需等到次年1月1日才释放年假，实际约等于近2年才能享受）</li>
+          <li><strong>额度标准：</strong>1-10年司龄→5天，10-20年→10天，20年以上→15天</li>
+          <li><strong>取消条件（以上年度请假情况判定）：</strong>
+            <ul>
+              <li>10年以下司龄：上年度累计病假+事假超过2个月→取消当年年假</li>
+              <li>10-20年司龄：超过3个月→取消</li>
+              <li>20年以上：超过4个月→取消</li>
+            </ul>
+          </li>
+          <li><strong>适用范围：</strong>合同制员工，剔除幸福工作坊人员；劳务派遣人员需特殊处理（RBA审核要求全员享年假）</li>
+          <li><strong>退休返聘：</strong>享受年假（工龄延续，未重新开始）</li>
+        </ul>
+      </div>
+
+      <h4>2.6 哺乳假 & 产检假</h4>
+      <ul>
+        <li><strong>哺乳假：</strong>每天1小时（多胎按文件允许增加），可集中使用（上午/下午各半小时或连续1小时），系统自动补位异常时间</li>
+        <li><strong>产检假：</strong>每月最多2天，半天起请，需提交附件。当前一线员工多走签卡，管理不严</li>
+      </ul>
+
+      <h4>2.7 附件补交机制</h4>
+      <ul>
+        <li>审批通过即生效，附件可事后补交</li>
+        <li>系统在假期结束日次日起持续推送补交提醒</li>
+        <li>管理员可查看未补交人员清单，在考勤期间结束前决定处理方式</li>
+        <li><strong>病假不适用补交</strong>（因涉及工资计算差异），需附件必填</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">3</span>加班管理</h3>
+
+      <h4>3.1 加班分类</h4>
+      <table>
+        <tr><th>类别</th><th>适用人群</th><th>处理方式</th></tr>
+        <tr><td>加班转加班费</td><td>工厂岗位：仓管、机修、电工、计量收发、EHS、污水处理、磨工等（不超过10个岗位）</td><td>需在花名册添加标识，按岗位或部门区分</td></tr>
+        <tr><td>加班转调休</td><td>职能人员及其他非上述岗位人员</td><td>公休日/节假日加班，时长≥0.5天方可转调休</td></tr>
+      </table>
+
+      <h4>3.2 加班规则</h4>
+      <ul>
+        <li><strong>派工方式：</strong>仅允许上级派工（领导代提），员工不可自行申请</li>
+        <li><strong>打卡要求：</strong>后续加班需打卡，加班单与打卡时间取交集</li>
+        <li><strong>计算规则：</strong>交集时长按0.5天向下取整（如1.2天→1天，0.8天→0.5天）</li>
+        <li><strong>加班类型：</strong>仅公休日和节假日加班（班后加班不认可转调休）</li>
+        <li><strong>制度先行：</strong>加班规则需先线下试运行，再上系统</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">4</span>出差与公出管理</h3>
+
+      <h4>4.1 定义区分</h4>
+      <table>
+        <tr><th>类别</th><th>范围</th><th>单位</th><th>是否涉及报销</th><th>申请系统</th></tr>
+        <tr><td><strong>出差</strong></td><td>跨市</td><td>天</td><td>可能涉及</td><td>HR系统（主体）→ 同步美客</td></tr>
+        <tr><td><strong>公出（短期出差）</strong></td><td>市内</td><td>小时（当天内）</td><td>不涉及</td><td>HR系统</td></tr>
+      </table>
+
+      <h4>4.2 流程优化方向</h4>
+      <ul>
+        <li><strong>统一入口：</strong>出差和公出均在HR系统提出申请，出差审批通过后同步行程到每刻，员工在每刻补充报销内容</li>
+        <li><strong>公出限制：</strong>仅限当天内，超时无法提交（需改走出差流程）</li>
+        <li><strong>打卡要求：</strong>公出需打卡（出发打卡+返回打卡），出差按天为单位无需中途打卡</li>
+        <li><strong>与每刻对接：</strong>仅同步出差行程（时间），不涉及费用字段，每刻自行处理报销</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">5</span>异常补签规则</h3>
+      <div class="box box-green">
+        <strong>✅ 简化后的规则</strong>
+        <ul>
+          <li><strong>漏打卡：</strong>每次扣10元，不限次数</li>
+          <li><strong>其他原因（考勤机故障等）：</strong>每月累计≤10次不扣款，超过10次每次扣10元</li>
+          <li><strong>考勤机故障：</strong>由管理员补签（不走流程），员工端不显示此选项</li>
+          <li><strong>新员工入职：</strong>自动补签入职第一天上班卡（仅限第一天）</li>
+          <li><strong>取消项：</strong>短期出差未打卡（后续走公出流程）、新工入职补签多天</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">6</span>RBA审核应对方案</h3>
+      <div class="box box-yellow">
+        <strong>⚠️ 审核要点</strong>
+        <ul>
+          <li>国外客户（沃尔沃、特斯拉等）要求通过RBA人权审核，标准高于劳动法</li>
+          <li>12小时班次在审核时需显示为8小时，打卡数据需隐藏真实时间</li>
+          <li><strong>方案一：</strong>班次设为8小时，实际排班由班组长管理，系统只统计8小时标准工时</li>
+          <li><strong>方案二：</strong>权限控制——审核时隐藏打卡时间字段，仅显示班次起止时间和考勤状态（正常/异常）</li>
+          <li>考勤文员工作台可灵活设置显示字段，审核前调整权限即可</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">7</span>考勤月报统计项目</h3>
+      <table>
+        <tr><th>项目</th><th>说明</th><th>标准/实际</th></tr>
+        <tr><td>正班出勤总时长</td><td>周一至周五工作日出勤，8小时内</td><td>标准 + 实际（两列）</td></tr>
+        <tr><td>周六出勤总时长</td><td>周六工作日出勤，8小时内</td><td>标准 + 实际（两列）</td></tr>
+        <tr><td>正班旷工总时长</td><td>周一至周五旷工时长</td><td>最多计8小时</td></tr>
+        <tr><td>实际休假总时长</td><td>所有假别合计（含公休日的连续假）</td><td>实际</td></tr>
+        <tr><td>周日出勤总时长</td><td>周日排工作日的出勤</td><td>标准 + 实际</td></tr>
+        <tr><td>迟到早退次数</td><td>迟到容忍1分钟，迟到30分钟以上算旷工</td><td>—</td></tr>
+        <tr><td>签卡次数</td><td>漏打卡 + 其他原因补签合计</td><td>分两类统计</td></tr>
+        <tr><td>年休假工时</td><td>分正班年假 + 周六年假</td><td>新增</td></tr>
+        <tr><td>带薪假工时</td><td>婚假 + 丧假 + 陪产假（合计）</td><td>新增</td></tr>
+        <tr><td>病假工时</td><td>病假时长（单独列出）</td><td>新增</td></tr>
+        <tr><td>早/中/晚班次数</td><td>按班次类别标签统计</td><td>新增</td></tr>
+        <tr><td>岗前工时</td><td>岗前人员的出勤工时（从正班中扣减）</td><td>新增</td></tr>
+        <tr><td>双休加班工时</td><td>单双休人员周六排休时长（默认计入加班）</td><td>新增</td></tr>
+      </table>
+
+      <h4>加班工时统计逻辑</h4>
+      <ul>
+        <li>周一至周五班后加班 × 1.5（仅标识人员）</li>
+        <li>周六班后加班 × 2</li>
+        <li>周日全天加班 × 2</li>
+        <li>法定节假日加班 × 3</li>
+        <li>职能人员法定节假日可报加班费，公休日加班转调休</li>
+      </ul>
+
+      <h4>单双休处理</h4>
+      <ul>
+        <li>单双休人员需打标签（入职/调动时维护），约400-600人</li>
+        <li>单双休人员周六排休时长自动计入"双休加班工时"</li>
+        <li>例如：4月有4个周六排休 → 加16小时；3个周六排休 → 加24小时</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MEETING 3 ==================== -->
+<div class="meeting" id="m3">
+  <div class="meeting-header">
+    <h2>三、考勤排班及权限管理讨论</h2>
+  </div>
+  <div class="meeting-body">
+
+    <div class="section">
+      <h3><span class="num">1</span>班次设置与管理</h3>
+
+      <h4>1.1 班次命名与审核应对</h4>
+      <ul>
+        <li>班次可自定义命名，内部统一口径标注为"早一""中一""中二""晚二"等</li>
+        <li>例如：早一=7:00-15:00，中一=7:00-17:00，中二=7:00-19:00</li>
+        <li>审核时隐藏打卡时间字段，仅显示班次名称和8小时时长，避免暴露实际工时</li>
+        <li>中二排班可享受中晚班补贴，班组长只需知道"排中二=有补贴"即可</li>
+      </ul>
+
+      <h4>1.2 中晚班补贴统计规则</h4>
+      <div class="box box-blue">
+        <strong>📌 统计条件</strong>
+        <ul>
+          <li>班次标识为中班或晚班</li>
+          <li>当天考勤正常（出勤满8小时）</li>
+          <li>允许补签卡，但补签次数 ≤ 2次</li>
+          <li>早班不统计补贴，仅中班和晚班打标签</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">2</span>考勤处理流程时间线</h3>
+      <table>
+        <tr><th>时间</th><th>动作</th><th>责任人</th></tr>
+        <tr><td>1号</td><td>通知全员处理上月考勤异常</td><td>梅梅</td></tr>
+        <tr><td>1-2号</td><td>员工处理异常，系统实时计算工时</td><td>员工 + 人事助理催办</td></tr>
+        <tr><td>3号早上</td><td>自动封存考勤数据（审批中单据作废）</td><td>系统自动</td></tr>
+        <tr><td>3号</td><td>封存前做一次计算确保数据准确</td><td>梅梅</td></tr>
+        <tr><td>4-5号</td><td>冻结出考勤月报，导出数据</td><td>梅梅</td></tr>
+        <tr><td>5-8号</td><td>分公司线下确认月报，提交纸质异常打卡说明单</td><td>分子公司人事</td></tr>
+        <tr><td>8号</td><td>提交最终版领导签字的纸质考勤月报</td><td>分子公司人事</td></tr>
+        <tr><td>9号</td><td>梅梅处理计时人员月报，做年休假、单双休、岗前工时等调整</td><td>梅梅（半天专注）</td></tr>
+        <tr><td>10号</td><td>发给分公司确认，分公司再拆给部门/员工公示</td><td>分子公司人事</td></tr>
+        <tr><td>12-13号</td><td>获取最终版考勤月报</td><td>梅梅</td></tr>
+      </table>
+      <div class="box box-green">
+        <strong>✅ 新系统优化目标</strong>
+        <ul>
+          <li>日报、月报实时计算，员工可随时查看自己的考勤信息</li>
+          <li>1-2号员工自行处理异常，3号梅梅仅做封存动作</li>
+          <li>取消线下Excel和纸质流程，文员/人事助理线上操作</li>
+          <li>新系统上线后，梅梅在1-2号后不再做任何考勤修正操作</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">3</span>排班方式与工作日历</h3>
+
+      <h4>3.1 默认排班</h4>
+      <ul>
+        <li>系统初始默认双休，可根据标识自动归类为单休或单双休</li>
+        <li><strong>考勤档案规则：</strong>按组织 + 单双休标识自动生成工作日历组，入职时自动匹配</li>
+        <li>大方向规则由梅梅设定，个别调整在考勤档案中手动修改</li>
+      </ul>
+
+      <h4>3.2 循环排班模板</h4>
+      <ul>
+        <li>可创建循环模板，按工作日历循环（如冬夏令时转换：5-9月夏令时，10-4月冬令时）</li>
+        <li>系统自动循环，提前生成6个月班次，无需每月手动排班</li>
+        <li>特殊人员（如实习生去分厂）需单独手动排班</li>
+      </ul>
+
+      <h4>3.3 工作日历管理</h4>
+      <ul>
+        <li>工作日历仅支持三种日期类型：工作日、公休日、节假日</li>
+        <li>单双休工作日历可批量修改（全公司统一调整）</li>
+        <li><strong>排班优先级 > 工作日历组：</strong>虽然员工绑定单双休日历，但排班页面可单独排成双休或单休</li>
+        <li>单双休算法仍按考勤档案中的工作日历组计算</li>
+      </ul>
+
+      <h4>3.4 考勤卡号维护</h4>
+      <ul>
+        <li>当前使用IC卡号（非工号），需手动维护到考勤档案</li>
+        <li><strong>建议：</strong>将考勤卡号默认设为工号，大华系统中以工号为唯一标识，减少手动维护</li>
+        <li>如使用人脸识别打卡，可读取HR系统中的照片信息</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">4</span>权限管理</h3>
+
+      <h4>4.1 文员权限</h4>
+      <ul>
+        <li>可定义"文员角色"，授权查看排班和考勤异常信息</li>
+        <li>数据权限可控制到具体部门</li>
+        <li>文员可在排班页面调整班次（仅排班，不涉及考勤档案等其他模块）</li>
+        <li>一个文员可管多个厂（如三分公司+工装分公司），需分别授权</li>
+      </ul>
+
+
+
+      <h4>4.2 班次权限隔离</h4>
+      <ul>
+        <li>新建班次时可设置"适用组织"，支持多选部门</li>
+        <li>职能通用班次（如冬夏令时）可设为双环本部向下共享</li>
+        <li>特殊班次（如车间专用）仅设给特定部门，其他班组看不到</li>
+        <li>班次适用范围可随时修改（如新增需求时加入新部门）</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="num">5</span>请假算薪规则讨论</h3>
+      <div class="box box-yellow">
+        <strong>⚠️ 7.5小时出勤问题</strong>
+        <ul>
+          <li>本部基地出勤7.5小时/天，但算薪按8小时计算</li>
+          <li>请假时产生矛盾：请上午3.5小时假 → 实际出勤4小时 → 加年假4小时 = 7.5小时 ≠ 8小时</li>
+          <li>员工不满：明明整天正常（出勤+带薪假），为何被扣0.5小时工资？</li>
+          <li><strong>讨论方向：</strong>请假小时假需明确半天维度（如4小时=0.5天），算薪时统一标准</li>
+          <li><strong>待确认：</strong>询问一婷老师此前给出的7.5小时算薪方案</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MEETING 4 ==================== -->
+<div class="meeting" id="m4">
+  <div class="meeting-header">
+    <h2>四、月报逻辑讨论</h2>
+  </div>
+  <div class="meeting-body">
+
+  
+    <div class="section">
+      <h3><span class="num">1</span>月报工时统计</h3>
+      <h4>实际工时与标准工时</h4>
+      <ul>
+        <li>系统同时支持标准工时（8小时制）和实际打卡工时</li>
+        <li>超过8小时的班次（如12小时），标准工时列显示8小时，实际工时列显示12小时（可减去用餐时间）</li>
+        <li>用餐时间扣减规则：12小时班次默认减1.5小时，可按规则配置</li>
+        <li>取整方式：向下取整，按0.5天为单位</li>
+      </ul>
+
+      <h4>岗前人员工时</h4>
+      <ul>
+        <li>通过"人员类别"字段识别岗前人员（入职培训期、转岗学习期等）</li>
+        <li>日报按天计算，当天人员类别 = 岗前人员 → 工时计入岗前工时</li>
+        <li>月中调动的人员，调动前按岗前统计，调动后按在岗统计</li>
+        <li>打卡工时 - 岗前工时 = 正常出勤工时</li>
+      </ul>
+
+      <h4>学徒期/转岗学习</h4>
+      <ul>
+        <li>每月约10人处于转岗学习期</li>
+        <li>方案：人员类别增加"学习人员"标签，走调动流程标识</li>
+        <li>学习期工时单独统计，按学徒工资标准计算</li>
+        <li>分公司人事提供学习天数和工时数据</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ACTIONS ==================== -->
+<div class="meeting" id="actions">
+  <div class="meeting-header" style="background: var(--warn-light); border-left-color: var(--warn);">
+    <h2 style="color: var(--warn);">📌 待办事项汇总</h2>
+  </div>
+  <div class="meeting-body">
+
+
+
+    <div class="section">
+      <h3>制度与规则类</h3>
+      <div class="action"><span class="icon">📋</span><div>与林红讨论工伤假是否允许补资料的问题</div></div>
+      <div class="action"><span class="icon">📋</span><div>确认婚假有效期是否从3个月调整为1年</div></div>
+      <div class="action"><span class="icon">📋</span><div>确认加班转调休规则：可给加班费的岗位清单、调休最小单位</div></div>
+      <div class="action"><span class="icon">📋</span><div>梳理各类假的审批流程模板（发起人→审批节点→审批人）</div></div>
+    </div>
+
+    <div class="section">
+      <h3>数据与配置类</h3>
+      <div class="action"><span class="icon">📊</span><div>梳理单双休人员标识规则</div></div>
+      <div class="action"><span class="icon">📊</span><div>提供各组织对应的单双休标识、冬夏令时默认班次及循环模板数据</div></div>
+      <div class="action"><span class="icon">📊</span><div>将班次表发给分子公司人事和文员，标记不用的和临时的班次以便清理</div></div>
+      <div class="action"><span class="icon">📊</span><div>询问分公司助理排班检查耗时，评估工作量</div></div>
+      <div class="action"><span class="icon">📊</span><div>与每刻新负责人沟通出差流程方案，本周内给出回复</div></div>
+    </div>
+
+
+
+<!-- ==================== FOOTER ==================== -->
+<div class="footer">
+
+</div>
+
+</div>
+</body>
+</html>
