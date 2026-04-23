@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议纪要 - 薪资核算体系梳理</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8eefb;
+    --accent: #e74c3c;
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --border: #e2e5ea;
+    --text: #1f2937;
+    --text-secondary: #6b7280;
+    --success: #059669;
+    --warning: #d97706;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+  .header {
+    background: linear-gradient(135deg, #1a56db 0%, #1e40af 100%);
+    color: #fff;
+    padding: 36px 40px;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .header h1 { font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+  .header .subtitle { font-size: 14px; opacity: 0.85; margin-top: 6px; }
+  .meta-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  .meta-bar span { display: flex; align-items: center; gap: 6px; }
+  .meta-bar .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.6); }
+  .body-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 36px 40px 48px;
+  }
+  .section { margin-bottom: 36px; }
+  .section:last-child { margin-bottom: 0; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary);
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-light);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px; height: 26px;
+    background: var(--primary-light);
+    border-radius: 6px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .sub-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 18px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid var(--primary);
+  }
+  p, li { font-size: 14px; color: #374151; }
+  ul { padding-left: 22px; margin: 8px 0; }
+  li { margin-bottom: 6px; }
+  li::marker { color: var(--primary); }
+  .highlight {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+  .highlight .label { font-weight: 700; color: var(--warning); margin-right: 6px; }
+  .info-box {
+    background: var(--primary-light);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+  .formula-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 13.5px;
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+  .formula-box .fn { font-weight: 700; color: var(--success); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+  th {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:nth-child(even) td { background: #f9fafb; }
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .tag-red { background: #fee2e2; color: #b91c1c; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-green { background: #d1fae5; color: #065f46; }
+  .tag-yellow { background: #fef3c7; color: #92400e; }
+  .tag-gray { background: #f3f4f6; color: #4b5563; }
+  .timeline { position: relative; padding-left: 28px; margin: 12px 0; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 4px; bottom: 4px;
+    width: 2px;
+    background: var(--primary-light);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 14px;
+    font-size: 13.5px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -22px; top: 7px;
+    width: 10px; height: 10px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--primary-light);
+  }
+  .timeline-item strong { color: var(--primary); }
+  .action-list { list-style: none; padding: 0; }
+  .action-list li {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .action-list li .bullet {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .action-list li .owner { font-weight: 700; color: var(--primary); }
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .two-col .col { background: #f9fafb; border-radius: 8px; padding: 14px 16px; border: 1px solid var(--border); }
+  .two-col .col h4 { font-size: 13.5px; margin-bottom: 8px; color: var(--primary); }
+  .day-work-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 12px 0; }
+  .day-card {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 13px;
+  }
+  .day-card .day-num { font-size: 20px; font-weight: 700; color: var(--primary); }
+  .day-card .day-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>📋 会议纪要：薪资核算与薪酬体系全流程梳理</h1>
+    <div class="subtitle">薪资体系现状分析及优化方向</div>
+    <div class="meta-bar">
+      <span><span class="dot"></span>日期：2026年4月21日（周二）</span>
+      <span><span class="dot"></span>类别：专题会议</span>
+      <span><span class="dot"></span>状态：<span class="tag tag-yellow">待跟进</span></span>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body-card">
+
+    <!-- 一、会议背景 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">📌</span> 一、会议背景与目标</div>
+      <p>本次会议对公司现行的<strong>计时与计薪资体系</strong>进行了全面梳理，覆盖从人员分类、定薪调薪、薪资构成到月度核算全流程，旨在识别关键痛点并明确后续优化方向。</p>
+      <div class="highlight">
+        <span class="label">⚠️ 核心问题：</span>全流程高度依赖线下 Excel 手工操作（定薪、调薪、考勤对接、病假审核等），系统（EHR/NC/MES）仅作数据录入，效率低且易出错。所有核算逻辑均在一张 3,000+ 人、堆叠多薪资项目的大表中手工完成。
+      </div>
+    </div>
+
+    <!-- 二、人员结构 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">👥</span> 二、人员结构与薪资类型</div>
+
+      <div class="sub-title">公司本部人员分类</div>
+      <table>
+        <thead>
+          <tr><th>人员类别</th><th>薪资类型</th><th>核算责任方</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>计件薪资人员</td>
+            <td><span class="tag tag-green">计件</span></td>
+            <td>各分子公司人事（线下提供）</td>
+            <td>由各工厂线下报送结果，经 TPS（精益生产部）审核产品单价后定稿</td>
+          </tr>
+          <tr>
+            <td>计时薪资人员</td>
+            <td><span class="tag tag-blue">计时</span></td>
+            <td>公司本部</td>
+            <td>因考勤数据在手，由本部核算</td>
+          </tr>
+          <tr>
+            <td>半计时半计件人员</td>
+            <td><span class="tag tag-gray">混合</span></td>
+            <td>人事提供，本部汇总</td>
+            <td>计时部分由人事按一线实际工时（非8小时）处理好后提供，计件部分另算，两者相加为最终工资</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sub-title">集团下属工厂</div>
+      <p>集团下设多个工厂，每个工厂有<strong>独立 HR人事</strong> 负责本地薪资数据处理。工厂定薪流程由 人事 发起，经分公司总经理审批后归集到本部。</p>
+
+      <div class="sub-title">计件薪资细分</div>
+      <ul>
+        <li><strong>个人计件：</strong>按个人产出直接计算，MES 系统可提供部分数据</li>
+        <li><strong>团队分摊工资：</strong>适用于清洗、包装等无法个人计件的岗位。先记在一人名下（如张三），从 MES 导出总额后，根据<strong>考核分</strong>和<strong>出勤工时</strong>等维度二次分配到各人名下，全部线下手工处理</li>
+        <li><strong>计件审核流程：</strong>MES 数据 → 人事 处理异常（缺申报、当日未干活转点工等）→ TPS 审核产品单价 → 最终结果归集。中间存在手动调整（计件调整列），原始 MES 数据不改动</li>
+      </ul>
+
+      <div class="sub-title">特殊人群</div>
+      <table>
+        <thead>
+          <tr><th>类别</th><th>人数规模（月度）</th><th>薪资方式</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>劳务派遣</td><td>个位数</td><td>劳务费结算</td><td>由劳务公司统一开票，不走本部薪资</td></tr>
+          <tr><td>同工同酬</td><td>55-60人</td><td>同工同酬</td><td>在系统中可看到</td></tr>
+          <tr><td>实习生（长期）</td><td>少量</td><td>月薪制</td><td>与正式员工一致的核算方式</td></tr>
+          <tr><td>实习生（短期）</td><td>0-3人/月</td><td>月薪制</td><td>同上</td></tr>
+          <tr><td>小时工</td><td>0-8人/月</td><td>线下自行处理</td><td>线下由招聘部门结算</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 三、定薪与调薪 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">💼</span> 三、定薪与调薪流程</div>
+
+      <div class="sub-title">定薪流程（新员工/转正）</div>
+      <ol style="padding-left: 22px; margin: 8px 0;">
+        <li>招聘部门在月底或月初提供新员工 Offer，约定<strong>总薪资</strong>（如 10,000 元），Offer 为纸质录用函，不包含入职日期和详细薪资结构</li>
+        <li>薪酬专员将总薪资拆分为<strong>「固定标准工资」</strong>（如 6,000 元，用于计算加班费）和<strong>「特殊津贴」</strong>（如 4,000 元），以满足合规要求。拆分依据为内部岗位水平参照</li>
+        <li>拆分后信息通过 NC 系统走线上审批，同时线下同步纸质审批</li>
+        <li>系统定薪只能<strong>按部门逐个发起</strong>（不同部门审批流不同）</li>
+      </ol>
+
+      <div class="info-box">
+        📌 <strong>定薪逻辑说明：</strong>
+        <ul style="margin-top:6px;">
+          <li>入职当月通常不拆分，以 Offer 总额为准；转正后（通常 1-3 个月观察期）根据员工实际水平做二次定薪，此时拆分加班基数</li>
+          <li>避免与内部同岗人员加班工资产生过大差异是拆分的主要考量</li>
+          <li>系统中定薪项目目前只有<strong>工资标准 + 职务津贴</strong>两项走线上，其余（技能、职称、特殊津贴等）均线下处理</li>
+          <li>领导审批时可修改金额（审批金额 ≠ 申请金额），但需走标准表档位</li>
+        </ul>
+      </div>
+
+      <div class="sub-title">薪资标准表（职级体系）</div>
+      <ul>
+        <li>公司实行<strong>12级职级体系</strong>（P1-P12），每级<strong>15个档位</strong>（如 5.1-5.15），共 180 个薪资档位</li>
+        <li>目前使用<strong>21版标准表</strong>（19版与21版基本一致，仅增加一条制度）</li>
+        <li>标准表为<strong>双总部（管理总部+本部）共用</strong>，集团其他单位（江苏、大连、研究院等）有独立标准表</li>
+        <li>大部分计时人员可套入标准表，少部分特殊人员套不进去，直接按金额定薪</li>
+        <li>定薪类别分两类：<span class="tag tag-blue">按标准表</span> 和 <span class="tag tag-gray">按金额</span></li>
+      </ul>
+
+      <div class="sub-title">调薪流程</div>
+      <ul>
+        <li>调薪统一在<strong>每月1号生效</strong>，不存在月中调薪（调动同样按1号生效）</li>
+        <li><strong>年度/晋升调薪：</strong>薪酬专员梳理名单 → 领导评审 → 直接在系统中维护新薪资档案。目前为<strong>非规范操作：无正式审批流，直接数据导入</strong>。按理应走批量调薪审批流程</li>
+        <li><strong>单人月度调薪：</strong>部门填写线下《薪资标准申请表》→ 相关领导审批 → 薪酬专员执行。分子公司由 人事 提申请单</li>
+        <li><strong>薪资档案标准清单：</strong>薪酬专员维护一个子表（工龄、职务、技能、职称、保密、特殊、驻外等），每月梳理更新，有变动立即调整</li>
+      </ul>
+    </div>
+
+    <!-- 四、薪资构成与计算逻辑 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">📊</span> 四、薪资构成与计算逻辑</div>
+
+      <div class="sub-title">薪资项目总览</div>
+      <p>薪资项目通用，覆盖所有计时人员（含实习生、分子公司）：</p>
+      <table>
+        <thead>
+          <tr><th>项目</th><th>挂钩规则</th><th>标准</th><th>备注</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>工资标准</td><td>固定标准工资</td><td>见职级表</td><td>由基本工资+周六工资+考核工资构成</td></tr>
+          <tr><td>职务津贴</td><td>÷标准工时×实际工时</td><td>M档：300-800+</td><td>仅管理岗（M档+O3线长）</td></tr>
+          <tr><td>技能津贴</td><td>÷标准工时×实际工时</td><td>0/100/200/…逐级递增</td><td>内部考试测评通过才升级，非自动</td></tr>
+          <tr><td>职称津贴</td><td>÷标准工时×实际工时</td><td>中级100/高级300-500</td><td>须持国家证书+岗位对口</td></tr>
+          <tr><td>特殊津贴</td><td>手工维护</td><td>按人定</td><td>定薪拆分后的差额部分</td></tr>
+          <tr><td>保密津贴</td><td>固定不变</td><td>500等</td><td>特定岗位，调岗即取消</td></tr>
+          <tr><td>工龄津贴</td><td>按工龄计算</td><td>30元/年（计时）</td><td>以入司日期+发薪截止日计算</td></tr>
+          <tr><td>驻外津贴</td><td>按驻地</td><td>因城市而异</td><td>仅保安、售后人员</td></tr>
+        </tbody>
+      </table>
+
+      <div class="formula-box">
+        <span class="fn">通用津贴公式：</span><br>
+        实发津贴 = （津贴标准 ÷ 正班标准工时）× 实际正班工时<br><br>
+        <span style="color:#6b7280;">请假（除必须扣款外）和年假视为正常出勤，不扣款。</span>
+      </div>
+
+      <div class="sub-title">固定工资拆分公式（核心逻辑）</div>
+      <p>固定标准工资（如6,000元）内部拆分为三项：</p>
+      <table>
+        <thead>
+          <tr><th>项目</th><th>计算逻辑</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>考核工资</strong></td>
+            <td>1-4级：标准工资 × 30%<br>5-8级：标准工资 × 40%<br>8级以上：标准工资 × 50%<br><em>考核工资 = 考核工资标准 × 考核系数（系数如：100以上→1.2，90~99→1.0等）</em></td>
+          </tr>
+          <tr>
+            <td><strong>基本工资（周一至周五）</strong></td>
+            <td>(标准工资 − 考核工资) 的部分，按周一到周五和周六比例分配<br><code>基本工资 = ROUNDUP( (标准−考核) ÷ 21.75 × (52÷12×2) ÷ 10, -1 )</code><br><span style="color:#6b7280;">其中 21.75 为月均计薪天数，52÷12 为月均周数，×2 为周六倍数，-1 为向前取整到十位</span></td>
+          </tr>
+          <tr>
+            <td><strong>周六工资</strong></td>
+            <td>基本工资的两倍（即周六按2倍计薪）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight">
+        <span class="label">⚠️ 历史遗留：</span>该拆分公式来自2019年版薪资标准表，一直沿用至今，发言人1 本人也未能完全解释公式的每个细节，需后续文档化澄清。
+      </div>
+
+      <div class="sub-title">考勤与工时规则</div>
+      <ul>
+        <li>公司实行<strong>单休制</strong>（周日休息）</li>
+        <li><strong>正班标准工时</strong> = 当月自然日天数 − 周日个数 − 非法定周六个数</li>
+        <li><strong>周六标准工时</strong> = 非法定周六的实际出勤天数</li>
+        <li>法定节假日落在周六 → 该日计入正班工时，当月周六工时相应减少（不补）</li>
+        <li>法定节假日落在周日 → 该日计入正班工时，并在下周补一个周日（挪休）</li>
+        <li>所有津贴按<strong>实际正班工时</strong>折算（非全天），工时从考勤系统班次内出勤取数</li>
+      </ul>
+
+      <div class="sub-title">加班工资规则</div>
+      <table>
+        <thead>
+          <tr><th>加班时段</th><th>倍数</th><th>适用范围</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>工作日班后</td><td><strong>1.5 倍</strong></td><td rowspan="3">仅适用于特定岗位（仓管、机修、电工等），其余一线员工无加班费</td></tr>
+          <tr><td>周六 / 周日</td><td><strong>2 倍</strong></td></tr>
+          <tr><td>周六班后</td><td><strong>2 倍</strong></td></tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>加班需提交<strong>加班申请单</strong>，目前系统不自动校验打卡记录，后续需做取交集处理</li>
+        <li>考勤数据中周六/周日需根据公司自定义排班日历判断，系统按自然日统计，需人工处理调休场景</li>
+        <li>公司班次复杂，共<strong>100+个班次</strong>，后续需简化</li>
+      </ul>
+
+      <div class="sub-title">考核工资</div>
+      <ul>
+        <li>全员绩效考核，由主管或多维度评分，结果为<strong>分数</strong>（非直接系数）</li>
+        <li>薪酬专员根据分数套系数：100以上→1.2，90~99→1.0，以下递减</li>
+        <li>技能5级及以上：考核分占40%，技术分占60%；5级以下：考核分占60-70%</li>
+        <li>考核数据由各部门在10号前完成，14号下班前必须结束考核，15号薪酬专员做核对</li>
+      </ul>
+    </div>
+
+    <!-- 五、特殊场景 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">🔧</span> 五、特殊人群与场景处理</div>
+
+      <div class="sub-title">学徒/岗前人员</div>
+      <ul>
+        <li>新入职操作工在上岗前（通常20天内）按<strong>小时工资</strong>计算（如18元/小时，因工种而异），称为「学徒工资」</li>
+        <li>上岗后切换至计件或计时薪资模式，通过<strong>人事调动流程</strong>实现</li>
+        <li><span class="tag tag-red">痛点</span> 薪资计算需手工切割工时：前半月算时薪、后半月算月薪，系统无法自动处理</li>
+        <li><span class="tag tag-red">痛点</span> 岗前人员月均<strong>200-300人</strong>，进出来去频繁，月度上岗率约80%，波动极大，不适合系统定薪维护</li>
+        <li>当前做法：人事 提供岗前人员子表（含工种、时薪、工时），薪酬专员线下汇总计算</li>
+      </ul>
+
+      <div class="sub-title">技能津贴（特殊逻辑）</div>
+      <ul>
+        <li>适用对象：一线生产现场、检验、工装等操作类岗位，转正后从零级起步（0元）</li>
+        <li>需通过<strong>内部考试/测评</strong>才能升级，非自动递增。可能一年考一次，也可能两年</li>
+        <li>换岗后技能等级可能重置（如从品质六级转计划物流，可能从一级重新开始）</li>
+        <li>培训部门提供变动名单（非每月，仅年度有大变动时统一提供）</li>
+      </ul>
+
+      <div class="sub-title">奖金与补贴</div>
+      <ul>
+        <li>奖金（年终奖、项目激励、零星奖励等）合并计入当月工资一同发放，无单独发放</li>
+        <li>各类补贴（交通、高温、电脑购置等）由部门提报，薪酬专员汇总导入</li>
+        <li>电脑补贴：按 ≤4,000 元标准 ÷ 48个月发放，需走 OA 审批（附发票）</li>
+        <li>高温补贴：分两档（热加工/炉前作业300元，非空调环境较低），仅6-8月（七八九三个月一次性填报，按岗位发放）</li>
+        <li>交通补贴：固定标准按正班工时折算；实习生另有一次性交通补贴（按学校所在地省会标准，200-800元）</li>
+        <li>话费补贴：按岗位/级别有标准</li>
+        <li>夜班/中班津贴：3/9/15元按班次，根据考勤班次判断，按次计算</li>
+        <li>年薪制人员：预发工资 = 年薪总额 × 20% ÷ 12，年初定一次，年底年度调薪可调整</li>
+      </ul>
+
+      <div class="sub-title">一线管理人员工资</div>
+      <ul>
+        <li>班长/线长工资 = 所管理团队的计件平均工资 × 岗位系数 × 提升系数，再按正班工时60% + 考核40%分配</li>
+        <li>约<strong>400-500人</strong>，完全手工计算，需等考核分数（15号左右）才能开始</li>
+      </ul>
+
+      <div class="sub-title">病假与旷工处理</div>
+      <ul>
+        <li><span class="tag tag-red">最耗时环节</span> 病假补贴需员工提交申请及证明材料，薪酬专员<strong>人工核对</strong>考勤系统与申请材料一致性</li>
+        <li>每月病假约10+人，每个需1小时以上审核（含沟通成本），主要问题：材料不匹配、当天在岗却请病假等</li>
+        <li>连续旷工三天以上视为旷离：当月工资全额扣除，并从上月工资中追回（按应发的18%比例扣除）</li>
+        <li>旷离名单由员工关系部门在15号左右提供</li>
+      </ul>
+
+      <div class="sub-title">税务与个税</div>
+      <ul>
+        <li>公司仅处理<strong>工资薪金所得</strong>个税，股权等其他类型由专门税务团队处理</li>
+        <li>实习生目前按正常工资薪金报税（因无法满足开核票要求，未走80%优惠）</li>
+        <li>公司个税与财务系统存在差异（如跨公司调动累积计算问题），目前以财务为准，差异通过年度汇算清缴消化</li>
+        <li>工会费：税前工资 × 千分之三，在税后扣除</li>
+        <li><strong>零星现金奖励：</strong>部分活动（如技能大赛）以现金形式现场发放，不走工资系统但仍需纳入个税申报，由活动负责人直接提供名单给税务会计</li>
+        <li><strong>离职人员特殊结清：</strong>个别员工（如被开除）需立即发薪，走 OA 用款流程先行发放，下月工资中冲回。每年约4-5次</li>
+        <li><strong>年终奖：</strong>按月度计税方式一把计完，导入金额后系统自动计算。存在年终奖一部分走月度工资申报以优化税负的情况</li>
+      </ul>
+    </div>
+
+    <!-- 六、核算时间线 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">📅</span> 六、月度核算时间线（详细）</div>
+      <div class="timeline">
+        <div class="timeline-item"><strong>1号中午12点前</strong> — HR提供上月最终版花名册，薪酬专员整理本月发薪名单和标准表（半天完成）</div>
+        <div class="timeline-item"><strong>1号下午-2号</strong> — 向各 人事 下发需定薪人员名单，人事 确认薪资结构并走线上/线下审批</div>
+        <div class="timeline-item"><strong>2号-3号</strong> — 人事 与各部门沟通确认定薪细节，薪酬专员等待审批结果</div>
+        <div class="timeline-item"><strong>3号-10号</strong> — <strong>考勤数据准备期</strong>（各 人事/部门准备子表数据，薪酬专员无数据可算）</div>
+        <div class="timeline-item"><strong>10号起</strong> — 开始接收各部门提报的子表数据（奖励、补贴、计件汇总、考核等），着手核算</div>
+        <div class="timeline-item"><strong>10号-12号</strong> — 做考勤：处理加班工时（系统导出不准需人工核对）、中夜班津贴、病假补贴</div>
+        <div class="timeline-item"><strong>12号-13号</strong> — 做杂项：各类补贴、奖励、学徒工资、激励方案等</div>
+        <div class="timeline-item"><strong>13号-14号</strong> — 做计件工资汇总（核对最低保障、岗前限制、超产封顶等条件）</div>
+        <div class="timeline-item"><strong>15号上午</strong> — 做一线管理工资（400-500人，约半天）；按部门导出数据给 人事 核对（<strong>关键控制点：人事只看薪酬专员提供的数据，不再接受其他部门修改</strong>）</div>
+        <div class="timeline-item"><strong>15号下午-16号</strong> — 扫尾：旷离扣款、工资调整项等。16号下班前所有数据定稿，停止接收新增</div>
+        <div class="timeline-item"><strong>17号</strong> — 薪酬专员自行完成全量数据审核（从头到尾复核一遍，重点检查职级不一致、子表公式错误）</div>
+        <div class="timeline-item"><strong>18号</strong> — 提交给小芳姐等领导进行线下审核</div>
+        <div class="timeline-item"><strong>19号</strong> — 将最终数据导入 NC 系统；线上审批流（小芳姐→魏总/周总→黄主任）</div>
+        <div class="timeline-item"><strong>20号</strong> — 统一发放工资（遇节假日则提前至工作日）</div>
+      </div>
+
+      <div class="highlight">
+        <span class="label">⚠️ 时间压力：</span>真正可用于核算的时间仅10号-16号（约5个工作日），期间需完成考勤、补贴、计件、一线管理等全部项目核算。如有周末或节假日，时间进一步压缩。
+      </div>
+    </div>
+
+    <!-- 七、审批流程 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">📝</span> 七、审批流程现状</div>
+
+      <div class="sub-title">定薪审批流（线上 NC）</div>
+      <p>按部门发起 → 部门负责人审批 → 中心负责人审批 → 小芳姐→ 归集。IT 系统中体现为"一阶、二阶"等节点。</p>
+
+      <div class="sub-title">月度发薪审批流（线上 NC）</div>
+      <p>小芳姐 → 魏总 → 周总（本部总经理）→ 小芳姐（其他基地到此节点） → 黄主任。财务不在 EHR 审批流内，仅在 OA 作为用款审批节点。</p>
+
+      <div class="sub-title">线下审批</div>
+      <ul>
+        <li>定薪：纸质薪资标准申请表同步走</li>
+        <li>年度/晋升调薪：目前直接系统导入，无正式审批流（待改善）</li>
+        <li>单人调薪：线下《薪资标准申请表》→ 领导签字 → 薪酬专员执行</li>
+      </ul>
+    </div>
+
+    <!-- 八、财务对接 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">💰</span> 八、财务成本对接</div>
+
+      <div class="sub-title">数据取值方式</div>
+      <ul>
+        <li>财务从 EHR 系统后台<strong>薪资报表</strong>自行取数，不直接从薪酬专员获取</li>
+        <li><strong>计提工资：</strong>取标准工资、各项补贴、上月考核系数等字段，直接计算</li>
+        <li><strong>计件工资：</strong>从条码系统取计件工资 + 计件调整项，汇总至成本中心</li>
+        <li><strong>成本中心：</strong>按"财务部门"维度（非行政维度），由 HR 维护。行政维度与财务维度大部分一致，车间存在差异（如制造一组对应两个车间）</li>
+        <li><strong>研发人员成本分摊：</strong>导入研发人员比例表，一人可能按不同比例分摊到多个研发项目，剩余部分归入计时工资。条码系统中已完成对接</li>
+        <li>个税：财务取应发数据，减去五险一金个人部分后自行计算，以财务申报为准</li>
+        <li><strong>银行：</strong>主要中国建设银行，次以浦发银行，另有中国银行等</li>
+      </ul>
+
+      <div class="highlight">
+        <span class="label">⚠️ 差异点：</span>薪酬表与财务数据存在差异的原因：①部分离职员工工资、现金收入由财务方法发放，人力工资没有此项数据；②跨公司调动时 EHR 累计计算而财务切割计算。目前通过年度汇算清缴消化差异。
+      </div>
+    </div>
+
+    <!-- 九、待办事项 -->
+    <div class="section">
+      <div class="section-title"><span class="icon">✅</span> 九、待办事项（Action Items）</div>
+      <ul class="action-list">
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <span class="owner">赵冬梅</span> — 梳理并文档化所有薪资项目的<strong>计算公式和取值逻辑</strong>，特别是历史遗留的复杂公式（基本工资拆分公式、考核工资比例规则）
+          </div>
+        </li>
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <span class="owner">赵冬梅</span> — 补充完善<strong>薪资标准表</strong>中各项津贴的标准金额（技能津贴各级标准、职称津贴各级标准、高温补贴各档标准等）
+          </div>
+        </li>
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <span class="owner">@财务+IT</span> — 条码系统（U9）计划取消，财务成本分摊等数据需迁移到 MES 或 EHR 系统
+          </div>
+        </li>
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <span class="owner">@财务+HR</span> — 计提工资线上化评估：是否能在 EHR 系统中每月1号新建发薪活动，自动计算上月计提工资，供财务直接取数，减少补提差异
+          </div>
+        </li>
+      </ul>
+    </div>
+
+
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    本纪要由薪酬管理部整理 · 2026年4月21日（含薪资体系及调薪流程讨论补充） · 如有疑问请联系薪酬专员
+  </div>
+
+</div>
+</body>
+</html>
