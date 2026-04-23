@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>双环绩效考核流程与系统需求对齐会 - 会议纪要</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8f0fe;
+    --accent: #059669;
+    --accent-light: #ecfdf5;
+    --warn: #d97706;
+    --warn-light: #fffbeb;
+    --danger: #dc2626;
+    --danger-light: #fef2f2;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --radius: 8px;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1a56db 100%);
+    color: #fff;
+    padding: 2.5rem 2.5rem 2rem;
+    border-radius: var(--radius) var(--radius) 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -40%; right: -10%;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,.06);
+    border-radius: 50%;
+  }
+  .header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: .5rem; position: relative; }
+  .header .meta { font-size: .9rem; opacity: .85; display: flex; gap: 1.5rem; flex-wrap: wrap; position: relative; }
+  .header .meta span { display: flex; align-items: center; gap: .35rem; }
+
+  /* Body card */
+  .card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .card-inner { padding: 0 2.5rem 2.5rem; }
+
+  /* Section */
+  .section { margin-top: 2rem; }
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary);
+    border-left: 4px solid var(--primary);
+    padding-left: .75rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .section-title .num {
+    background: var(--primary);
+    color: #fff;
+    font-size: .75rem;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 0 0 1px var(--gray-200);
+  }
+  thead th {
+    background: var(--gray-100);
+    color: var(--gray-700);
+    font-weight: 600;
+    text-align: left;
+    padding: .65rem 1rem;
+    border-bottom: 2px solid var(--gray-200);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: .6rem 1rem;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--gray-50); }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 600;
+    padding: .15rem .55rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .badge-blue   { background: var(--primary-light); color: var(--primary); }
+  .badge-green  { background: var(--accent-light);  color: var(--accent);  }
+  .badge-yellow { background: var(--warn-light);    color: var(--warn);    }
+  .badge-red    { background: var(--danger-light);  color: var(--danger);  }
+
+  /* Process flow */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .4rem;
+    padding: 1rem 1.25rem;
+    background: var(--primary-light);
+    border-radius: var(--radius);
+    font-size: .88rem;
+    margin: .75rem 0;
+  }
+  .flow .step {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    padding: .35rem .75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .flow .arrow { color: var(--primary); font-weight: 700; }
+
+  /* Pain points */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+  }
+  @media (max-width: 640px) { .pain-grid { grid-template-columns: 1fr; } }
+  .pain-card {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    background: #fff;
+    border-left: 4px solid var(--danger);
+    transition: box-shadow .15s;
+  }
+  .pain-card:hover { box-shadow: var(--shadow); }
+  .pain-card h4 {
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--danger);
+    margin-bottom: .4rem;
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+  }
+  .pain-card p, .pain-card ul {
+    font-size: .84rem;
+    color: var(--gray-600);
+    margin: 0;
+  }
+  .pain-card ul { padding-left: 1.1rem; margin-top: .25rem; }
+  .pain-card li { margin-bottom: .15rem; }
+
+  /* TODO list */
+  .todo-list { list-style: none; padding: 0; }
+  .todo-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+    padding: .6rem 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: .88rem;
+  }
+  .todo-list li:last-child { border-bottom: none; }
+  .todo-num {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    background: var(--gray-100);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+    color: var(--gray-600);
+  }
+  .todo-content { flex: 1; }
+  .todo-content strong { color: var(--gray-900); }
+  .todo-tags { display: flex; gap: .35rem; margin-top: .25rem; flex-wrap: wrap; }
+
+  /* Sub list */
+  .sub-list {
+    font-size: .86rem;
+    color: var(--gray-600);
+    margin-top: .5rem;
+    padding-left: 1.1rem;
+  }
+  .sub-list li { margin-bottom: .25rem; }
+
+  /* Role cards */
+  .role-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: .75rem;
+  }
+  .role-card {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+    transition: box-shadow .15s;
+  }
+  .role-card:hover { box-shadow: var(--shadow); }
+  .role-card .icon {
+    font-size: 1.8rem;
+    margin-bottom: .4rem;
+  }
+  .role-card h4 { font-size: .9rem; font-weight: 600; color: var(--gray-800); margin-bottom: .3rem; }
+  .role-card p { font-size: .8rem; color: var(--gray-600); line-height: 1.5; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 1.5rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 4px; bottom: 4px;
+    width: 2px;
+    background: var(--gray-200);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: .75rem;
+    font-size: .88rem;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 7px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+  .timeline-item .time {
+    font-weight: 700;
+    color: var(--primary);
+    display: inline-block;
+    min-width: 60px;
+  }
+  .timeline-item .desc { color: var(--gray-600); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: .78rem;
+    color: var(--gray-300);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>📋 双环绩效考核流程与系统需求对齐会</h1>
+    <div class="meta">
+      <span>📅 2026年4月17日</span>
+      <span>🏢 双环 × 北森</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-inner">
+
+      <!-- 一、考核周期 & 人群 -->
+      <div class="section">
+        <div class="section-title"><span class="num">1</span> 考核周期 & 人群</div>
+        <table>
+          <thead>
+            <tr><th>维度</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>考核人群</strong></td>
+              <td><span class="badge badge-blue">全员</span> 约 3000+ 人</td>
+            </tr>
+            <tr>
+              <td><strong>薪酬类别</strong></td>
+              <td>大类：计时 / 计件<br>细分：一线管理、职能、计时、<strong>目标责任制</strong>、年薪考核制 等</td>
+            </tr>
+            <tr>
+              <td><strong>月度考核</strong></td>
+              <td>全员均做月度考核。目标责任制 7 级及以下按月；其余全按月</td>
+            </tr>
+            <tr>
+              <td><strong>季度考核</strong></td>
+              <td>目标责任制 <strong>7 级及以上</strong> 按季度 + 年度</td>
+            </tr>
+            <tr>
+              <td><strong>年度考核</strong></td>
+              <td><strong>全员</strong>均有年度考核（与级别无关）<br>年度总权重 200 分（业绩 100 + 管理 100），加减分另计</td>
+            </tr>
+            <tr>
+              <td><strong>特殊人员</strong></td>
+              <td>当月离职、挂靠等按默认系数（80~89 分按一倍系数）</td>
+            </tr>
+            <tr>
+              <td><strong>一线工人</strong></td>
+              <td>仅 5 个指标 + 行为考核，<span class="badge badge-yellow">当前不在系统内考核</span>，账号仅 3,000 个</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 二、绩效管理角色分工 -->
+      <div class="section">
+        <div class="section-title"><span class="num">2</span> 绩效管理角色分工</div>
+        <div class="role-cards">
+          <div class="role-card">
+            <div class="icon">👩‍💼</div>
+            <h4>总部绩效管理员（婷婷）</h4>
+            <p>配表、催办、结束考核<br>全员结果数据导出与强排确认<br>岗位模板建设<br>每月发 16 封邮件确认</p>
+          </div>
+          <div class="role-card">
+            <div class="icon">📝</div>
+            <h4>部门文员</h4>
+            <p>本部门月度绩效发起<br>进度跟进、催促上级审核<br><strong>不直接修改考核结果</strong></p>
+          </div>
+          <div class="role-card">
+            <div class="icon">🏢</div>
+            <h4>分子公司人事</h4>
+            <p>考核发起、配表、结束考核<br>系统异常处理<br><strong>可修改考核数据</strong><br>自行配审批流</p>
+          </div>
+          <div class="role-card">
+            <div class="icon">💡</div>
+            <h4>小芳（绩效策划）</h4>
+            <p>绩效方案策划<br>制定制度<br>审核季度/年度分数</p>
+          </div>
+        </div>
+        <ul class="sub-list" style="margin-top:.75rem;">
+          <li>三方协作模式：总部定模板 → 分公司/部门各自操作 → 总部审核结果 → 导出确认</li>
+          <li>婷婷：季度/年度单独发 Excel 给小芳审核分数（非薪酬）</li>
+          <li>苏老师：绩效方案策划</li>
+        </ul>
+      </div>
+
+      <!-- 三、考核时间点 -->
+      <div class="section">
+        <div class="section-title"><span class="num">3</span> 考核时间点</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="time">1 号</span>
+            <span class="desc">启动考核，一线员工行为考核先发起</span>
+          </div>
+          <div class="timeline-item">
+            <span class="time">7~8 号</span>
+            <span class="desc">发起非一线考核（系统不支持分批发起，需一起发）</span>
+          </div>
+          <div class="timeline-item">
+            <span class="time">9 号</span>
+            <span class="desc">财务数据出（销售额等）</span>
+          </div>
+          <div class="timeline-item">
+            <span class="time">10 号</span>
+            <span class="desc">其他业务线数据出（品质数据可能延迟至 12~13 号）</span>
+          </div>
+          <div class="timeline-item">
+            <span class="time">14 号</span>
+            <span class="desc">所有考核结束（下班前）</span>
+          </div>
+          <div class="timeline-item">
+            <span class="time">15 号</span>
+            <span class="desc">总部审核 + 发 16 封邮件确认</span>
+          </div>
+          <div class="timeline-item">
+            <span class="time">~20 号</span>
+            <span class="desc">薪酬发放（绩效系数需此前确定）</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 四、考核表结构和加减分项 -->
+      <div class="section">
+        <div class="section-title"><span class="num">4</span> 考核表结构和加减分项</div>
+
+        <h4 style="font-size:.92rem; margin-bottom:.5rem;">月度考核表</h4>
+        <table>
+          <thead><tr><th>模块</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><strong>管理指标</strong></td><td>权重 100%，按岗位不同指标项数不同（如制造部长 20 个指标）</td></tr>
+            <tr><td><strong>定量指标</strong></td><td>完成率计算（目标值 / 完成值 / 保底值 / 挑战值 → 公式算分）</td></tr>
+            <tr><td><strong>定性指标</strong></td><td>主观评价类，指标定义根据岗位不同会有差异</td></tr>
+            <tr><td><strong>销售额</strong></td><td>按累计滚动考核，系统用达成率（线下换算后录入）</td></tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:.92rem; margin: 1rem 0 .5rem;">年度考核表（目标责任制 + 年薪考核制人员）</h4>
+        <table>
+          <thead><tr><th>模块</th><th>分值</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><strong>业绩指标</strong></td><td>100 分</td><td>组织绩效维度</td></tr>
+            <tr><td><strong>管理指标</strong></td><td>100 分</td><td>个人绩效维度</td></tr>
+            <tr>
+              <td><strong>加分项</strong></td><td>上限 10 分</td>
+              <td>
+                公司统一 2 项必考 + 各分公司个性化 1~2 项<br>
+                区块得分 ≤ 10 分，单项指标有封顶值<br>
+                总经理个性化价值观考核另设单独区块
+              </td>
+            </tr>
+            <tr>
+              <td><strong>扣分项</strong></td><td>上限 5 分</td>
+              <td>部分岗位（如总经理）有特殊扣分项，单独区块不计入 5 分上限</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:.92rem; margin: 1rem 0 .5rem;">指标计算方式</h4>
+        <table>
+          <thead><tr><th>方式</th><th>说明</th><th>待统一事项</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>完成率制</strong></td>
+              <td>目标值/完成值/保底值/挑战值 → 公式计算得分</td>
+              <td>封顶值不同 → 实际为挑战值差异，非公式差异</td>
+            </tr>
+            <tr>
+              <td><strong>逐扣制</strong></td>
+              <td>每下降 1% 扣 N 分</td>
+              <td>按权重统一控制（权重高扣多、权重低扣少），而非按绝对分数差</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 五、目标制定流程 -->
+      <div class="section">
+        <div class="section-title"><span class="num">5</span> 目标制定流程</div>
+        <div class="flow">
+          <div class="step">指标库搭建</div><span class="arrow">→</span>
+          <div class="step">岗位模板建立</div><span class="arrow">→</span>
+          <div class="step">模板下发</div><span class="arrow">→</span>
+          <div class="step">目标值设定</div><span class="arrow">→</span>
+          <div class="step">员工确认</div><span class="arrow">→</span>
+          <div class="step">上级审批 → 生效</div>
+        </div>
+        <ul class="sub-list">
+          <li>年初按业务模块（品质、运营、设备、人力资源等）确定年度考核指标</li>
+          <li>总部绩效管理员（婷婷）按岗位建立通用考核模板</li>
+          <li>年初一次性定好全年每月目标值 + 季度目标 + 年度目标（12+4+1=17 列）</li>
+          <li>月度目标值不在考核表体现（太长），用数据采集表管理</li>
+          <li>月度目标累计即季度目标（部分指标，非全部，需逐指标定义）</li>
+          <li>指标调整须打报告重新审批，一般不调整</li>
+          <li>当前线下用 Excel 定好后上线，线下签字确认</li>
+        </ul>
+      </div>
+
+      <!-- 六、绩效考核流程 -->
+      <div class="section">
+        <div class="section-title"><span class="num">6</span> 绩效考核流程</div>
+
+        <h4 style="font-size:.92rem; margin-bottom:.5rem;">月度考核流程</h4>
+        <div class="flow">
+          <div class="step">月初发起考核</div><span class="arrow">→</span>
+          <div class="step">配表 / 匹配人</div><span class="arrow">→</span>
+          <div class="step">评价人按指标打分</div><span class="arrow">→</span>
+          <div class="step">结果审核人审核</div><span class="arrow">→</span>
+          <div class="step">结束考核</div><span class="arrow">→</span>
+          <div class="step">总部导出 → 审核强排 → 发邮件</div>
+        </div>
+
+        <h4 style="font-size:.92rem; margin: 1rem 0 .5rem;">审批流（待内部确定）</h4>
+        <table>
+          <thead><tr><th>场景</th><th>流程</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>目标制定</strong></td>
+              <td>员工确认 → 上级审批 → 生效</td>
+              <td>固定流程</td>
+            </tr>
+            <tr>
+              <td><strong>考核（分公司-普通）</strong></td>
+              <td>评价人打分 → 部门负责人审核</td>
+              <td>部门内自行消化</td>
+            </tr>
+            <tr>
+              <td><strong>考核（分公司-特殊）</strong></td>
+              <td>评价人打分 → 部门负责人审核 → 条线总部负责人审核</td>
+              <td>品质经理、人资等</td>
+            </tr>
+            <tr>
+              <td><strong>考核（总部职能）</strong></td>
+              <td>评价人打分 → 部门负责人审核 → 人资负责人审核</td>
+              <td>按职级</td>
+            </tr>
+            <tr>
+              <td><strong>⚠️ 分公司总经理 vs 条线负责人</strong></td>
+              <td colspan="2"><span class="badge badge-red">待定</span> 同级管理冲突，谁有最终审批权未明确</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:.92rem; margin: 1rem 0 .5rem;">系统操作注意事项</h4>
+        <ul class="sub-list">
+          <li>考核方案按考核对象分发（职能和分子公司分开页面）</li>
+          <li>每月需手动核对新增/离职人员（系统不能自动识别新增员工）</li>
+          <li>两人评价一指标时需手动分配，系统显示倍增记录（20指标×2人=40条）</li>
+          <li><strong>双重考核（兼职）</strong>：系统不支持同一人重复出现，需考虑实现方案</li>
+          <li>调分管理：部门长无理由调分需填写理由 + 审批（当前无此功能）</li>
+        </ul>
+      </div>
+
+      <!-- 七、主要痛点 -->
+      <div class="section">
+        <div class="section-title"><span class="num">7</span> 主要痛点</div>
+        <div class="pain-grid">
+          <div class="pain-card">
+            <h4>🔥 数据采集之痛</h4>
+            <ul>
+              <li>数据多层核对、手工加工、Excel 反复传递</li>
+              <li>品质数据延迟严重（12~13号），拖慢整体</li>
+              <li>用友系统与 HR 系统不对接</li>
+              <li><strong>期望</strong>：建立数据中心/平台，自动提取 + 审核流</li>
+            </ul>
+          </div>
+          <div class="pain-card">
+            <h4>⚙️ 系统操作繁琐</h4>
+            <ul>
+              <li>岗位模板配表不支持导入，需手动逐项勾选</li>
+              <li>评价人/审核人设置界面不直观</li>
+              <li>绩效期间选择按字母排序，不便查找</li>
+              <li>每月手动核对新增/离职人员</li>
+            </ul>
+          </div>
+          <div class="pain-card">
+            <h4>📊 导出格式问题</h4>
+            <ul>
+              <li>系统导出格式与总部需求不一致</li>
+              <li>必须按部门分别导出，部分未完成需反复等待</li>
+              <li>导出含多余表头、时间等信息，需手动整理</li>
+              <li>每月发 16 封邮件，拆分工作量大</li>
+            </ul>
+          </div>
+          <div class="pain-card">
+            <h4>🔀 审批流权责不清</h4>
+            <ul>
+              <li>分公司总经理 vs 业务条线负责人审批权冲突</li>
+              <li>同级管理问题未确定</li>
+              <li>并列审批模式如何处理待商议</li>
+              <li>各分子公司自行配审批流，缺乏统一规范</li>
+            </ul>
+          </div>
+          <div class="pain-card">
+            <h4>✏️ 调分管理缺乏留痕</h4>
+            <ul>
+              <li>部门长无理由调分无记录</li>
+              <li>系统偶发计算错误导致分数异常</li>
+              <li>领导希望看到原始分数与调整后分数对比</li>
+              <li>调分需填写理由 + 审批流程（待实现）</li>
+            </ul>
+          </div>
+          <div class="pain-card">
+            <h4>🧩 概念落地困难</h4>
+            <ul>
+              <li>双环长期没有"组织绩效"与"个人绩效"区分</li>
+              <li>担心新系统让业务部门工作量不减反增</li>
+              <li>模板下发后可被修改，总部无法监控</li>
+              <li>组织绩效 → 自动继承到个人绩效的逻辑待落地</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 八、待办事项 -->
+      <div class="section">
+        <div class="section-title"><span class="num">8</span> 待办事项</div>
+        <ul class="todo-list">
+          <li>
+            <span class="todo-num">1</span>
+            <div class="todo-content">
+              <strong>确认岗位模板数量</strong>
+              <div class="todo-tags"><span class="badge badge-green">双环（婷婷）</span></div>
+            </div>
+          </li>
+          <li>
+            <span class="todo-num">2</span>
+            <div class="todo-content">
+              <strong>梳理审批流程 & 明确一/二级审批角色</strong>
+              <div class="todo-tags"><span class="badge badge-red">双环（内部优先）</span></div>
+            </div>
+          </li>
+          <li>
+            <span class="todo-num">3</span>
+            <div class="todo-content">
+              <strong>解决分公司总经理与条线负责人审批权冲突</strong>
+              <div class="todo-tags"><span class="badge badge-red">双环（内部管理问题）</span></div>
+            </div>
+          </li>
+          <li>
+            <span class="todo-num">4</span>
+            <div class="todo-content">
+              <strong>确认加减分项控制规则</strong> — 区块得分上限、单项指标得分上限的系统控制
+              <div class="todo-tags"><span class="badge badge-yellow">双环 + 北森</span></div>
+            </div>
+          </li> 
+          <li>
+            <span class="todo-num">5</span>
+            <div class="todo-content">
+              <strong>双环内部先定好审批权规则</strong> — 配置的前提条件
+              <div class="todo-tags"><span class="badge badge-red">阻塞项</span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">会议纪要 · 2026.04.17</div>
+</div>
+
+</body>
+</html>
