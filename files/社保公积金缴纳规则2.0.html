@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议纪要 — 社保公积金缴纳规则</title>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-light: #e8effd;
+    --primary-dark: #0f3a8e;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #10b981;
+    --info: #3b82f6;
+    --warn: #f59e0b;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.06);
+    --radius: 10px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* ── Header ─────────────────────────────────────── */
+  .header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1a56db 40%, #2563eb 100%);
+    color: #fff;
+    padding: 48px 0 42px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.12) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,.06) 0%, transparent 50%);
+  }
+  .header-inner {
+    max-width: 960px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1;
+  }
+  .header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: .5px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    margin-bottom: 20px;
+    line-height: 1.35;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px 32px;
+    font-size: 14px;
+    opacity: .92;
+  }
+  .meta-grid dt { color: rgba(255,255,255,.65); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+  .meta-grid dd { font-weight: 500; }
+
+  /* ── Layout ─────────────────────────────────────── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  .content { padding: 36px 0 64px; }
+
+  /* ── Section ────────────────────────────────────── */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .section-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    background: #fafbfc;
+  }
+  .section-head .icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .section-head h2 {
+    font-size: 17px; font-weight: 650; color: var(--text);
+  }
+  .section-body { padding: 22px 24px 24px; }
+
+  /* ── Icon colors ────────────────────────────────── */
+  .ic-blue   { background: #dbeafe; color: #2563eb; }
+  .ic-green  { background: #d1fae5; color: #059669; }
+  .ic-purple { background: #ede9fe; color: #7c3aed; }
+  .ic-orange { background: #ffedd5; color: #ea580c; }
+  .ic-pink   { background: #fce7f3; color: #db2777; }
+  .ic-teal   { background: #ccfbf1; color: #0d9488; }
+  .ic-red    { background: #fee2e2; color: #dc2626; }
+  .ic-slate  { background: #f1f5f9; color: #475569; }
+
+  /* ── Tags ───────────────────────────────────────── */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.7;
+    vertical-align: middle;
+  }
+  .tag-high   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .tag-medium { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+  .tag-low    { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+  .tag-info   { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .tag-ok     { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+  .tag-warn   { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+  .tag-danger { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+  /* ── Sub-items ──────────────────────────────────── */
+  .sub-title {
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--primary);
+    margin: 18px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sub-title:first-child { margin-top: 0; }
+  .sub-title::before {
+    content: '';
+    width: 4px; height: 16px;
+    background: var(--primary);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .item-list { padding-left: 18px; margin: 6px 0 12px; }
+  .item-list li { margin-bottom: 5px; color: #334155; }
+  .item-list li strong { color: var(--text); }
+  p.detail { color: #475569; margin: 6px 0 10px; font-size: 14.5px; }
+
+  /* ── Highlights / callouts ──────────────────────── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .callout-warn  { background: #fffbeb; border-left: 4px solid #f59e0b; }
+  .callout-danger { background: #fef2f2; border-left: 4px solid #ef4444; }
+  .callout-info  { background: #eff6ff; border-left: 4px solid #3b82f6; }
+  .callout-ok    { background: #ecfdf5; border-left: 4px solid #10b981; }
+
+  /* ── Table ──────────────────────────────────────── */
+  .table-wrap { overflow-x: auto; margin: 10px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    background: #f1f5f9;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 650;
+    color: #334155;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #f8fafc; }
+
+  /* ── Analysis cards ─────────────────────────────── */
+  .focus-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .focus-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #fafbfc, #fff);
+    position: relative;
+  }
+  .focus-card .num {
+    position: absolute;
+    top: -10px; left: 16px;
+    background: var(--primary);
+    color: #fff;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .focus-card h4 { font-size: 14px; font-weight: 650; margin-bottom: 6px; color: var(--text); }
+  .focus-card p  { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ── Footer ─────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Responsive ─────────────────────────────────── */
+  @media (max-width: 640px) {
+    .header { padding: 32px 0 28px; }
+    .header h1 { font-size: 22px; }
+    .section-body { padding: 16px; }
+    .section-head { padding: 14px 16px; }
+    .meta-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <span class="badge">📋 会议纪要</span>
+    <h1>社保公积金缴纳规则</h1>
+    <dl class="meta-grid">
+      <div><dt>会议日期</dt><dd>2026 年 4 月 22 日</dd></div>
+  
+
+    </dl>
+  </div>
+</header>
+
+<main class="content">
+<div class="container">
+
+<!-- ══════════════ 1. 会议概要 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-blue">📌</div>
+    <h2>会议概要</h2>
+  </div>
+  <div class="section-body">
+    <p class="detail">本次会议聚焦<strong>社保与公积金缴纳规则的系统化落地</strong>、以及<strong>集体计件分摊薪酬计算</p>
+  
+  </div>
+</section>
+
+<!-- ══════════════ 2. 社保与公积金缴纳规则 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-green">🏦</div>
+    <h2>社保与公积金缴纳规则</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">缴纳时间节点</div>
+    <ul class="item-list">
+      <li><strong>社保：</strong>每月 <span class="tag tag-info">25 日</span> 前完成当月参保操作，逾期不可补缴</li>
+      <li><strong>公积金：</strong>每月 <span class="tag tag-info">10 日</span> 前完成当月汇缴</li>
+    </ul>
+
+    <div class="sub-title">跨基地参保机制</div>
+    <ul class="item-list">
+      <li>集团下辖 <strong>6 家子公司</strong>，员工跨基地调动时需协调两地社保对接</li>
+      <li>当前操作方式：<strong>邮件人工对接</strong>，无系统化流转</li>
+    </ul>
+    <div class="callout callout-warn">
+      ⚠️ <strong>合规风险：</strong>邮件对接存在时效延误与信息遗漏风险，建议后续嵌入入职/调动流程节点，系统自动触发参保/停保。
+    </div>
+
+    <div class="callout callout-danger">
+      🚨 <strong>社保缴纳地与合同签署地不一致风险（婷婷提出）：</strong>部分员工合同签署在嘉兴/研究院等法人主体，但实际工作地在玉环，为享受当地人才政策要求在玉环缴纳社保。当前操作方式为线下签纸质合同作申报用途后作废，系统内无记录。<strong>此做法存在重大合规风险</strong>，需在系统上线前与集团（小芳）讨论统一解决方案。目前有 <span class="tag tag-danger">6 家子公司</span>存在此类跨法人挂靠缴纳情况。
+    </div>
+
+    <div class="sub-title">缴费基数规则</div>
+    <ul class="item-list">
+      <li><strong>五险：</strong>按当地最低基数 <span class="tag tag-warn">60%</span> 为下限缴纳</li>
+      <li><strong>公积金：</strong>按<strong>职级分档</strong>确定缴存比例与基数，非统一比例</li>
+    </ul>
+
+    <div class="sub-title">公积金缴纳条件 <span class="tag tag-high">重要补充</span></div>
+    <ul class="item-list">
+      <li><strong>全员社保：</strong>入职即缴纳，无条件限制</li>
+      <li><strong>公积金分层缴纳：</strong>
+        <ul style="margin-top:4px;">
+          <li><strong>入职即缴：</strong>4 级及以上职级，或本科及以上学历 → 入职当月缴纳（10 号前入职当月缴，10 号后入职次月缴）</li>
+          <li><strong>满一年后缴：</strong>其他员工（不符合上述条件）→ 入职满 1 年后开始缴纳公积金</li>
+        </ul>
+      </li>
+  
+    </ul>
+
+    <div class="sub-title">工伤险特殊要求</div>
+    <ul class="item-list">
+      <li>台州地区工伤险：<span class="tag tag-danger">次日生效，不可回溯</span></li>
+      <li>新入职员工须在入职当天完成工伤险参保操作，否则出现工伤由企业全额承担</li>
+      <li><strong>学生工：</strong>仅需缴纳单工伤险种</li>
+      
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════ 3. 社保/公积金操作流程 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-purple">🔄</div>
+    <h2>社保 / 公积金操作流程</h2>
+  </div>
+  <div class="section-body">
+
+    <div class="sub-title">日参保</div>
+    <ul class="item-list">
+      <li>6 个分公司的参保数据通过 <strong>Excel 汇总</strong>后统一操作</li>
+      <li>须<strong>提前一天</strong>准备次日参保名单</li>
+      <li>分公司每日 <span class="tag tag-warn">下午 4 点前</span>提交隔日上班人员的参保信息，由娜娜当天完成社保系统参保操作</li>
+      <li>月均参保量约 <span class="tag tag-info">200 人</span>（随招聘需求波动），高峰期（如批量学生工入职）工作量显著增加</li>
+      <li><strong>痛点：</strong>分公司经常超过 4 点截止时间仍在发送信息；工伤险次日生效的政策要求参保操作必须当天完成</li>
+    </ul>
+
+    <div class="sub-title">月度核对</div>
+    <ul class="item-list">
+      <li><strong>社保：</strong>每月 <span class="tag tag-info">23–24 日</span> 核对当月参保人员名单与基数</li>
+      <li><strong>公积金：</strong>每月 <span class="tag tag-info">8–9 日</span> 核对汇缴明细</li>
+    </ul>
+
+    <div class="sub-title">日退保</div>
+    <ul class="item-list">
+      <li>离职员工当日触发退保操作，与离职业务流程联动</li>
+      <li>当前依赖人工判断时间节点，建议系统自动校验</li>
+      <li>日退保与月度退保并行：部分员工因需及时转到新单位，当天即需办理退保</li>
+      <li>退保信息与参保信息在同一张 Excel 表中，通过邮件发送</li>
+    </ul>
+
+    <div class="sub-title">月度核对流程细节</div>
+    <ul class="item-list">
+      <li><strong>社保核对流程：</strong>
+        <ul style="margin-top:4px;">
+          <li>从社保系统导出最新在缴名单 → 与上月五险花名册合并 → 形成当月完整花名册</li>
+          <li><span class="tag tag-info">23–24 日</span>与分公司核对在职/离职/旷工人员名单</li>
+          <li>分公司半天内反馈核对结果（23 号下午发，24 号上午回）</li>
+          <li><span class="tag tag-info">25 日</span>社保系统关停，花名册定稿</li>
+        </ul>
+      </li>
+      <li><strong>公积金核对流程：</strong>
+        <ul style="margin-top:4px;">
+          <li><span class="tag tag-info">7–9 日</span>核对汇缴明细，标注增员条件（本科+/满一年等）</li>
+          <li><span class="tag tag-info">10 日</span>公积金系统截止，<span class="tag tag-info">11 日</span>划账付款，花名册定稿</li>
+        </ul>
+      </li>
+      <li><strong>退保核对重点：</strong>需核对上月离职未退保人员 + 当月旷工人员 + 当月离职人员，旷工名单截止到 15 号，15–25 号新增旷工需分公司补充</li>
+    </ul>
+
+    <div class="sub-title">异地缴纳未来方案</div>
+    <ul class="item-list">
+      <li>目标：将异地社保/公积金缴纳<strong>嵌入入职流程</strong>，作为必填节点</li>
+      <li>由系统根据员工属地自动分配参保机构与操作人</li>
+    </ul>
+    <div class="callout callout-ok">
+      ✅ <strong>改进方向：</strong>北森平台可配置入离职自动触发任务至对应经办人。
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════ 5. 其他需求 ══════════════ -->
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-slate">📎</div>
+    <h2>其他需求</h2>
+  </div>
+  <div class="section-body">
+    <ul class="item-list">
+      <li><strong>工伤信息管理：</strong>建立工伤事故台账，关联参保信息与赔付进度，实现全流程追踪</li>
+    </ul>
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="section-head">
+    <div class="icon ic-blue">❗️  </div>
+    <h2>待办</h2>
+  </div>
+  <div class="section-body">
+    <p class="detail"><strong></strong>梳理 6 家子公司社保/公积金经办人与流程节点<strong></p>
+  
+  </div>
+</section>
+
+</div>
+</main>
+
+<footer class="footer">
+  <p>📋 2026 年 4 月 22 日 </p>
+</footer>
+
+</body>
+</html>
