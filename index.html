@@ -43,9 +43,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#999;gap:8px}
 .empty .ei{font-size:48px;opacity:.2}
 .ld{text-align:center;padding:40px;color:#999}
-.ld .sp{display:inline-block;width:24px;height:24px;border:2.5px solid #ddd;border-top-color:#4a6fa5;border-radius:50%;animation:sp .6s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-.ld p{font-size:13px;margin-top:8px}
+
 .err{background:#fff5f5;border:1px solid #fcc;border-radius:8px;padding:16px;text-align:center;color:#c44;margin:10px 0}
 .err button{margin-top:8px;padding:6px 16px;border:none;border-radius:6px;background:#4a6fa5;color:#fff;cursor:pointer;font-size:12px}
 
@@ -55,7 +53,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .md h2{font-size:16px;margin-bottom:14px;font-weight:700}
 .md .fg{margin-bottom:12px}
 .md label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
-.md input[type=text],.md input[type=password],.md textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none}
+.md input[type=text],.md textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none}
 .md input:focus,.md textarea:focus{border-color:#4a6fa5;box-shadow:0 0 0 3px rgba(74,111,165,.12)}
 .md textarea{font-family:'Menlo','Consolas',monospace;font-size:12px;resize:vertical;min-height:180px}
 .md .ma{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
@@ -87,7 +85,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 <aside class="side">
   <h1>📋 会议纪要 <small id="cnt"></small></h1>
   <div class="srch"><input id="sI" placeholder="搜索…" autocomplete="off"></div>
-  <div class="list" id="fL"><div class="ld"><div class="sp"></div><p>加载中…</p></div></div>
+  <div class="list" id="fL"></div>
   <div class="sfoot"><button id="btnN">＋ 新建会议纪要</button></div>
 </aside>
 
@@ -139,206 +137,241 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
   </div>
 </div>
 
-<!-- Token -->
-<div class="ov" id="tOv">
-  <div class="md">
-    <h2>🔑 需要验证</h2>
-    <p style="font-size:12px;color:#888;margin-bottom:14px">操作需要 GitHub Token（保存在浏览器中，下次不用再输）</p>
-    <div class="fg"><input type="password" id="tI" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off"></div>
-    <div class="ma">
-      <button class="bs" onclick="closeOv('tOv');_tkRej&&_tkRej()">取消</button>
-      <button class="bp" id="btnT">确定</button>
-    </div>
-  </div>
-</div>
-
 <script>
-const OWNER='ksllove',REPO='shuanghuanjiyao',BR='main',TK_KEY='gh_tk_v5';
-const API=`https://api.github.com/repos/${OWNER}/${REPO}`;
+// ═══ IndexedDB 存储层 ═══
+const DB_NAME = 'MeetingMinutesDB';
+const DB_VER = 1;
+const STORE = 'minutes';
 
-let TOKEN='',FILES=[],ACTIVE=null,EDITING=null,QUEUE=[];
-let _tkRes=null,_tkRej=null;
-
-const $=id=>document.getElementById(id);
-const esc=s=>{const d=document.createElement('div');d.textContent=s||'';return d.innerHTML};
-function toast(m,t='ok'){const e=document.createElement('div');e.className='toast '+t;e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),3000)}
-function closeOv(id){$(id).classList.remove('show')}
-function openOv(id){$(id).classList.add('show')}
-
-// ═══ Token（仅写操作时弹出）═══
-function needTk(){
-  if(TOKEN)return Promise.resolve();
-  const s=localStorage.getItem(TK_KEY);
-  if(s){TOKEN=s;return Promise.resolve()}
-  return new Promise((ok,no)=>{
-    _tkRes=ok;_tkRej=no;$('tI').value='';openOv('tOv');setTimeout(()=>$('tI').focus(),100);
+function openDB() {
+  return new Promise((ok, no) => {
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE)) {
+        db.createObjectStore(STORE, { keyPath: 'name' });
+      }
+    };
+    req.onsuccess = e => ok(e.target.result);
+    req.onerror = e => no(e.target.error);
   });
 }
-$('btnT').onclick=async()=>{
-  const t=$('tI').value.trim();if(!t)return;
-  try{
-    const r=await fetch(API,{headers:{Authorization:'Bearer '+t}});
-    if(!r.ok){toast('Token 无效','er');return}
-    TOKEN=t;localStorage.setItem(TK_KEY,t);closeOv('tOv');_tkRes&&_tkRes();
-  }catch{toast('网络错误','er')}
-};
-$('tI').onkeydown=e=>{if(e.key==='Enter')$('btnT').click()};
 
-// ═══ API ═══
-async function gh(method,path,body){
-  const r=await fetch(`${API}/contents/${path}`,{
-    method,headers:{Authorization:'Bearer '+TOKEN,'Content-Type':'application/json',Accept:'application/vnd.github.v3+json'},
-    body:JSON.stringify(body)
+async function dbGetAll() {
+  const db = await openDB();
+  return new Promise((ok, no) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const st = tx.objectStore(STORE);
+    const req = st.getAll();
+    req.onsuccess = () => ok(req.result);
+    req.onerror = () => no(req.error);
   });
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.message||'操作失败');
-  return d;
 }
 
-// ═══ Load ═══
-async function loadList(){
-  const el=$('fL');
-  el.innerHTML='<div class="ld"><div class="sp"></div><p>加载中…</p></div>';
-  try{
-    const r=await fetch(`${API}/contents/?ref=${BR}`,{headers:{Accept:'application/vnd.github.v3+json'}});
-    if(!r.ok)throw new Error('加载失败 '+r.status);
-    const d=await r.json();
-    FILES=d.filter(f=>f.name.endsWith('.html')&&f.name!=='index.html')
-      .map(f=>({name:f.name,size:f.size,sha:f.sha,url:f.download_url}))
-      .sort((a,b)=>b.name.localeCompare(a.name));
+async function dbGet(name) {
+  const db = await openDB();
+  return new Promise((ok, no) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).get(name);
+    req.onsuccess = () => ok(req.result);
+    req.onerror = () => no(req.error);
+  });
+}
+
+async function dbPut(item) {
+  const db = await openDB();
+  return new Promise((ok, no) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).put(item);
+    tx.oncomplete = () => ok();
+    tx.onerror = () => no(tx.error);
+  });
+}
+
+async function dbDelete(name) {
+  const db = await openDB();
+  return new Promise((ok, no) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).delete(name);
+    tx.oncomplete = () => ok();
+    tx.onerror = () => no(tx.error);
+  });
+}
+
+// ═══ 工具函数 ═══
+let FILES = [], ACTIVE = null, EDITING = null, QUEUE = [];
+
+const $ = id => document.getElementById(id);
+const esc = s => { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML };
+function toast(m, t = 'ok') {
+  const e = document.createElement('div');
+  e.className = 'toast ' + t; e.textContent = m;
+  document.body.appendChild(e); setTimeout(() => e.remove(), 3000);
+}
+function closeOv(id) { $(id).classList.remove('show') }
+function openOv(id) { $(id).classList.add('show') }
+
+// ═══ 加载列表 ═══
+async function loadList() {
+  try {
+    const all = await dbGetAll();
+    FILES = all.map(f => ({
+      name: f.name,
+      size: f.content.length,
+      content: f.content,
+      updated: f.updated || 0
+    })).sort((a, b) => b.name.localeCompare(a.name));
     render();
-  }catch(e){
-    el.innerHTML='<div class="err"><p>'+esc(e.message)+'</p><button onclick="loadList()">🔄 重试</button></div>';
+  } catch (e) {
+    $('fL').innerHTML = '<div class="err"><p>' + esc(e.message) + '</p><button onclick="loadList()">🔄 重试</button></div>';
   }
 }
 
-function render(q){
-  q=(q||'').toLowerCase();
-  const ls=FILES.filter(f=>f.name.toLowerCase().includes(q));
-  $('cnt').textContent=FILES.length+' 条';
-  const el=$('fL');
-  if(!ls.length){el.innerHTML='<div style="text-align:center;padding:24px;color:#666;font-size:12px">'+(FILES.length?'无匹配':'暂无文件')+'</div>';return}
-  el.innerHTML=ls.map(f=>'<div class="fi'+(f.name===ACTIVE?' on':'')+'" data-n="'+esc(f.name)+'"><div class="fn">'+esc(f.name.replace(/\.html?$/i,''))+'</div><div class="fm">'+(f.size/1024).toFixed(1)+' KB</div></div>').join('');
+function render(q) {
+  q = (q || '').toLowerCase();
+  const ls = FILES.filter(f => f.name.toLowerCase().includes(q));
+  $('cnt').textContent = FILES.length + ' 条';
+  const el = $('fL');
+  if (!ls.length) {
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:#666;font-size:12px">' + (FILES.length ? '无匹配' : '暂无文件') + '</div>';
+    return;
+  }
+  el.innerHTML = ls.map(f =>
+    '<div class="fi' + (f.name === ACTIVE ? ' on' : '') + '" data-n="' + esc(f.name) + '">' +
+    '<div class="fn">' + esc(f.name.replace(/\.html?$/i, '')) + '</div>' +
+    '<div class="fm">' + (f.size / 1024).toFixed(1) + ' KB</div></div>'
+  ).join('');
 }
 
-// ═══ View ═══
-async function view(name){
-  ACTIVE=name;render($('sI').value);
-  $('mT').style.display='';$('mTi').textContent=name.replace(/\.html?$/i,'');
-  const mb=$('mB');
-  mb.innerHTML='<div class="ld"><div class="sp"></div><p>加载中…</p></div>';
-  try{
-    const f=FILES.find(x=>x.name===name);if(!f)throw new Error('文件不存在');
-    const r=await fetch(f.url);if(!r.ok)throw new Error('读取失败');
-    const html=await r.text();
-    const safe=html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    mb.innerHTML='<div class="info"><span>📎 '+esc(name)+'</span><span>📏 '+(f.size/1024).toFixed(1)+' KB</span></div><div class="card"><iframe srcdoc="'+safe+'" sandbox="allow-same-origin" onload="fit(this)"></iframe></div>';
-    mb.scrollTop=0;
-  }catch(e){mb.innerHTML='<div class="err"><p>'+esc(e.message)+'</p><button onclick="view(\''+esc(name)+'\')">重试</button></div>'}
+// ═══ 查看 ═══
+function view(name) {
+  ACTIVE = name; render($('sI').value);
+  $('mT').style.display = '';
+  $('mTi').textContent = name.replace(/\.html?$/i, '');
+  const mb = $('mB');
+  const f = FILES.find(x => x.name === name);
+  if (!f) {
+    mb.innerHTML = '<div class="err"><p>文件不存在</p></div>';
+    return;
+  }
+  const safe = f.content.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  mb.innerHTML = '<div class="info"><span>📎 ' + esc(name) + '</span><span>📏 ' + (f.size / 1024).toFixed(1) + ' KB</span></div>' +
+    '<div class="card"><iframe srcdoc="' + safe + '" sandbox="allow-same-origin" onload="fit(this)"></iframe></div>';
+  mb.scrollTop = 0;
 }
 
-function fit(ifr){try{const d=ifr.contentDocument||ifr.contentWindow.document;const r=()=>{ifr.style.height=Math.max(400,d.body.scrollHeight+20)+'px'};r();new ResizeObserver(r).observe(d.body)}catch{}}
+function fit(ifr) {
+  try {
+    const d = ifr.contentDocument || ifr.contentWindow.document;
+    const r = () => { ifr.style.height = Math.max(400, d.body.scrollHeight + 20) + 'px' };
+    r(); new ResizeObserver(r).observe(d.body);
+  } catch {}
+}
 
-// ═══ New ═══
-$('btnN').onclick=async()=>{
-  try{await needTk()}catch{return}
-  QUEUE=[];$('nN').value='';$('nC').value='';$('fQ').innerHTML='';$('fIn').value='';togM();openOv('nOv');
+// ═══ 新建 ═══
+$('btnN').onclick = () => {
+  QUEUE = []; $('nN').value = ''; $('nC').value = '';
+  $('fQ').innerHTML = ''; $('fIn').value = ''; togM(); openOv('nOv');
 };
-$('nOv').onclick=e=>{if(e.target===e.currentTarget)closeOv('nOv')};
-function togM(){$('mI').style.display=QUEUE.length?'none':''}
+$('nOv').onclick = e => { if (e.target === e.currentTarget) closeOv('nOv') };
+function togM() { $('mI').style.display = QUEUE.length ? 'none' : '' }
 
-$('fIn').onchange=e=>{addQ(e.target.files);e.target.value=''};
-const uz=$('upZ');
-uz.ondragover=e=>{e.preventDefault();uz.classList.add('dg')};
-uz.ondragleave=()=>uz.classList.remove('dg');
-uz.ondrop=e=>{e.preventDefault();uz.classList.remove('dg');addQ(e.dataTransfer.files)};
+$('fIn').onchange = e => { addQ(e.target.files); e.target.value = '' };
+const uz = $('upZ');
+uz.ondragover = e => { e.preventDefault(); uz.classList.add('dg') };
+uz.ondragleave = () => uz.classList.remove('dg');
+uz.ondrop = e => { e.preventDefault(); uz.classList.remove('dg'); addQ(e.dataTransfer.files) };
 
-async function addQ(fl){
-  for(const f of Array.from(fl).filter(x=>/\.html?$/i.test(x.name)))QUEUE.push({name:f.name,content:await f.text(),size:f.size});
-  if(!QUEUE.length&&fl.length){toast('请选择 .html 文件','er');return}
+async function addQ(fl) {
+  for (const f of Array.from(fl).filter(x => /\.html?$/i.test(x.name)))
+    QUEUE.push({ name: f.name, content: await f.text(), size: f.size });
+  if (!QUEUE.length && fl.length) { toast('请选择 .html 文件', 'er'); return }
   renderQ();
 }
-function renderQ(){
-  $('fQ').innerHTML=QUEUE.map((f,i)=>'<div class="qi"><span class="qn">'+esc(f.name)+'</span><span class="qs">'+(f.size/1024).toFixed(1)+'KB</span><span class="qst" id="qs'+i+'"></span><button onclick="rmQ('+i+')">✕</button></div>').join('');
+
+function renderQ() {
+  $('fQ').innerHTML = QUEUE.map((f, i) =>
+    '<div class="qi"><span class="qn">' + esc(f.name) + '</span>' +
+    '<span class="qs">' + (f.size / 1024).toFixed(1) + 'KB</span>' +
+    '<span class="qst" id="qs' + i + '"></span>' +
+    '<button onclick="rmQ(' + i + ')">✕</button></div>'
+  ).join('');
   togM();
 }
-window.rmQ=function(i){QUEUE.splice(i,1);renderQ()};
+window.rmQ = function (i) { QUEUE.splice(i, 1); renderQ() };
 
-$('btnS').onclick=async()=>{
-  const btn=$('btnS');btn.disabled=true;
-  try{
-    if(QUEUE.length){
-      let ok=0,fail=0;
-      for(let i=0;i<QUEUE.length;i++){
-        const f=QUEUE[i],st=$('qs'+i);
-        st.textContent='上传…';st.className='qst ld';
-        try{await gh('PUT',f.name,{message:'新增: '+f.name,content:btoa(unescape(encodeURIComponent(f.content)))});st.textContent='✓';st.className='qst ok';ok++}
-        catch{st.textContent='✗';st.className='qst er';fail++}
+$('btnS').onclick = async () => {
+  const btn = $('btnS'); btn.disabled = true;
+  try {
+    if (QUEUE.length) {
+      let ok = 0, fail = 0;
+      for (let i = 0; i < QUEUE.length; i++) {
+        const f = QUEUE[i], st = $('qs' + i);
+        st.textContent = '保存…'; st.className = 'qst ld';
+        try {
+          await dbPut({ name: f.name, content: f.content, updated: Date.now() });
+          st.textContent = '✓'; st.className = 'qst ok'; ok++;
+        } catch {
+          st.textContent = '✗'; st.className = 'qst er'; fail++;
+        }
       }
-      toast(`${ok}成功${fail?' '+fail+'失败':''}`,fail?'er':'ok');
-    }else{
-      const nm=$('nN').value.trim(),ct=$('nC').value.trim();
-      if(!ct){toast('请输入内容','er');btn.disabled=false;return}
-      const fn=(nm||new Date().toISOString().slice(0,10))+'.html';
-      await gh('PUT',fn,{message:'新增: '+fn,content:btoa(unescape(encodeURIComponent(ct)))});
+      toast(`${ok}成功${fail ? ' ' + fail + '失败' : ''}`, fail ? 'er' : 'ok');
+    } else {
+      const nm = $('nN').value.trim(), ct = $('nC').value.trim();
+      if (!ct) { toast('请输入内容', 'er'); btn.disabled = false; return }
+      const fn = (nm || new Date().toISOString().slice(0, 10)) + '.html';
+      await dbPut({ name: fn, content: ct, updated: Date.now() });
       toast('保存成功');
     }
-    await loadList();closeOv('nOv');
-  }catch(e){toast('失败: '+e.message,'er')}
-  btn.disabled=false;
+    await loadList(); closeOv('nOv');
+  } catch (e) { toast('失败: ' + e.message, 'er') }
+  btn.disabled = false;
 };
 
-// ═══ Edit ═══
-window.doEdit=async()=>{
-  if(!ACTIVE)return;
-  try{await needTk()}catch{return}
-  EDITING=ACTIVE;$('eN').value=ACTIVE;$('eC').value='加载中…';openOv('eOv');
-  try{
-    const f=FILES.find(x=>x.name===ACTIVE);if(!f)throw 0;
-    const r=await fetch(f.url);if(!r.ok)throw 0;
-    $('eC').value=await r.text();
-  }catch{toast('加载失败','er');$('eC').value=''}
+// ═══ 编辑 ═══
+window.doEdit = () => {
+  if (!ACTIVE) return;
+  EDITING = ACTIVE;
+  $('eN').value = ACTIVE;
+  const f = FILES.find(x => x.name === ACTIVE);
+  $('eC').value = f ? f.content : '';
+  openOv('eOv');
 };
-$('eOv').onclick=e=>{if(e.target===e.currentTarget)closeOv('eOv')};
+$('eOv').onclick = e => { if (e.target === e.currentTarget) closeOv('eOv') };
 
-$('btnE').onclick=async()=>{
-  const nm=$('eN').value.trim(),ct=$('eC').value;
-  if(!nm||!ct){toast('不能为空','er');return}
-  const btn=$('btnE');btn.disabled=true;
-  try{
-    let sha=FILES.find(f=>f.name===nm)?.sha||null;
-    if(nm!==EDITING){
-      const old=FILES.find(f=>f.name===EDITING);
-      if(old)await gh('DELETE',EDITING,{message:'重命名 → '+nm,sha:old.sha});
-      sha=null;
+$('btnE').onclick = async () => {
+  const nm = $('eN').value.trim(), ct = $('eC').value;
+  if (!nm || !ct) { toast('不能为空', 'er'); return }
+  const btn = $('btnE'); btn.disabled = true;
+  try {
+    if (nm !== EDITING) {
+      await dbDelete(EDITING);
     }
-    await gh('PUT',nm,{message:'更新: '+nm,content:btoa(unescape(encodeURIComponent(ct))),...(sha?{sha}:{})});
-    toast('保存成功');await loadList();closeOv('eOv');view(nm);
-  }catch(e){toast('失败: '+e.message,'er')}
-  btn.disabled=false;
+    await dbPut({ name: nm, content: ct, updated: Date.now() });
+    toast('保存成功'); await loadList(); closeOv('eOv'); view(nm);
+  } catch (e) { toast('失败: ' + e.message, 'er') }
+  btn.disabled = false;
 };
 
-// ═══ Delete ═══
-window.doDel=async()=>{
-  if(!ACTIVE||!confirm('删除「'+ACTIVE+'」？不可恢复'))return;
-  try{await needTk()}catch{return}
-  try{
-    const f=FILES.find(x=>x.name===ACTIVE);if(!f)throw new Error('文件不存在');
-    await gh('DELETE',ACTIVE,{message:'删除: '+ACTIVE,sha:f.sha});
-    toast('已删除');ACTIVE=null;
-    $('mT').style.display='none';
-    $('mB').innerHTML='<div class="empty"><div class="ei">📋</div><p>选择一条会议纪要</p></div>';
+// ═══ 删除 ═══
+window.doDel = async () => {
+  if (!ACTIVE || !confirm('删除「' + ACTIVE + '」？不可恢复')) return;
+  try {
+    await dbDelete(ACTIVE);
+    toast('已删除'); ACTIVE = null;
+    $('mT').style.display = 'none';
+    $('mB').innerHTML = '<div class="empty"><div class="ei">📋</div><p>选择一条会议纪要</p></div>';
     await loadList();
-  }catch(e){toast('删除失败: '+e.message,'er')}
+  } catch (e) { toast('删除失败: ' + e.message, 'er') }
 };
 
-// ═══ Events ═══
-$('fL').onclick=e=>{const it=e.target.closest('.fi');if(it)view(it.dataset.n)};
-let st;$('sI').oninput=e=>{clearTimeout(st);st=setTimeout(()=>render(e.target.value),150)};
-window.addEventListener('online',()=>$('offBar').classList.remove('show'));
-window.addEventListener('offline',()=>$('offBar').classList.add('show'));
+// ═══ 事件 ═══
+$('fL').onclick = e => { const it = e.target.closest('.fi'); if (it) view(it.dataset.n) };
+let st; $('sI').oninput = e => { clearTimeout(st); st = setTimeout(() => render(e.target.value), 150) };
+window.addEventListener('online', () => $('offBar').classList.remove('show'));
+window.addEventListener('offline', () => $('offBar').classList.add('show'));
 
-// ═══ Init ═══
+// ═══ 初始化 ═══
 loadList();
 </script>
 </body>
