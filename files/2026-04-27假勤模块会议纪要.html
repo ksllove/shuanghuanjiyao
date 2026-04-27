@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026-04-27 假勤模块会议纪要</title>
+  <style>
+    :root {
+      --bg: #f4efe8;
+      --paper: #fffdfa;
+      --ink: #2e2a27;
+      --muted: #6a635d;
+      --line: #ddd2c5;
+      --accent: #8f4f2b;
+      --soft: #f6e7d7;
+      --risk: #8c3d30;
+      --warn: #936114;
+      --ok: #2f6750;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, #f7efe5 0%, transparent 32%),
+        linear-gradient(180deg, #eee5d8 0%, var(--bg) 220px);
+      color: var(--ink);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.68;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #fff8f0 0%, #fffdfa 60%, #f8f1e7 100%);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 30px 32px;
+      box-shadow: 0 18px 45px rgba(82, 53, 27, 0.08);
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 12px;
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #4f2f19;
+    }
+
+    h2 {
+      margin-top: 30px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 22px;
+      color: #5f371d;
+    }
+
+    h3 {
+      margin-top: 18px;
+      font-size: 17px;
+      color: #6a3c1f;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 15px;
+      margin-top: 10px;
+    }
+
+    .chips {
+      margin-top: 14px;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 4px 10px;
+      margin: 0 8px 8px 0;
+      border-radius: 999px;
+      background: var(--soft);
+      border: 1px solid #eccfb3;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .card, .meta-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .meta-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .summary {
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: #fff8ef;
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 12px 14px;
+      border-bottom: 1px solid #ebe2d8;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f7ede1;
+      color: #5e3820;
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .risk { color: var(--risk); font-weight: 600; }
+    .warn { color: var(--warn); font-weight: 600; }
+    .ok { color: var(--ok); font-weight: 600; }
+    .footnote { margin-top: 28px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1>假勤模块会议纪要</h1>
+      <p class="lead">结合 2026 年 4 月 27 日当日会议逐字稿整理，围绕集团与营销板块假勤管理现状、规则口径、系统落地问题及后续待办进行归纳。</p>
+
+      <div class="chips">
+        <span class="chip">假勤模块</span>
+        <span class="chip">集团与营销</span>
+        <span class="chip">会议纪要</span>
+        <span class="chip">2026-04-27</span>
+      </div>
+
+      <div class="meta">
+        <div class="meta-card">
+          <strong>会议主题</strong>
+          假勤模块业务调研与考勤管理问题梳理
+        </div>
+        <div class="meta-card">
+          <strong>会议范围</strong>
+          工作日历、考勤方案、休假、加班、出差、公出、月报、应出勤及异常处理
+        </div>
+        <div class="meta-card">
+          <strong>纪要目标</strong>
+          形成实施可用的规则口径、问题清单和后续跟进事项
+        </div>
+      </div>
+
+      <div class="summary">
+        <strong>会议结论概览：</strong>
+        当前集团与营销板块的假勤管理规则已较为完整，但存在大量按部门、人员、特殊场景细分的配置；月报和薪酬前处理环节仍高度依赖人工修正。后续实施的重点，不是单纯还原流程，而是要把<strong>多套工作日历、特殊人群例外、月报口径和薪酬取数</strong>一起拉通。
+      </div>
+    </section>
+
+    <h2>一、现状概览</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>1. 管理现状</h3>
+        <ul>
+          <li>集团与营销考勤当前主要由 1 人集中负责，覆盖人数约 1500 人，包含实习生。</li>
+          <li>除直播场景外，大多数部门没有明确的专职部门考勤员。</li>
+          <li>月末和次月初的统计、核对、修正工作较集中，人工压力较大。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>2. 系统现状</h3>
+        <ul>
+          <li>现阶段主要使用红海云管理考勤方案和规则。</li>
+          <li>打卡方式并存：钉钉、SFA、考勤机。</li>
+          <li>后续计划统一切换飞书考勤机，数据流向需提前规划。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>3. 实施重点</h3>
+        <ul>
+          <li>先厘清主流工作日历与特殊人群边界。</li>
+          <li>再统一月报与薪酬取数口径。</li>
+          <li>最后通过系统配置减少人工核对和线下补数据动作。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>二、已确认的业务规则与场景</h2>
+
+    <h3>1. 工作日历与考勤方案</h3>
+    <div class="card">
+      <ul>
+        <li>当前存在多套工作日历：单休、双休、单双休、单休只休法定、全月排班。</li>
+        <li>新员工适用哪类工作日历，当前并非简单按公司判断，而是按事业部、末级部门乃至特殊人员分层配置。</li>
+        <li>系统内存在工作日历优先级逻辑，支持先按大类方案分配，再逐级细分到更小部门或特殊人员。</li>
+        <li>部分部门内部存在同部门不同考勤规则的情况，因此不能只按一级部门统一配置。</li>
+      </ul>
+    </div>
+
+    <h3>2. 特殊人群场景</h3>
+    <div class="grid">
+      <div class="card">
+        <h3>直播人群</h3>
+        <ul>
+          <li>直播场景由直播负责人在线下排班。</li>
+          <li>直播相关部门约 10 个，排班灵活，不适合做强应出勤管控。</li>
+          <li>工资更多依赖上播时长导入，不完全依赖标准考勤打卡逻辑。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>仓库与客服</h3>
+        <ul>
+          <li>仓库、自营仓、客服等人群存在少排、多工作日历并行等问题。</li>
+          <li>仓库、自营仓和客服更适合做应出勤天数强控。</li>
+          <li>当前初步口径是直播不强控，仓库和客服类重点强控。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>高管与免打卡人员</h3>
+        <ul>
+          <li>部分高管、特殊岗位、司机等需要单独设置方案或免打卡标识。</li>
+          <li>特殊人员不能完全按部门批量管理，需要单独拉出配置。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>3. 休假规则</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>假别</th>
+          <th>当前会议口径</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>年假</td>
+          <td>按工龄计算，月度释放；5 天年假按月释放 0.42 天；入职信息需维护首次缴纳社保时间</td>
+          <td>修改历史工龄后，系统不会自动重算，需关注后续处理口径</td>
+        </tr>
+        <tr>
+          <td>事假</td>
+          <td>事假前置假仍以年假为主，原则上先休年假再休事假</td>
+          <td>与前期资料一致</td>
+        </tr>
+        <tr>
+          <td>病假</td>
+          <td>按天或半天处理，无额外复杂控制</td>
+          <td>医疗期累计规则后续结合系统能力确认</td>
+        </tr>
+        <tr>
+          <td>婚假</td>
+          <td>按经营主体所在地或社保缴纳地执行</td>
+          <td>是否分段休、是否包含公休日仍需最终确认</td>
+        </tr>
+        <tr>
+          <td>产假</td>
+          <td>需提交附件，一次性休完，额度按不同地区政策执行</td>
+          <td>158 / 188 等地区差异需明确最终口径</td>
+        </tr>
+        <tr>
+          <td>护理假</td>
+          <td>即陪产假，当前提到 15 天默认口径</td>
+          <td>是否分段休待确认</td>
+        </tr>
+        <tr>
+          <td>哺乳假</td>
+          <td>每天 1 小时，可早上晚到或下午早走</td>
+          <td>不能混用多种哺乳假管理方式</td>
+        </tr>
+        <tr>
+          <td>调休假</td>
+          <td>与加班、公休日出勤等场景联动</td>
+          <td>部分业务口径还需与实际执行再确认</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>4. 加班、出差、公出与补卡</h3>
+    <div class="card">
+      <ul>
+        <li>直播等特殊场景的周末出勤、非标准班次，需要结合排班和实际管理动作判断，不宜直接套标准方案。</li>
+        <li>出差、外出通常需要根据员工实际班次申请，否则容易产生异常。</li>
+        <li>出差、公出与加班存在联动，提了出差或公出后，如需加班，应保留对应外勤或打卡记录。</li>
+        <li>市内出差与室外出差需要区分，市内出差不享受出差补贴。</li>
+        <li>出差单与阿里商旅存在联动，部分人员为订酒店等动作仍需提出差单，但不代表一定享受差旅补贴。</li>
+        <li>补卡次数、补卡与负激励联动、补卡抄送本人等规则在会上有继续确认。</li>
+        <li>系统应增加补卡在途单据校验，避免请假、病假、年假等流程未归档时补卡造成冲突。</li>
+      </ul>
+    </div>
+
+    <h3>5. 出差补贴场景补充说明</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>场景</th>
+          <th>当前会议口径</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>市内出差</td>
+          <td>市内出差不享受出差补贴</td>
+          <td>需要在表单或报表中与室外出差明确区分</td>
+        </tr>
+        <tr>
+          <td>非长期出差</td>
+          <td>按日计补贴，前期资料口径为餐补 80 元/天、交通补贴 100 元/天</td>
+          <td>需结合薪酬最终取数口径落地</td>
+        </tr>
+        <tr>
+          <td>长期出差</td>
+          <td>长期出差按同一地点大于等于 5 天识别</td>
+          <td>会议中已再次确认这是补贴计算的重要分界点</td>
+        </tr>
+        <tr>
+          <td>长期出差头尾两天</td>
+          <td>头尾两天补贴高于中间天数，原因是头尾两天通常处于路途过程中，补贴标准单独计算</td>
+          <td>会议中明确提到头尾两天与中间天数不按同一标准发放</td>
+        </tr>
+        <tr>
+          <td>长期出差中间天数</td>
+          <td>中间天数补贴低于头尾两天；前期资料口径为餐补按 80 × 0.7 计算</td>
+          <td>需在差旅明细或月报中可识别头尾与中间日期</td>
+        </tr>
+        <tr>
+          <td>交通补贴</td>
+          <td>交通补贴仅发放头尾两天</td>
+          <td>这是会议中明确提到的特殊管理口径，颗粒度较细</td>
+        </tr>
+        <tr>
+          <td>自驾出差</td>
+          <td>自驾不享受每天 100 元的市内交通补贴，但可按规则报销油费</td>
+          <td>需要在出差申请中区分交通工具，如飞机、火车、自驾</td>
+        </tr>
+        <tr>
+          <td>差旅白名单/特殊人员</td>
+          <td>部分人员为了订酒店等仍可能提出差单，但不应自动享受出差补贴</td>
+          <td>系统需要支持“有出差单但无补贴”的场景</td>
+        </tr>
+        <tr>
+          <td>司机出差</td>
+          <td>当前存在通过打卡地点和周末打卡倒推非工作日出差并计算补贴的情况</td>
+          <td>建议后续线上化，减少线下补明细</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>三、月报与数据处理口径</h2>
+
+    <h3>1. 应出勤天数处理</h3>
+    <div class="card">
+      <ul>
+        <li>当前实际操作中，系统排班得出的应出勤天数，需要人工再核一遍。</li>
+        <li>如系统应出勤与人工判断不一致，需要再追查是少排班、特殊人群还是离职等原因造成。</li>
+        <li>这部分工作量较大，1 号导出月报后，单应出勤核对一项通常就需要半天左右。</li>
+      </ul>
+    </div>
+
+    <h3>2. 当前需人工修正的重点场景</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>场景</th>
+          <th>当前处理方式</th>
+          <th>影响</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>应出勤修正</td>
+          <td>人工重算并与系统值对比</td>
+          <td class="warn">耗时大，且依赖业务解释</td>
+        </tr>
+        <tr>
+          <td>产假人员数据</td>
+          <td>逐个查看产假期间包含的工作日，再修正应出勤</td>
+          <td class="warn">每月重复处理，约需 1 小时</td>
+        </tr>
+        <tr>
+          <td>离职员工</td>
+          <td>根据在职期间手动调整应出勤和旷工显示</td>
+          <td class="risk">直接影响算薪</td>
+        </tr>
+        <tr>
+          <td>司机出差补贴</td>
+          <td>根据打卡地点和周末打卡倒推出差明细</td>
+          <td class="risk">依赖线下判断，建议后续线上化</td>
+        </tr>
+        <tr>
+          <td>负激励合计</td>
+          <td>在导出月报中新增列手工汇总</td>
+          <td class="warn">需明确最终计算公式</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3. 月报与关账节点</h3>
+    <div class="card">
+      <ul>
+        <li>上月考勤数据在次月 2 号下班前仍可调整。</li>
+        <li>月报在 1 号先出初稿供薪酬计提，3 号需出终稿用于正式算薪。</li>
+        <li>因此同一月报周期内，考勤数据可能需要至少两轮处理。</li>
+      </ul>
+    </div>
+
+    <h2>四、系统落地建议</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>1. 考勤方案分层配置</h3>
+        <ul>
+          <li>优先按主流工作日历分层。</li>
+          <li>再对直播、司机、高管等特殊人群单独处理。</li>
+          <li>尽量避免过细按岗位穷举，优先使用部门、人员类别、用工形式等标签。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>2. 应出勤强控策略</h3>
+        <ul>
+          <li>直播类人群不建议强控。</li>
+          <li>仓库、自营仓、客服等人群建议重点强控。</li>
+          <li>系统至少应支持输出“工作日历应出勤”和“实际排班应出勤”两个对比口径。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>3. 异常与补卡优化</h3>
+        <ul>
+          <li>补卡前校验在途单据。</li>
+          <li>手机端尽量支持异常提示和快速处理。</li>
+          <li>减少月末线下沟通和重复解释成本。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>4. 数据与薪酬联动</h3>
+        <ul>
+          <li>需尽快与薪酬确认应出勤、实际出勤、产假、负激励等字段取数口径。</li>
+          <li>后续设计应以“月报终稿可直接支撑算薪”为目标。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>五、风险与未决事项</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>事项</th>
+          <th>当前状态</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>直播场景是否完全不做强控</td>
+          <td class="warn">待进一步确认</td>
+          <td>关系到排班、应出勤及薪酬逻辑</td>
+        </tr>
+        <tr>
+          <td>婚假、护理假是否允许分段休及是否含公休日</td>
+          <td class="warn">未最终收口</td>
+          <td>需统一政策口径和系统实现方式</td>
+        </tr>
+        <tr>
+          <td>产假地区差异额度</td>
+          <td class="warn">待明确</td>
+          <td>158 / 188 等不同地区口径需统一</td>
+        </tr>
+        <tr>
+          <td>司机出差是否纳入线上提单</td>
+          <td class="risk">建议调整</td>
+          <td>当前线下补明细风险较高</td>
+        </tr>
+        <tr>
+          <td>长期出差头尾补贴与中间补贴拆分口径</td>
+          <td class="risk">需明确落地方式</td>
+          <td>系统和报表需能准确拆分头尾两天、中间天数及对应补贴标准</td>
+        </tr>
+        <tr>
+          <td>自驾、市内出差、白名单人员补贴排除逻辑</td>
+          <td class="warn">待固化</td>
+          <td>需避免“有出差单即自动发补贴”的误判</td>
+        </tr>
+        <tr>
+          <td>负激励计算公式</td>
+          <td class="risk">待确认</td>
+          <td>当前仍需人工汇总，影响月报稳定性</td>
+        </tr>
+        <tr>
+          <td>飞书考勤机切换后的数据接入方式</td>
+          <td class="warn">待补充</td>
+          <td>需提前规划对接方案</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>六、后续待办</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>待办事项</th>
+          <th>建议动作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>确认直播、仓库、客服等人群的应出勤强控范围</td>
+          <td>先确认哪些部门强控、哪些部门仅提示不限制</td>
+        </tr>
+        <tr>
+          <td>与薪酬确认月报字段取数规则</td>
+          <td>重点确认应出勤、实际出勤、产假、负激励等字段</td>
+        </tr>
+        <tr>
+          <td>确认婚假、护理假、产假等地区政策清单</td>
+          <td>整理经营主体所在地或社保缴纳地对应规则</td>
+        </tr>
+        <tr>
+          <td>梳理司机出差补贴线上化方案</td>
+          <td>评估是否统一要求线上提出差单</td>
+        </tr>
+        <tr>
+          <td>补充出差补贴计算口径</td>
+          <td>明确室内/室外、长期/非长期、头尾两天/中间天数、自驾/非自驾、白名单等补贴规则及报表呈现方式</td>
+        </tr>
+        <tr>
+          <td>梳理现有考勤机品牌、型号、接入路径</td>
+          <td>为后续飞书考勤机切换做准备</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
