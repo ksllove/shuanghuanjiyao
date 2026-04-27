@@ -112,6 +112,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
     <div class="acts">
       <button onclick="doEdit()">✏️ 编辑</button>
       <button onclick="doPreview()">👁 预览</button>
+      <button onclick="doDownload()">⬇️ 下载</button>
       <button class="del" onclick="doDel()">🗑 删除</button>
     </div>
   </div>
@@ -639,6 +640,24 @@ function doDel() {
     $('mB').innerHTML = '<div class="empty"><div class="ei">🌐</div><p>选择或上传文件</p></div>';
     return loadList();
   }).catch(function() { toast('删除失败', 'er') });
+}
+
+function doDownload() {
+  if (!ACTIVE) return;
+  apiGet(ACTIVE)
+    .then(function(d) {
+      var content = b64d(d.content);
+      var blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = ACTIVE;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      toast('✅ 已下载: ' + ACTIVE);
+    })
+    .catch(function(e) {
+      toast('下载失败: ' + e.message, 'er');
+    });
 }
 
 // ═══ 事件 ═══
