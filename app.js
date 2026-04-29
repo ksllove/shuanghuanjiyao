@@ -436,6 +436,17 @@ function dismissDraft() {
 }
 
 
+function loadScript(src) {
+  return new Promise(function(resolve, reject) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+
 // 备用：纯 textarea 编辑器
 function openEditorFallback(title, content, sha) {
   $('editorOverlay').classList.add('show');
@@ -451,31 +462,11 @@ function openEditorFallback(title, content, sha) {
   if (sha) ta.dataset.sha = sha;
 
   ta.addEventListener('keydown', function(e) {
-    // Tab 插入空格
     if (e.key === 'Tab') {
       e.preventDefault();
       var s = ta.selectionStart, en = ta.selectionEnd;
       ta.value = ta.value.substring(0, s) + '  ' + ta.value.substring(en);
       ta.selectionStart = ta.selectionEnd = s + 2;
-      return;
-    }
-    // Enter 自动缩进
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      var s = ta.selectionStart;
-      var before = ta.value.substring(0, s);
-      var after = ta.value.substring(s);
-      var lineStart = before.lastIndexOf('
-') + 1;
-      var line = before.substring(lineStart);
-      var indent = line.match(/^(\s*)/)[1];
-      // 如果上一行以 > 结尾（开标签），增加缩进
-      var extra = /<\/?[a-zA-Z][^>]*>\s*$/.test(before.trim()) && !/<\//.test(before.trim().split('<').pop()) ? '  ' : '';
-      ta.value = before + '
-' + indent + extra + after;
-      ta.selectionStart = ta.selectionEnd = s + 1 + indent.length + extra.length;
-      onEditorChange();
-      return;
     }
   });
 
@@ -655,6 +646,7 @@ function toggleWrap() {
   if (fb) fb.style.whiteSpace = fb.style.whiteSpace === 'pre-wrap' ? 'pre' : 'pre-wrap';
   $('wrapBtn').style.borderColor = $('wrapBtn').style.borderColor ? '' : 'var(--accent)';
 }
+
 
 // ═══ 拖拽分屏 ═══
 (function() {
