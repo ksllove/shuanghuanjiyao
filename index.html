@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>HTML 文件管理器 Pro</title>
+<title>文件管理器 Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="off" id="offBar">⚠️ 网络断开</div>
 
 <aside class="side">
-  <h1>🌐 HTML 管理器 <small id="cnt">0</small></h1>
+  <h1>🌐 文件管理器 <small id="cnt">0</small></h1>
   <div class="tk-bar">
     <input id="tokenInput" type="text" placeholder="粘贴 GitHub Token (ghp_...)" autocomplete="off">
     <button onclick="doSaveToken()">连接</button>
@@ -75,10 +75,8 @@
     <span><kbd>Ctrl</kbd>+<kbd>S</kbd> 保存</span>
     <span><kbd>Ctrl</kbd>+<kbd>F</kbd> 搜索</span>
     <span><kbd>Ctrl</kbd>+<kbd>H</kbd> 替换</span>
-    <span><kbd>Ctrl</kbd>+<kbd>D</kbd> 选择下一个匹配</span>
-    <span><kbd>Ctrl</kbd>+<kbd>/</kbd> 切换注释</span>
     <span><kbd>Ctrl</kbd>+<kbd>Z</kbd> 撤销</span>
-    <span><kbd>Alt</kbd>+<kbd>↑/↓</kbd> 移动行</span>
+
   </div>
 </div>
 
@@ -86,10 +84,10 @@
 <!-- 上传弹窗 -->
 <div class="ov" id="nOv">
   <div class="md">
-    <h2>📤 上传 HTML</h2>
+    <h2>📤 上传文件</h2>
     <div class="fg">
-      <label class="up" id="upZ" for="fIn"><p>📄 点击或拖拽 HTML 文件</p><small>.html / .htm</small></label>
-      <input type="file" id="fIn" accept=".html,.htm" multiple style="display:none">
+      <label class="up" id="upZ" for="fIn"><p>📄 点击或拖拽文件</p><small>支持所有文件类型</small></label>
+      <input type="file" id="fIn" multiple style="display:none">
     </div>
     <div id="fQ"></div>
     <div id="mI">
