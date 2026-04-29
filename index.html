@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>HTML 文件管理器</title>
+<title>HTML 文件管理器 Pro</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:#0f0f1a;color:#e0e0e0;height:100vh;overflow:hidden;display:flex}
@@ -45,9 +45,8 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .md h2{font-size:17px;margin-bottom:18px;font-weight:700;color:#fff}
 .md .fg{margin-bottom:14px}
 .md label{display:block;font-size:12px;font-weight:600;color:#aaa;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-.md input[type=text],.md textarea{width:100%;padding:10px 14px;border:1px solid #2a2a45;border-radius:8px;font-size:13px;outline:none;background:#12122a;color:#e0e0e0}
-.md input:focus,.md textarea:focus{border-color:#6c5ce7}
-.md textarea{font-family:'Menlo','Consolas',monospace;font-size:12px;resize:vertical;min-height:220px;line-height:1.6;tab-size:2}
+.md input[type=text]{width:100%;padding:10px 14px;border:1px solid #2a2a45;border-radius:8px;font-size:13px;outline:none;background:#12122a;color:#e0e0e0}
+.md input:focus{border-color:#6c5ce7}
 .md .ma{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
 .md .ma button{padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none}
 .bp{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff}.bp:hover{filter:brightness(1.1)}
@@ -61,16 +60,51 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .qi .qs{color:#666;font-size:10px}
 .qi .qst{font-size:10px;font-weight:600}.qst.ok{color:#6c5ce7}.qst.er{color:#ff6b6b}.qst.ld{color:#a855f7}
 .qi button{background:none;border:none;color:#ff6b6b;cursor:pointer;font-size:14px}
-.ed-wrap{display:flex;gap:0;border:1px solid #2a2a45;border-radius:10px;overflow:hidden;margin-top:8px}
-.ed-p{flex:1;display:flex;flex-direction:column;min-height:300px}
-.ed-bar{padding:8px 12px;background:#12122a;border-bottom:1px solid #2a2a45;font-size:11px;color:#666;display:flex;align-items:center;justify-content:space-between}
-.ed-bar .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
-.dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
-.code-ed{flex:1;width:100%;padding:14px;background:#0d0d1a;color:#e0e0e0;border:none;outline:none;resize:none;font-family:'Menlo','Consolas',monospace;font-size:12px;line-height:1.7;tab-size:2;overflow:auto}
-.prev-p{flex:1;border-left:1px solid #2a2a45;display:flex;flex-direction:column}
-.prev-p .ed-bar{cursor:pointer}
-.prev-p iframe{flex:1;border:none;background:#fff}
-.tb{display:flex;gap:6px}.tb button{padding:4px 10px;background:#1e1e38;border:1px solid #2a2a45;border-radius:6px;color:#aaa;font-size:11px;cursor:pointer}.tb button:hover{border-color:#6c5ce7;color:#fff}
+
+/* ═══ 编辑器面板 ═══ */
+.editor-overlay{position:fixed;inset:0;background:#0f0f1a;z-index:50;display:none;flex-direction:column}
+.editor-overlay.show{display:flex}
+.eo-bar{padding:10px 20px;background:#16162a;border-bottom:1px solid #2a2a45;display:flex;align-items:center;gap:12px;min-height:50px}
+.eo-bar h2{font-size:15px;font-weight:700;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eo-bar h2 small{font-weight:400;color:#a855f7;margin-left:8px;font-size:12px}
+.eo-bar .acts{display:flex;gap:6px;align-items:center}
+.eo-bar .acts button{padding:6px 14px;border:1px solid #3a3a55;border-radius:8px;background:transparent;font-size:12px;cursor:pointer;color:#aaa;display:flex;align-items:center;gap:4px}
+.eo-bar .acts button:hover{background:#252545;color:#fff;border-color:#6c5ce7}
+.eo-bar .acts .save-btn{background:linear-gradient(135deg,#6c5ce7,#a855f7);color:#fff;border:none}
+.eo-bar .acts .save-btn:hover{filter:brightness(1.1)}
+.eo-bar .acts .close-btn{border-color:#ff5f56;color:#ff6b6b}
+.eo-bar .acts .close-btn:hover{background:#3a1a1a}
+.eo-body{flex:1;display:flex;overflow:hidden;position:relative}
+.eo-editor{flex:1;display:flex;flex-direction:column;min-width:0}
+.eo-preview{flex:1;display:flex;flex-direction:column;border-left:1px solid #2a2a45;min-width:0}
+.eo-preview .preview-header{padding:6px 12px;background:#12122a;border-bottom:1px solid #2a2a45;font-size:11px;color:#666;display:flex;align-items:center;gap:8px}
+.eo-preview .preview-header label{display:flex;align-items:center;gap:4px;cursor:pointer;margin-left:auto;font-size:10px}
+.eo-preview .preview-header input[type=checkbox]{accent-color:#6c5ce7}
+.eo-preview iframe{flex:1;border:none;background:#fff}
+
+.resize-handle{width:5px;background:#2a2a45;cursor:col-resize;flex-shrink:0;transition:background .15s;position:relative;z-index:10}
+.resize-handle:hover,.resize-handle.active{background:#6c5ce7}
+
+.cm-wrap{flex:1;overflow:hidden}
+.cm-wrap .cm-editor{height:100%;background:#0d0d1a}
+.cm-wrap .cm-editor .cm-scroller{font-family:'Menlo','Consolas','Liberation Mono',monospace;font-size:13px;line-height:1.7}
+.cm-wrap .cm-editor .cm-gutters{background:#0a0a16;border-right:1px solid #1a1a30;color:#444}
+.cm-wrap .cm-editor .cm-activeLineGutter{background:#12122a;color:#6c5ce7}
+.cm-wrap .cm-editor .cm-activeLine{background:rgba(108,92,231,.06)}
+.cm-wrap .cm-editor .cm-selectionBackground{background:rgba(108,92,231,.2)!important}
+.cm-wrap .cm-editor .cm-cursor{border-left-color:#a855f7}
+.cm-wrap .cm-editor.cm-focused{outline:none}
+.cm-wrap .cm-editor .cm-tooltip{background:#1a1a30;border:1px solid #2a2a45;color:#e0e0e0}
+.cm-wrap .cm-editor .cm-tooltip-autocomplete ul li[aria-selected]{background:#252545}
+.cm-wrap .cm-editor .cm-searchMatch{background:rgba(168,85,247,.3);outline:1px solid rgba(168,85,247,.5)}
+.cm-wrap .cm-editor .cm-searchMatch.cm-searchMatch-selected{background:rgba(168,85,247,.5)}
+
+.kb-bar{padding:4px 12px;background:#0a0a16;border-top:1px solid #1a1a30;font-size:10px;color:#444;display:flex;gap:16px;flex-wrap:wrap}
+.kb-bar kbd{background:#1a1a30;padding:1px 5px;border-radius:3px;color:#888;font-family:inherit;font-size:10px;border:1px solid #2a2a45}
+
+.emmet-hint{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#1a1a30;border:1px solid #6c5ce7;border-radius:8px;padding:6px 14px;font-size:12px;color:#a855f7;z-index:60;display:none;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.emmet-hint.show{display:block}
+
 .toast{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:500;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.3);animation:si .3s ease}
 .toast.ok{background:linear-gradient(135deg,#6c5ce7,#a855f7)}.toast.er{background:#ff5f56}
 @keyframes si{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -85,7 +119,9 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
 .tk-bar button:hover{filter:brightness(1.1)}
 .st{font-size:10px;padding:3px 10px;border-radius:6px;font-weight:600}
 .st.on{background:#27c93f22;color:#27c93f}.st.off{background:#ff5f5622;color:#ff5f56}
-@media(max-width:768px){body{flex-direction:column}.side{width:100%;min-width:100%;height:45vh}.main{min-height:55vh}.md{width:96vw}.ed-wrap{flex-direction:column}.prev-p{border-left:none;border-top:1px solid #2a2a45}}
+.modal-ed{min-height:200px;max-height:400px;border:1px solid #2a2a45;border-radius:8px;overflow:hidden}
+
+@media(max-width:768px){body{flex-direction:column}.side{width:100%;min-width:100%;height:45vh}.main{min-height:55vh}.md{width:96vw}.eo-body{flex-direction:column}.eo-preview{border-left:none;border-top:1px solid #2a2a45}.resize-handle{width:100%;height:5px;cursor:row-resize}}
 </style>
 </head>
 <body>
@@ -112,7 +148,6 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
     <div class="acts">
       <button onclick="doEdit()">✏️ 编辑</button>
       <button onclick="doPreview()">👁 预览</button>
-      <button onclick="doDownload()">⬇️ 下载</button>
       <button class="del" onclick="doDel()">🗑 删除</button>
     </div>
   </div>
@@ -121,6 +156,46 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
   </div>
 </main>
 
+<!-- 编辑器全屏面板 -->
+<div class="editor-overlay" id="editorOverlay">
+  <div class="eo-bar">
+    <h2 id="eoTitle">编辑</h2>
+    <div class="acts">
+      <button onclick="doFmt()" title="格式化代码">🔧 格式化</button>
+      <button onclick="toggleWrap()" id="wrapBtn" title="切换自动换行">↩️ 换行</button>
+      <button onclick="togglePreview()" id="prevToggleBtn" title="切换预览面板">👁 预览</button>
+      <button class="save-btn" onclick="doSaveEdit()" title="Ctrl+S">💾 保存</button>
+      <button class="close-btn" onclick="closeEditor()">✕ 关闭</button>
+    </div>
+  </div>
+  <div class="eo-body">
+    <div class="eo-editor" id="eoEditor">
+      <div class="cm-wrap" id="cmContainer"></div>
+    </div>
+    <div class="resize-handle" id="resizeHandle"></div>
+    <div class="eo-preview" id="eoPreview">
+      <div class="preview-header">
+        <span>👁 实时预览</span>
+        <label><input type="checkbox" id="autoRefresh" checked> 自动刷新</label>
+      </div>
+      <iframe id="prevFrame"></iframe>
+    </div>
+  </div>
+  <div class="kb-bar">
+    <span><kbd>Ctrl</kbd>+<kbd>S</kbd> 保存</span>
+    <span><kbd>Ctrl</kbd>+<kbd>F</kbd> 搜索</span>
+    <span><kbd>Ctrl</kbd>+<kbd>H</kbd> 替换</span>
+    <span><kbd>Ctrl</kbd>+<kbd>D</kbd> 选择下一个匹配</span>
+    <span><kbd>Ctrl</kbd>+<kbd>/</kbd> 切换注释</span>
+    <span><kbd>Tab</kbd> Emmet 展开</span>
+    <span><kbd>Ctrl</kbd>+<kbd>Z</kbd> 撤销</span>
+    <span><kbd>Alt</kbd>+<kbd>↑/↓</kbd> 移动行</span>
+  </div>
+</div>
+
+<div class="emmet-hint" id="emmetHint"></div>
+
+<!-- 上传弹窗 -->
 <div class="ov" id="nOv">
   <div class="md">
     <h2>📤 上传 HTML</h2>
@@ -131,36 +206,41 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
     <div id="fQ"></div>
     <div id="mI">
       <div class="fg"><label>文件名</label><input type="text" id="nN" placeholder="留空用原文件名"></div>
-      <div class="fg"><label>HTML</label><textarea id="nC" rows="7" placeholder="粘贴 HTML…"></textarea></div>
+      <div class="fg"><label>HTML</label><div class="cm-wrap modal-ed" id="uploadCmWrap"></div></div>
     </div>
     <div class="ma"><button class="bs" onclick="closeOv('nOv')">取消</button><button class="bp" onclick="doSave()">保存</button></div>
   </div>
 </div>
 
-<div class="ov" id="eOv">
-  <div class="md" style="width:95vw;max-width:1400px;height:85vh">
-    <h2>✏️ <span id="eTitle" style="color:#a855f7;font-weight:400"></span></h2>
-    <div class="fg" style="margin-bottom:8px"><label>文件名</label><input type="text" id="eN" style="max-width:400px"></div>
-    <div class="ed-wrap" style="flex:1;min-height:0">
-      <div class="ed-p">
-        <div class="ed-bar"><span><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span> HTML</span>
-          <div class="tb"><button onclick="doFmt()">格式化</button></div>
-        </div>
-        <textarea class="code-ed" id="eC" spellcheck="false"></textarea>
-      </div>
-      <div class="prev-p">
-        <div class="ed-bar" onclick="doRefreshPrev()">👁 预览 <small style="margin-left:auto;color:#6c5ce7">点击刷新</small></div>
-        <iframe id="prevFrame"></iframe>
-      </div>
-    </div>
-    <div class="ma" style="margin-top:12px">
-      <button class="bs" onclick="closeOv('eOv')">取消</button>
-      <button class="bp" onclick="doSaveEdit()">💾 保存</button>
-    </div>
-  </div>
-</div>
+<!-- CodeMirror 6 模块化加载 -->
+<script type="importmap">
+{
+  "imports": {
+    "@codemirror/view": "https://esm.sh/@codemirror/view@6.36.5",
+    "@codemirror/state": "https://esm.sh/@codemirror/state@6.5.2",
+    "@codemirror/commands": "https://esm.sh/@codemirror/commands@6.8.1",
+    "@codemirror/language": "https://esm.sh/@codemirror/language@6.10.8",
+    "@codemirror/lang-html": "https://esm.sh/@codemirror/lang-html@6.4.9",
+    "@codemirror/autocomplete": "https://esm.sh/@codemirror/autocomplete@6.18.6",
+    "@codemirror/search": "https://esm.sh/@codemirror/search@6.5.10",
+    "@codemirror/lint": "https://esm.sh/@codemirror/lint@6.8.4",
+    "@codemirror/autocomplete": "https://esm.sh/@codemirror/autocomplete@6.18.6",
+    "@lezer/html": "https://esm.sh/@lezer/html@1.3.10"
+  }
+}
+</script>
 
-<script>
+<script type="module">
+// ═══ CodeMirror 6 导入 ═══
+import {EditorView, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, allowMultipleSelections, indentOnInput, rectangularSelection, crosshairCursor, highlightActiveLine, highlightSelectionMatches, keymap} from '@codemirror/view';
+import {EditorState} from '@codemirror/state';
+import {defaultKeymap, history, historyKeymap} from '@codemirror/commands';
+import {foldGutter, syntaxHighlighting, defaultHighlightStyle, bracketMatching, indentOnInput as langIndentOnInput} from '@codemirror/language';
+import {html} from '@codemirror/lang-html';
+import {closeBrackets, closeBracketsKeymap, autocompletion, completionKeymap} from '@codemirror/autocomplete';
+import {searchKeymap, highlightSelectionMatches as hsm} from '@codemirror/search';
+import {lintKeymap} from '@codemirror/lint';
+
 // ═══ 全局变量 ═══
 var OWNER = 'ksllove';
 var REPO = 'shuanghuanjiyao';
@@ -173,8 +253,22 @@ var ACTIVE = null;
 var EDITING = null;
 var QUEUE = [];
 var prevTimer = null;
+var editorCm = null;
+var uploadCm = null;
+var previewVisible = true;
+var emmetLoaded = false;
 
-// ═══ DOM 工具 (必须最先定义) ═══
+// Emmet 动态加载
+var emmetExp = null;
+try {
+  var emMod = await import('https://esm.sh/emmet@2.4.7');
+  emmetExp = emMod.default || emMod;
+  emmetLoaded = true;
+} catch(e) {
+  console.warn('Emmet 加载失败，Tab 缩进可用但 Emmet 展开不可用', e);
+}
+
+// ═══ DOM 工具 ═══
 function $(id) { return document.getElementById(id) }
 function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML }
 function toast(m, t) {
@@ -234,11 +328,9 @@ function updateTokenUI() {
   }
 }
 
-function doSaveToken() {
+window.doSaveToken = function() {
   var inp = $('tokenInput');
   var v = inp.value.trim();
-
-  // 如果已连接且没输入新值，断开
   if (!v && TOKEN) {
     TOKEN = '';
     localStorage.removeItem('gh_token');
@@ -248,24 +340,13 @@ function doSaveToken() {
     toast('已断开');
     return;
   }
-
-  if (!v) {
-    toast('请输入 Token', 'er');
-    return;
-  }
-
-  // 去掉可能的空格
+  if (!v) { toast('请输入 Token', 'er'); return }
   v = v.replace(/\s/g, '');
-
   TOKEN = v;
   localStorage.setItem('gh_token', TOKEN);
   toast('正在验证…');
-
   apiFetch(API + '/user')
-    .then(function(r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json() })
     .then(function(d) {
       toast('✅ 已连接: ' + d.login);
       updateTokenUI();
@@ -277,39 +358,24 @@ function doSaveToken() {
       localStorage.removeItem('gh_token');
       updateTokenUI();
     });
-}
-
-// Enter 键
-document.addEventListener('DOMContentLoaded', function() {
-  $('tokenInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') doSaveToken();
-  });
-});
+};
 
 // ═══ GitHub API ═══
 function apiList() {
   return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '?ref=' + BRANCH + '&_=' + Date.now())
-    .then(function(r) {
-      if (r.status === 404) return [];
-      if (!r.ok) throw new Error('API ' + r.status);
-      return r.json();
-    });
+    .then(function(r) { if (r.status === 404) return []; if (!r.ok) throw new Error('API ' + r.status); return r.json() });
 }
 
 function apiGet(name) {
   return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '/' + encodeURIComponent(name) + '?ref=' + BRANCH)
-    .then(function(r) {
-      if (!r.ok) throw new Error('获取失败 ' + r.status);
-      return r.json();
-    });
+    .then(function(r) { if (!r.ok) throw new Error('获取失败 ' + r.status); return r.json() });
 }
 
 function apiPut(name, content, sha) {
   var body = { message: (sha ? '更新: ' : '新建: ') + name, content: b64e(content), branch: BRANCH };
   if (sha) body.sha = sha;
   return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '/' + encodeURIComponent(name), {
-    method: 'PUT',
-    body: JSON.stringify(body)
+    method: 'PUT', body: JSON.stringify(body)
   }).then(function(r) {
     if (!r.ok) return r.json().then(function(e) { throw new Error(e.message || '保存失败 ' + r.status) });
     return r.json().then(function(d) { return d.content });
@@ -318,11 +384,8 @@ function apiPut(name, content, sha) {
 
 function apiDel(name, sha) {
   return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '/' + encodeURIComponent(name), {
-    method: 'DELETE',
-    body: JSON.stringify({ message: '删除: ' + name, sha: sha, branch: BRANCH })
-  }).then(function(r) {
-    if (!r.ok) throw new Error('删除失败 ' + r.status);
-  });
+    method: 'DELETE', body: JSON.stringify({ message: '删除: ' + name, sha: sha, branch: BRANCH })
+  }).then(function(r) { if (!r.ok) throw new Error('删除失败 ' + r.status) });
 }
 
 function ensureDir() {
@@ -355,8 +418,7 @@ function render(q) {
   $('cnt').textContent = FILES.length + ' 个文件';
   var el = $('fL');
   if (!ls.length) {
-    el.innerHTML = '<div style="text-align:center;padding:32px;color:#555;font-size:13px">' +
-      (FILES.length ? '无匹配' : '暂无文件') + '</div>';
+    el.innerHTML = '<div style="text-align:center;padding:32px;color:#555;font-size:13px">' + (FILES.length ? '无匹配' : '暂无文件') + '</div>';
     return;
   }
   var html = '';
@@ -370,14 +432,13 @@ function render(q) {
 }
 
 // ═══ 查看 ═══
-function view(name) {
+window.view = function(name) {
   ACTIVE = name;
   render($('sI').value);
   $('mT').style.display = '';
   $('mTi').textContent = name.replace(/\.html?$/i, '');
   var mb = $('mB');
   mb.innerHTML = '<div style="text-align:center;padding:60px"><div class="ld"></div><p style="color:#666;font-size:13px;margin-top:12px">加载中…</p></div>';
-
   apiGet(name)
     .then(function(d) {
       var content = b64d(d.content);
@@ -386,62 +447,244 @@ function view(name) {
         '<div class="card"><iframe srcdoc="' + safe + '" sandbox="allow-same-origin" onload="fitIfr(this)"></iframe></div>';
       mb.scrollTop = 0;
     })
-    .catch(function(e) {
-      mb.innerHTML = '<div style="padding:40px;text-align:center;color:#ff6b6b">' + esc(e.message) + '</div>';
-    });
-}
+    .catch(function(e) { mb.innerHTML = '<div style="padding:40px;text-align:center;color:#ff6b6b">' + esc(e.message) + '</div>' });
+};
 
-function fitIfr(ifr) {
+window.fitIfr = function(ifr) {
   try {
     var d = ifr.contentDocument || ifr.contentWindow.document;
     var r = function() { ifr.style.height = Math.max(400, d.body.scrollHeight + 30) + 'px' };
     r();
     new ResizeObserver(r).observe(d.body);
   } catch(e) {}
+};
+
+// ═══ CodeMirror 6 实例创建 ═══
+function createCmInstance(parentEl, content, isModal) {
+  var wrap = document.createElement('div');
+  wrap.className = 'cm-wrap';
+  if (isModal) { wrap.style.minHeight = '200px'; wrap.style.maxHeight = '400px'; }
+  else { wrap.style.flex = '1'; }
+  parentEl.appendChild(wrap);
+
+  var extensions = [
+    lineNumbers(),
+    highlightActiveLineGutter(),
+    highlightSpecialChars(),
+    history(),
+    foldGutter(),
+    drawSelection(),
+    dropCursor(),
+    allowMultipleSelections.of(true),
+    langIndentOnInput(),
+    syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+    bracketMatching(),
+    autocompletion(),
+    rectangularSelection(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightSelectionMatches(),
+    html(),
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...completionKeymap,
+      ...lintKeymap,
+      // Tab: Emmet 展开 或 插入空格
+      { key: 'Tab', run: function(view) {
+        var state = view.state;
+        var pos = state.selection.main.head;
+        var line = state.doc.lineAt(pos);
+        var textBefore = line.text.slice(0, pos - line.from);
+        var match = textBefore.match(/[\w\.\#\>\+\*\^\(\)\[\]\$\{\}\/\:]+$/);
+        if (match && emmetLoaded && emmetExp) {
+          try {
+            var expanded = emmetExp(match[0], { syntax: 'html' });
+            if (expanded && expanded !== match[0]) {
+              var from = pos - match[0].length;
+              view.dispatch({
+                changes: { from: from, to: pos, insert: expanded },
+                selection: { anchor: from + expanded.length }
+              });
+              showEmmetHint(match[0] + ' → ' + expanded.substring(0, 50) + (expanded.length > 50 ? '…' : ''));
+              return true;
+            }
+          } catch(e) {}
+        }
+        if (view.state.selection.main.empty) {
+          view.dispatch({ changes: { from: pos, insert: '  ' }, selection: { anchor: pos + 2 } });
+          return true;
+        }
+        return false;
+      }},
+      // Alt+Arrow 移动行
+      { key: 'Alt-ArrowUp', run: function(view) {
+        var state = view.state;
+        var line = state.doc.lineAt(state.selection.main.head);
+        if (line.number <= 1) return false;
+        var prevLine = state.doc.line(line.number - 1);
+        var text = line.text;
+        view.dispatch({
+          changes: [
+            { from: prevLine.from, to: line.to, insert: text + '\n' + prevLine.text }
+          ],
+          selection: { anchor: prevLine.from + text.length }
+        });
+        return true;
+      }},
+      { key: 'Alt-ArrowDown', run: function(view) {
+        var state = view.state;
+        var line = state.doc.lineAt(state.selection.main.head);
+        if (line.number >= state.doc.lines) return false;
+        var nextLine = state.doc.line(line.number + 1);
+        var text = line.text;
+        view.dispatch({
+          changes: [
+            { from: line.from, to: nextLine.to, insert: nextLine.text + '\n' + text }
+          ],
+          selection: { anchor: line.from + nextLine.text.length + 1 + text.length }
+        });
+        return true;
+      }},
+    ]),
+    EditorView.updateListener.of(function(update) {
+      if (update.docChanged) onEditorChange();
+    }),
+    EditorView.theme({
+      '&': { height: '100%' },
+      '.cm-scroller': { overflow: 'auto' },
+    }),
+  ];
+
+  var view = new EditorView({
+    doc: content || '',
+    parent: wrap,
+    extensions: extensions,
+  });
+
+  return view;
 }
 
+// ═══ 编辑器面板 ═══
+function openEditor(title, content, sha) {
+  $('editorOverlay').classList.add('show');
+  $('eoTitle').innerHTML = title;
+  var container = $('cmContainer');
+  if (editorCm) { editorCm.destroy(); container.innerHTML = ''; }
+  editorCm = createCmInstance(container, content || '');
+  if (sha) editorCm._savedSha = sha;
+  setTimeout(doRefreshPrev, 100);
+  setTimeout(function() { editorCm.focus() }, 150);
+}
+
+window.closeEditor = function() {
+  $('editorOverlay').classList.remove('show');
+  if (editorCm) { editorCm.destroy(); editorCm = null; $('cmContainer').innerHTML = ''; }
+};
+
+function getEditorContent() { return editorCm ? editorCm.state.doc.toString() : '' }
+
+function onEditorChange() {
+  clearTimeout(prevTimer);
+  if ($('autoRefresh').checked) prevTimer = setTimeout(doRefreshPrev, 300);
+}
+
+function doRefreshPrev() {
+  var f = $('prevFrame');
+  var c = getEditorContent();
+  try { var d = f.contentDocument || f.contentWindow.document; d.open(); d.write(c); d.close() } catch(e) {}
+}
+
+window.togglePreview = function() {
+  var prev = $('eoPreview');
+  var handle = $('resizeHandle');
+  previewVisible = !previewVisible;
+  if (previewVisible) {
+    prev.style.display = ''; handle.style.display = '';
+    $('prevToggleBtn').style.borderColor = ''; $('prevToggleBtn').style.color = '';
+    doRefreshPrev();
+  } else {
+    prev.style.display = 'none'; handle.style.display = 'none';
+    $('prevToggleBtn').style.borderColor = '#6c5ce7'; $('prevToggleBtn').style.color = '#6c5ce7';
+  }
+};
+
+window.toggleWrap = function() {
+  var scroller = document.querySelector('#cmContainer .cm-scroller');
+  if (!scroller) return;
+  var wrapped = scroller.style.whiteSpace === 'pre-wrap';
+  scroller.style.whiteSpace = wrapped ? 'pre' : 'pre-wrap';
+  scroller.style.wordBreak = wrapped ? '' : 'break-all';
+  $('wrapBtn').style.borderColor = wrapped ? '' : '#6c5ce7';
+  $('wrapBtn').style.color = wrapped ? '' : '#6c5ce7';
+};
+
+// ═══ 拖拽分屏 ═══
+(function() {
+  var handle = $('resizeHandle');
+  var editorPanel = $('eoEditor');
+  var previewPanel = $('eoPreview');
+  var dragging = false, startX, startEditorW;
+
+  handle.addEventListener('mousedown', function(e) {
+    dragging = true; startX = e.clientX;
+    startEditorW = editorPanel.getBoundingClientRect().width;
+    handle.classList.add('active');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    var dx = e.clientX - startX;
+    var container = document.querySelector('.eo-body');
+    var totalW = container.getBoundingClientRect().width - 5;
+    var newEditorW = Math.max(200, Math.min(totalW - 200, startEditorW + dx));
+    var pct = (newEditorW / totalW * 100) + '%';
+    editorPanel.style.flex = 'none'; editorPanel.style.width = pct;
+    previewPanel.style.flex = '1';
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (!dragging) return;
+    dragging = false; handle.classList.remove('active');
+    document.body.style.cursor = ''; document.body.style.userSelect = '';
+  });
+})();
+
 // ═══ 上传 ═══
-function doUpload() {
+window.doUpload = function() {
   QUEUE = [];
   $('nN').value = '';
-  $('nC').value = '';
   $('fQ').innerHTML = '';
   $('fIn').value = '';
   togM();
   openOv('nOv');
-}
+  setTimeout(function() {
+    if (uploadCm) { uploadCm.destroy(); $('uploadCmWrap').innerHTML = ''; }
+    uploadCm = createCmInstance($('uploadCmWrap'), '', true);
+  }, 50);
+};
 
 function togM() { $('mI').style.display = QUEUE.length ? 'none' : '' }
 
-$('fIn').addEventListener('change', function(e) {
-  addQ(e.target.files);
-  e.target.value = '';
-});
+$('fIn').addEventListener('change', function(e) { addQ(e.target.files); e.target.value = '' });
 
 var uz = $('upZ');
 uz.addEventListener('dragover', function(e) { e.preventDefault(); uz.classList.add('dg') });
 uz.addEventListener('dragleave', function() { uz.classList.remove('dg') });
-uz.addEventListener('drop', function(e) {
-  e.preventDefault();
-  uz.classList.remove('dg');
-  addQ(e.dataTransfer.files);
-});
+uz.addEventListener('drop', function(e) { e.preventDefault(); uz.classList.remove('dg'); addQ(e.dataTransfer.files) });
 
 function addQ(fl) {
   var pending = [];
-  for (var i = 0; i < fl.length; i++) {
-    if (/\.html?$/i.test(fl[i].name)) {
-      pending.push(fl[i]);
-    }
-  }
+  for (var i = 0; i < fl.length; i++) { if (/\.html?$/i.test(fl[i].name)) pending.push(fl[i]); }
   if (!pending.length && fl.length) { toast('选 .html 文件', 'er'); return }
-
-  var promises = pending.map(function(f) {
-    return f.text().then(function(text) {
-      QUEUE.push({ name: f.name, content: text, size: f.size });
-    });
-  });
-  Promise.all(promises).then(renderQ);
+  Promise.all(pending.map(function(f) {
+    return f.text().then(function(text) { QUEUE.push({ name: f.name, content: text, size: f.size }) });
+  })).then(renderQ);
 }
 
 function renderQ() {
@@ -455,240 +698,151 @@ function renderQ() {
   togM();
 }
 
-function rmQ(i) { QUEUE.splice(i, 1); renderQ() }
+window.rmQ = function(i) { QUEUE.splice(i, 1); renderQ() };
 
-function doSave() {
-  var btn = event.target;
-  btn.disabled = true;
-
+window.doSave = function() {
+  var btn = event.target; btn.disabled = true;
   function finish() { btn.disabled = false }
 
   if (QUEUE.length) {
-    var ok = 0, fail = 0, total = QUEUE.length, done = 0;
-
+    var ok = 0, fail = 0, total = QUEUE.length;
     function next(i) {
       if (i >= total) {
         toast(ok + ' 个成功' + (fail ? '，' + fail + ' 失败' : ''), fail ? 'er' : 'ok');
         loadList().then(function() { closeOv('nOv'); finish() });
         return;
       }
-      var f = QUEUE[i];
-      var st = $('qs' + i);
-      st.textContent = '上传…';
-      st.className = 'qst ld';
-
-      apiGet(f.name)
-        .catch(function() { return null })
-        .then(function(existing) {
-          var sha = existing ? existing.sha : null;
-          return apiPut(f.name, f.content, sha);
-        })
-        .then(function() {
-          st.textContent = '✓';
-          st.className = 'qst ok';
-          ok++;
-          next(i + 1);
-        })
-        .catch(function(e) {
-          st.textContent = '✗ ' + e.message;
-          st.className = 'qst er';
-          fail++;
-          next(i + 1);
-        });
+      var f = QUEUE[i]; var st = $('qs' + i);
+      st.textContent = '上传…'; st.className = 'qst ld';
+      apiGet(f.name).catch(function() { return null })
+        .then(function(ex) { return apiPut(f.name, f.content, ex ? ex.sha : null) })
+        .then(function() { st.textContent = '✓'; st.className = 'qst ok'; ok++; next(i + 1) })
+        .catch(function(e) { st.textContent = '✗ ' + e.message; st.className = 'qst er'; fail++; next(i + 1) });
     }
     next(0);
   } else {
     var nm = $('nN').value.trim();
-    var ct = $('nC').value.trim();
+    var ct = uploadCm ? uploadCm.state.doc.toString() : '';
     if (!ct) { toast('输入内容', 'er'); finish(); return }
     var fn = (nm || new Date().toISOString().slice(0, 10)) + '.html';
-
-    apiGet(fn)
-      .catch(function() { return null })
-      .then(function(existing) {
-        var sha = existing ? existing.sha : null;
-        return apiPut(fn, ct, sha);
-      })
-      .then(function() {
-        toast('「' + fn + '」已上传');
-        return loadList();
-      })
+    apiGet(fn).catch(function() { return null })
+      .then(function(ex) { return apiPut(fn, ct, ex ? ex.sha : null) })
+      .then(function() { toast('「' + fn + '」已上传'); return loadList() })
       .then(function() { closeOv('nOv'); finish() })
       .catch(function(e) { toast('失败: ' + e.message, 'er'); finish() });
   }
-}
+};
 
 // ═══ 新建 ═══
-function doNew() {
+window.doNew = function() {
   EDITING = null;
-  $('eTitle').textContent = '新文件';
-  $('eN').value = '未命名-' + Date.now().toString(36) + '.html';
-  $('eC').value = '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <title>新页面</title>\n</head>\n<body>\n  <h1>Hello</h1>\n</body>\n</html>';
-  doRefreshPrev();
-  openOv('eOv');
-  setTimeout(function() { $('eC').focus() }, 100);
-}
+  openEditor('📝 新文件', '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <title>新页面</title>\n</head>\n<body>\n  <h1>Hello</h1>\n</body>\n</html>');
+};
 
-// ═══ 编辑器 ═══
-function doEdit() {
+// ═══ 编辑 ═══
+window.doEdit = function() {
   if (!ACTIVE) return;
   EDITING = ACTIVE;
-  $('eTitle').textContent = ACTIVE;
-  $('eN').value = ACTIVE;
-  $('eC').value = '加载中…';
-
   apiGet(ACTIVE)
     .then(function(d) {
-      $('eC').value = b64d(d.content);
-      $('eC').dataset.sha = d.sha;
-      doRefreshPrev();
+      openEditor('✏️ <span style="color:#a855f7;font-weight:400">' + esc(ACTIVE) + '</span>', b64d(d.content), d.sha);
     })
-    .catch(function(e) { $('eC').value = '/* ' + e.message + ' */' });
+    .catch(function(e) { toast('加载失败: ' + e.message, 'er') });
+};
 
-  openOv('eOv');
-  setTimeout(function() { $('eC').focus() }, 100);
-}
+window.doSaveEdit = function() {
+  var nm = EDITING || ('未命名-' + Date.now().toString(36) + '.html');
+  var ct = getEditorContent();
+  var sha = editorCm._savedSha || null;
 
-$('eC').addEventListener('input', function() {
-  clearTimeout(prevTimer);
-  prevTimer = setTimeout(doRefreshPrev, 500);
-});
-
-function doRefreshPrev() {
-  var f = $('prevFrame');
-  var c = $('eC').value;
-  try { var d = f.contentDocument || f.contentWindow.document; d.open(); d.write(c); d.close() } catch(e) {}
-}
-
-$('eC').addEventListener('keydown', function(e) {
-  if (e.key === 'Tab') {
-    e.preventDefault();
-    var t = e.target, s = t.selectionStart, en = t.selectionEnd;
-    t.value = t.value.substring(0, s) + '  ' + t.value.substring(en);
-    t.selectionStart = t.selectionEnd = s + 2;
+  if (!EDITING) {
+    var name = prompt('文件名:', nm);
+    if (!name) return;
+    nm = name.endsWith('.html') ? name : name + '.html';
   }
-  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-    e.preventDefault();
-    doSaveEdit();
-  }
-});
 
-function doSaveEdit() {
-  var nm = $('eN').value.trim();
-  var ct = $('eC').value;
-  if (!nm) { toast('文件名空', 'er'); return }
-
-  var fn = nm.endsWith('.html') ? nm : nm + '.html';
-  var sha = $('eC').dataset.sha || null;
-
-  Promise.resolve()
-    .then(function() {
-      if (EDITING && fn !== EDITING) {
-        return apiGet(EDITING).then(function(old) { return apiDel(EDITING, old.sha) }).catch(function() {});
-      }
-    })
-    .then(function() {
-      if (EDITING && fn !== EDITING) sha = null;
-      return apiPut(fn, ct, sha);
-    })
+  apiPut(nm, ct, sha)
     .then(function(r) {
-      $('eC').dataset.sha = r.sha;
-      toast('「' + fn + '」已保存');
+      if (editorCm) editorCm._savedSha = r.sha;
+      EDITING = nm; ACTIVE = nm;
+      toast('「' + nm + '」已保存');
       return loadList();
     })
-    .then(function() {
-      ACTIVE = fn;
-      render($('sI').value);
-    })
+    .then(function() { render($('sI').value) })
     .catch(function(e) { toast('保存失败: ' + e.message, 'er') });
-}
+};
 
-// ═══ 工具 ═══
-function doFmt() {
-  var ta = $('eC');
-  var code = ta.value;
+// ═══ 格式化 ═══
+window.doFmt = function() {
+  if (!editorCm) return;
+  var code = getEditorContent();
   var indent = 0;
-  ta.value = code.replace(/>\s*</g, '>\n<').split('\n').map(function(l) {
+  var formatted = code.replace(/>\s*</g, '>\n<').split('\n').map(function(l) {
     l = l.trim();
     if (!l) return '';
     if (l.match(/^<\/\w/)) indent = Math.max(0, indent - 1);
     var r = '  '.repeat(indent) + l;
-    if (l.match(/^<\w[^>]*[^\/]>.*$/) && !l.match(/^<(br|hr|img|input|meta|link)/i)) indent++;
+    if (l.match(/^<\w[^>]*[^\/]>.*$/) && !l.match(/^<(br|hr|img|input|meta|link|source|area|base|col|embed|track|wbr)/i)) indent++;
     return r;
   }).join('\n');
+  editorCm.dispatch({ changes: { from: 0, to: editorCm.state.doc.length, insert: formatted } });
   toast('已格式化');
+};
+
+// ═══ Emmet 提示 ═══
+function showEmmetHint(text) {
+  var hint = $('emmetHint');
+  hint.textContent = text;
+  hint.classList.add('show');
+  setTimeout(function() { hint.classList.remove('show') }, 2000);
 }
 
-function doPreview() {
+// ═══ 预览 ═══
+window.doPreview = function() {
   if (!ACTIVE) return;
   apiGet(ACTIVE).then(function(d) {
     var w = window.open('', '_blank');
-    w.document.open();
-    w.document.write(b64d(d.content));
-    w.document.close();
+    w.document.open(); w.document.write(b64d(d.content)); w.document.close();
   }).catch(function() { toast('失败', 'er') });
-}
+};
 
-function doDel() {
+// ═══ 删除 ═══
+window.doDel = function() {
   if (!ACTIVE || !confirm('删除「' + ACTIVE + '」？')) return;
-  apiGet(ACTIVE).then(function(d) {
-    return apiDel(ACTIVE, d.sha);
-  }).then(function() {
-    toast('已删除');
-    ACTIVE = null;
-    $('mT').style.display = 'none';
-    $('mB').innerHTML = '<div class="empty"><div class="ei">🌐</div><p>选择或上传文件</p></div>';
-    return loadList();
-  }).catch(function() { toast('删除失败', 'er') });
-}
-
-function doDownload() {
-  if (!ACTIVE) return;
-  apiGet(ACTIVE)
-    .then(function(d) {
-      var content = b64d(d.content);
-      var blob = new Blob([content], { type: 'text/html;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = ACTIVE;
-      a.click();
-      URL.revokeObjectURL(a.href);
-      toast('✅ 已下载: ' + ACTIVE);
-    })
-    .catch(function(e) {
-      toast('下载失败: ' + e.message, 'er');
-    });
-}
+  apiGet(ACTIVE).then(function(d) { return apiDel(ACTIVE, d.sha) })
+    .then(function() {
+      toast('已删除'); ACTIVE = null;
+      $('mT').style.display = 'none';
+      $('mB').innerHTML = '<div class="empty"><div class="ei">🌐</div><p>选择或上传文件</p></div>';
+      return loadList();
+    }).catch(function() { toast('删除失败', 'er') });
+};
 
 // ═══ 事件 ═══
-$('fL').addEventListener('click', function(e) {
-  var it = e.target.closest('.fi');
-  if (it) view(it.dataset.n);
-});
+$('fL').addEventListener('click', function(e) { var it = e.target.closest('.fi'); if (it) view(it.dataset.n) });
 
 var searchTimer;
-$('sI').addEventListener('input', function(e) {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(function() { render(e.target.value) }, 150);
-});
+$('sI').addEventListener('input', function(e) { clearTimeout(searchTimer); searchTimer = setTimeout(function() { render(e.target.value) }, 150) });
 
 window.addEventListener('online', function() { $('offBar').classList.remove('show') });
 window.addEventListener('offline', function() { $('offBar').classList.add('show') });
 
 document.addEventListener('keydown', function(e) {
   if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); doNew() }
-  if (e.key === 'Escape') { closeOv('nOv'); closeOv('eOv') }
+  if (e.key === 'Escape') {
+    if ($('editorOverlay').classList.contains('show')) { closeEditor(); return }
+    closeOv('nOv');
+  }
 });
 
-// 关闭弹窗
 $('nOv').addEventListener('click', function(e) { if (e.target === this) closeOv('nOv') });
-$('eOv').addEventListener('click', function(e) { if (e.target === this) closeOv('eOv') });
+
+$('tokenInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') doSaveToken() });
 
 // ═══ 初始化 ═══
 updateTokenUI();
-if (TOKEN) {
-  ensureDir().then(loadList);
-}
+if (TOKEN) ensureDir().then(loadList);
+
 </script>
 </body>
 </html>
