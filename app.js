@@ -451,15 +451,18 @@ function loadScript(src) {
 
 async function ensureCm() {
   if (cmLoaded) return true;
+  // 已经加载好了（module script 在页面加载时执行）
+  if (window.CM_READY) {
+    cmLoaded = true;
+    return true;
+  }
   toast('加载编辑器组件…');
   try {
-    // 通过 module 方式加载 CodeMirror 6
-    // 全局变量由底部的 module script 设置
-    // 等待 CM_READY 标志
+    // 等待 CM_READY 标志（module script 异步加载中）
     var waited = 0;
-    while (!window.CM_READY && waited < 15000) {
-      await new Promise(function(r) { setTimeout(r, 200) });
-      waited += 200;
+    while (!window.CM_READY && waited < 20000) {
+      await new Promise(function(r) { setTimeout(r, 300) });
+      waited += 300;
     }
     if (window.CM_READY) {
       cmLoaded = true;
@@ -481,7 +484,7 @@ function openEditorFallback(title, content, sha) {
   var container = $('cmContainer');
   container.innerHTML = '';
   var ta = document.createElement('textarea');
-  ta.style.cssText = 'flex:1;width:100%;padding:14px;background:var(--bg-gutter);color:var(--text);border:none;outline:none;resize:none;font-family:var(--mono);font-size:13px;line-height:1.7;tab-size:2';
+  ta.style.cssText = 'flex:1;width:100%;height:100%;padding:14px;background:var(--bg-gutter);color:var(--text);border:none;outline:none;resize:none;font-family:var(--mono);font-size:13px;line-height:1.7;tab-size:2;min-height:0';
   ta.value = content || '';
   ta.id = 'fallbackEditor';
   ta.spellcheck = false;
