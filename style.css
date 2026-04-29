@@ -495,7 +495,7 @@ body {
 .eo-bar .acts .close-btn:hover { background: rgba(58,26,26,1); }
 
 .eo-body { flex: 1; display: flex; overflow: hidden; position: relative; }
-.eo-editor { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.eo-editor { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
 
 .eo-preview {
   flex: 1;
@@ -542,7 +542,7 @@ body {
 .resize-handle.active { background: var(--accent); }
 
 /* ── CodeMirror 暗色覆盖 ── */
-.cm-wrap { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.cm-wrap { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
 .cm-wrap .cm-editor { flex: 1; min-height: 0; background: var(--bg-gutter); }
 .cm-wrap .cm-editor .cm-scroller {
   font-family: var(--mono);
@@ -551,6 +551,9 @@ body {
   overflow: auto;
   height: 100%;
 }
+
+/* fallback textarea 也需要撑满 */
+.cm-wrap textarea { flex: 1; min-height: 0; }
 
 .cm-wrap .cm-editor .cm-gutters { background: var(--bg-gutter); border-right: 1px solid var(--bg3); color: #444; }
 .cm-wrap .cm-editor .cm-activeLineGutter { background: var(--bg-input); color: var(--accent); }
