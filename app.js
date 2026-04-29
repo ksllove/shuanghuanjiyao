@@ -14,7 +14,6 @@ var ACTIVE = null;
 var EDITING = null;
 var QUEUE = [];
 var prevTimer = null;
-var editorCm = null;
 var previewVisible = true;
 var DRAFT_KEY = 'draft_';
 
@@ -436,47 +435,6 @@ function dismissDraft() {
   }
 }
 
-// ═══ CodeMirror 6 编辑器（延迟加载） ═══
-var cmLoaded = false;
-var emmetExp = null;
-
-function loadScript(src) {
-  return new Promise(function(resolve, reject) {
-    var s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-async function ensureCm() {
-  if (cmLoaded) return true;
-  // 已经加载好了（module script 在页面加载时执行）
-  if (window.CM_READY) {
-    cmLoaded = true;
-    return true;
-  }
-  toast('加载编辑器组件…');
-  try {
-    // 等待 CM_READY 标志（module script 异步加载中）
-    var waited = 0;
-    while (!window.CM_READY && waited < 20000) {
-      await new Promise(function(r) { setTimeout(r, 300) });
-      waited += 300;
-    }
-    if (window.CM_READY) {
-      cmLoaded = true;
-      toast('编辑器加载完成');
-      return true;
-    }
-    throw new Error('加载超时');
-  } catch(e) {
-    toast('编辑器加载失败，使用基础编辑器', 'er');
-    console.error('CM load error:', e);
-    return false;
-  }
-}
 
 // 备用：纯 textarea 编辑器
 function openEditorFallback(title, content, sha) {
@@ -493,11 +451,31 @@ function openEditorFallback(title, content, sha) {
   if (sha) ta.dataset.sha = sha;
 
   ta.addEventListener('keydown', function(e) {
+    // Tab 插入空格
     if (e.key === 'Tab') {
       e.preventDefault();
       var s = ta.selectionStart, en = ta.selectionEnd;
       ta.value = ta.value.substring(0, s) + '  ' + ta.value.substring(en);
       ta.selectionStart = ta.selectionEnd = s + 2;
+      return;
+    }
+    // Enter 自动缩进
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var s = ta.selectionStart;
+      var before = ta.value.substring(0, s);
+      var after = ta.value.substring(s);
+      var lineStart = before.lastIndexOf('
+') + 1;
+      var line = before.substring(lineStart);
+      var indent = line.match(/^(\s*)/)[1];
+      // 如果上一行以 > 结尾（开标签），增加缩进
+      var extra = /<\/?[a-zA-Z][^>]*>\s*$/.test(before.trim()) && !/<\//.test(before.trim().split('<').pop()) ? '  ' : '';
+      ta.value = before + '
+' + indent + extra + after;
+      ta.selectionStart = ta.selectionEnd = s + 1 + indent.length + extra.length;
+      onEditorChange();
+      return;
     }
   });
 
@@ -517,152 +495,17 @@ async function openEditor(title, content, sha) {
     content = draft; // 默认使用草稿
   }
 
-  var loaded = await ensureCm();
-  if (loaded && typeof window.CM_EditorView !== 'undefined') {
-    openEditorCm(title, content, sha);
-  } else {
-    openEditorFallback(title, content, sha);
-  }
-}
-
-function openEditorCm(title, content, sha) {
-  $('editorOverlay').classList.add('show');
-  $('eoTitle').innerHTML = title;
-  var container = $('cmContainer');
-  container.innerHTML = '';
-
-  var EditorView = window.CM_EditorView;
-  var lineNumbers = window.CM_lineNumbers;
-  var highlightActiveLineGutter = window.CM_highlightActiveLineGutter;
-  var highlightSpecialChars = window.CM_highlightSpecialChars;
-  var drawSelection = window.CM_drawSelection;
-  var dropCursor = window.CM_dropCursor;
-  var allowMultipleSelections = window.CM_allowMultipleSelections;
-  var indentOnInput = window.CM_indentOnInput;
-  var rectangularSelection = window.CM_rectangularSelection;
-  var crosshairCursor = window.CM_crosshairCursor;
-  var highlightActiveLine = window.CM_highlightActiveLine;
-  var highlightSelectionMatches = window.CM_highlightSelectionMatches;
-  var keymap = window.CM_keymap;
-  var defaultKeymap = window.CM_defaultKeymap;
-  var history = window.CM_history;
-  var historyKeymap = window.CM_historyKeymap;
-  var foldGutter = window.CM_foldGutter;
-  var syntaxHighlighting = window.CM_syntaxHighlighting;
-  var defaultHighlightStyle = window.CM_defaultHighlightStyle;
-  var bracketMatching = window.CM_bracketMatching;
-  var html = window.CM_html;
-  var closeBrackets = window.CM_closeBrackets;
-  var closeBracketsKeymap = window.CM_closeBracketsKeymap;
-  var autocompletion = window.CM_autocompletion;
-  var completionKeymap = window.CM_completionKeymap;
-  var searchKeymap = window.CM_searchKeymap;
-  var highlightSelectionMatches2 = window.CM_highlightSelectionMatches2;
-  var lintKeymap = window.CM_lintKeymap;
-
-  var wrap = document.createElement('div');
-  wrap.className = 'cm-wrap';
-  wrap.style.flex = '1';
-  container.appendChild(wrap);
-
-  editorCm = new EditorView({
-    doc: content || '',
-    parent: wrap,
-    extensions: [
-      lineNumbers(),
-      highlightActiveLineGutter(),
-      highlightSpecialChars(),
-      history(),
-      foldGutter(),
-      drawSelection(),
-      dropCursor(),
-      allowMultipleSelections.of(true),
-      indentOnInput(),
-      syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-      bracketMatching(),
-      autocompletion(),
-      rectangularSelection(),
-      crosshairCursor(),
-      highlightActiveLine(),
-      highlightSelectionMatches2(),
-      html(),
-      keymap.of([
-        ...closeBracketsKeymap,
-        ...defaultKeymap,
-        ...searchKeymap,
-        ...historyKeymap,
-        ...completionKeymap,
-        ...lintKeymap,
-        { key: 'Tab', run: function(view) {
-          var state = view.state;
-          var pos = state.selection.main.head;
-          var line = state.doc.lineAt(pos);
-          var textBefore = line.text.slice(0, pos - line.from);
-          var match = textBefore.match(/[\w\.\#\>\+\*\^\(\)\[\]\$\{\}\/\:]+$/);
-          if (match && emmetExp) {
-            try {
-              var expanded = emmetExp(match[0], { syntax: 'html' });
-              if (expanded && expanded !== match[0]) {
-                var from = pos - match[0].length;
-                view.dispatch({ changes: { from: from, to: pos, insert: expanded }, selection: { anchor: from + expanded.length } });
-                showEmmetHint(match[0] + ' → ' + expanded.substring(0, 50));
-                return true;
-              }
-            } catch(e) {}
-          }
-          if (view.state.selection.main.empty) {
-            view.dispatch({ changes: { from: pos, insert: '  ' }, selection: { anchor: pos + 2 } });
-            return true;
-          }
-          return false;
-        }},
-        { key: 'Alt-ArrowUp', run: function(view) {
-          var state = view.state;
-          var line = state.doc.lineAt(state.selection.main.head);
-          if (line.number <= 1) return false;
-          var prevLine = state.doc.line(line.number - 1);
-          view.dispatch({ changes: [{ from: prevLine.from, to: line.to, insert: line.text + '\n' + prevLine.text }], selection: { anchor: prevLine.from + line.text.length } });
-          return true;
-        }},
-        { key: 'Alt-ArrowDown', run: function(view) {
-          var state = view.state;
-          var line = state.doc.lineAt(state.selection.main.head);
-          if (line.number >= state.doc.lines) return false;
-          var nextLine = state.doc.line(line.number + 1);
-          view.dispatch({ changes: [{ from: line.from, to: nextLine.to, insert: nextLine.text + '\n' + line.text }], selection: { anchor: line.from + nextLine.text.length + 1 + line.text.length } });
-          return true;
-        }},
-      ]),
-      EditorView.updateListener.of(function(update) {
-        if (update.docChanged) onEditorChange();
-      }),
-      EditorView.theme({ '&': { flex: '1', minHeight: '0' }, '.cm-scroller': { overflow: 'auto', height: '100%' } }),
-    ],
-  });
-
-  editorCm._savedSha = sha || null;
-
-  // 检查草稿
-  var name = EDITING || '_new_';
-  checkDraft(name);
-
-  doRefreshPrev();
-  setTimeout(function() { editorCm.focus() }, 150);
+  openEditorFallback(title, content, sha);
 }
 
 function getEditorContent() {
-  if (editorCm && editorCm.state) return editorCm.state.doc.toString();
   var fb = document.getElementById('fallbackEditor');
   return fb ? fb.value : '';
 }
 
 function setEditorContent(content) {
-  if (editorCm && editorCm.dispatch) {
-    editorCm.dispatch({ changes: { from: 0, to: editorCm.state.doc.length, insert: content } });
-  } else {
-    var fb = document.getElementById('fallbackEditor');
-    if (fb) fb.value = content;
-  }
+  var fb = document.getElementById('fallbackEditor');
+  if (fb) fb.value = content;
 }
 
 function doRefreshPrev() {
@@ -680,16 +523,14 @@ function closeEditor() {
   if (banner) banner.classList.remove('show');
 
   $('editorOverlay').classList.remove('show');
-  if (editorCm) { editorCm.destroy && editorCm.destroy(); editorCm = null; }
   $('cmContainer').innerHTML = '';
 }
 
 function doSaveEdit() {
   var nm = EDITING || ('未命名-' + Date.now().toString(36) + '.html');
   var ct = getEditorContent();
-  var sha = (editorCm && editorCm._savedSha) || null;
   var fb = document.getElementById('fallbackEditor');
-  if (!editorCm && fb) sha = fb.dataset.sha || null;
+  var sha = (fb && fb.dataset.sha) || null;
 
   if (!EDITING) {
     var name = prompt('文件名:', nm);
@@ -699,7 +540,6 @@ function doSaveEdit() {
 
   apiPut(nm, ct, sha)
     .then(function(r) {
-      if (editorCm) editorCm._savedSha = r.sha;
       if (fb) fb.dataset.sha = r.sha;
       EDITING = nm; ACTIVE = nm;
       clearDraft(nm);
@@ -719,12 +559,8 @@ function doFmt() {
     // 简单但更可靠的 HTML 格式化
     var formatted = formatHTML(code);
 
-    if (editorCm && editorCm.dispatch) {
-      editorCm.dispatch({ changes: { from: 0, to: editorCm.state.doc.length, insert: formatted } });
-    } else {
-      var fb = document.getElementById('fallbackEditor');
-      if (fb) fb.value = formatted;
-    }
+    var fb = document.getElementById('fallbackEditor');
+    if (fb) fb.value = formatted;
     toast('已格式化');
   } catch(e) {
     toast('格式化失败', 'er');
@@ -815,22 +651,9 @@ function togglePreview() {
 }
 
 function toggleWrap() {
-  var scroller = document.querySelector('#cmContainer .cm-scroller');
-  if (scroller) {
-    var wrapped = scroller.style.whiteSpace === 'pre-wrap';
-    scroller.style.whiteSpace = wrapped ? 'pre' : 'pre-wrap';
-    scroller.style.wordBreak = wrapped ? '' : 'break-all';
-  }
   var fb = document.getElementById('fallbackEditor');
   if (fb) fb.style.whiteSpace = fb.style.whiteSpace === 'pre-wrap' ? 'pre' : 'pre-wrap';
   $('wrapBtn').style.borderColor = $('wrapBtn').style.borderColor ? '' : 'var(--accent)';
-}
-
-function showEmmetHint(text) {
-  var hint = $('emmetHint');
-  hint.textContent = text;
-  hint.classList.add('show');
-  setTimeout(function() { hint.classList.remove('show') }, 2000);
 }
 
 // ═══ 拖拽分屏 ═══
