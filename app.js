@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════
-   HTML 文件管理器 Pro - 主逻辑
+   文件管理器 Pro - 主逻辑
    ═══════════════════════════════════════ */
 
 // ═══ 全局变量 ═══
@@ -16,6 +16,29 @@ var QUEUE = [];
 var prevTimer = null;
 var previewVisible = true;
 var DRAFT_KEY = 'draft_';
+
+// ═══ 文件类型工具 ═══
+var TEXT_EXTS = /\.(txt|md|markdown|json|js|jsx|ts|tsx|css|scss|less|html|htm|xml|svg|yml|yaml|toml|ini|cfg|conf|sh|bash|zsh|bat|cmd|ps1|py|rb|go|rs|java|c|cpp|h|hpp|cs|php|sql|graphql|gql|csv|tsv|log|env|gitignore|dockerignore|dockerfile|makefile|cmake|gradle|properties|editorconfig|prettierrc|eslintrc|babelrc|lock|sum|mod|htaccess|nginx|conf|lua|r|jl|swift|kt|dart|vue|svelte|astro)$/i;
+var IMG_EXTS = /\.(png|jpg|jpeg|gif|webp|svg|bmp|ico|tiff|avif)$/i;
+
+function getFileIcon(name) {
+  if (/\.md$/i.test(name)) return '📝';
+  if (/\.json$/i.test(name)) return '📋';
+  if (/\.css|scss|less$/i.test(name)) return '🎨';
+  if (/\.js|jsx|ts|tsx$/i.test(name)) return '⚡';
+  if (/\.py$/i.test(name)) return '🐍';
+  if (/\.html?$/i.test(name)) return '🌐';
+  if (/\.xml|svg$/i.test(name)) return '📄';
+  if (IMG_EXTS.test(name)) return '🖼️';
+  if (/\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$/i.test(name)) return '📎';
+  if (/\.(zip|tar|gz|rar|7z)$/i.test(name)) return '📦';
+  return '📄';
+}
+
+function isTextFile(name) {
+  return TEXT_EXTS.test(name);
+}
+
 
 // ═══ DOM 工具 ═══
 function $(id) { return document.getElementById(id) }
@@ -147,8 +170,8 @@ function apiGet(name) {
     .then(function(r) { if (!r.ok) throw new Error('获取失败 ' + r.status); return r.json() });
 }
 
-function apiPut(name, content, sha) {
-  var body = { message: (sha ? '更新: ' : '新建: ') + name, content: b64e(content), branch: BRANCH };
+function apiPut(name, content, sha, binary) {
+  var body = { message: (sha ? '更新: ' : '新建: ') + name, content: binary ? content : b64e(content), branch: BRANCH };
   if (sha) body.sha = sha;
   return apiFetch(API + '/repos/' + OWNER + '/' + REPO + '/contents/' + DIR + '/' + encodeURIComponent(name), {
     method: 'PUT', body: JSON.stringify(body)
@@ -177,7 +200,7 @@ function loadList() {
   return apiList()
     .then(function(items) {
       FILES = items
-        .filter(function(i) { return i.type === 'file' && /\.html?$/i.test(i.name) && i.name !== 'index.html' })
+        .filter(function(i) { return i.type === 'file' && i.name !== '.gitkeep' && i.name !== 'index.html' })
         .map(function(i) { return { name: i.name, sha: i.sha, size: i.size } })
         .sort(function(a, b) { return b.name.localeCompare(a.name) });
       render();
@@ -201,7 +224,7 @@ function render(q) {
   for (var i = 0; i < ls.length; i++) {
     var f = ls[i];
     html += '<div class="fi' + (f.name === ACTIVE ? ' on' : '') + '" data-n="' + esc(f.name) + '">' +
-      '<div class="fn">📄 ' + esc(f.name.replace(/\.html?$/i, '')) + '</div>' +
+      '<div class="fn">' + getFileIcon(f.name) + ' ' + esc(f.name) + '</div>' +
       '<div class="fm">' + fmtSz(f.size) + '</div></div>';
   }
   el.innerHTML = html;
@@ -258,10 +281,16 @@ uz.addEventListener('drop', function(e) { e.preventDefault(); uz.classList.remov
 
 function addQ(fl) {
   var pending = [];
-  for (var i = 0; i < fl.length; i++) { if (/\.html?$/i.test(fl[i].name)) pending.push(fl[i]); }
-  if (!pending.length && fl.length) { toast('选 .html 文件', 'er'); return }
+  for (var i = 0; i < fl.length; i++) { pending.push(fl[i]); }
+  if (!pending.length) return;
   Promise.all(pending.map(function(f) {
-    return f.text().then(function(text) { QUEUE.push({ name: f.name, content: text, size: f.size }) });
+    if (isTextFile(f.name)) {
+      return f.text().then(function(text) { QUEUE.push({ name: f.name, content: text, size: f.size, binary: false }) });
+    } else {
+      return f.arrayBuffer().then(function(buf) {
+        QUEUE.push({ name: f.name, content: btoa(String.fromCharCode.apply(null, new Uint8Array(buf))), size: f.size, binary: true });
+      });
+    }
   })).then(renderQ);
 }
 
@@ -269,7 +298,7 @@ function renderQ() {
   var html = '';
   for (var i = 0; i < QUEUE.length; i++) {
     var f = QUEUE[i];
-    html += '<div class="qi"><span class="qn">📄 ' + esc(f.name) + '</span><span class="qs">' + fmtSz(f.size) + '</span>' +
+    html += '<div class="qi"><span class="qn">' + getFileIcon(f.name) + ' ' + esc(f.name) + '</span><span class="qs">' + fmtSz(f.size) + '</span>' +
       '<span class="qst" id="qs' + i + '"></span><button onclick="rmQ(' + i + ')">✕</button></div>';
   }
   $('fQ').innerHTML = html;
@@ -292,7 +321,7 @@ function doSave() {
       var f = QUEUE[i]; var st = $('qs' + i);
       st.textContent = '上传…'; st.className = 'qst ld';
       apiGet(f.name).catch(function() { return null })
-        .then(function(ex) { return apiPut(f.name, f.content, ex ? ex.sha : null) })
+        .then(function(ex) { return apiPut(f.name, f.content, ex ? ex.sha : null, f.binary) })
         .then(function() { st.textContent = '✓'; st.className = 'qst ok'; ok++; next(i + 1) })
         .catch(function(e) { st.textContent = '✗ ' + e.message; st.className = 'qst er'; fail++; next(i + 1) });
     }
@@ -301,7 +330,7 @@ function doSave() {
     var nm = $('nN').value.trim();
     var ct = $('nC').value.trim();
     if (!ct) { toast('输入内容', 'er'); finish(); return }
-    var fn = (nm || new Date().toISOString().slice(0, 10)) + '.html';
+    var fn = nm || (new Date().toISOString().slice(0, 10) + '.txt');
     apiGet(fn).catch(function() { return null })
       .then(function(ex) { return apiPut(fn, ct, ex ? ex.sha : null) })
       .then(function() { toast('「' + fn + '」已上传'); return loadList() })
@@ -313,13 +342,13 @@ function doSave() {
 // ═══ 新建 ═══
 function doNew() {
   EDITING = null;
-  var content = '<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n  <meta charset="UTF-8">\n  <title>新页面</title>\n</head>\n<body>\n  <h1>Hello</h1>\n</body>\n</html>';
-  openEditor('📝 新文件', content);
+  openEditor('📝 新文件', '');
 }
 
 // ═══ 编辑 ═══
 function doEdit() {
   if (!ACTIVE) return;
+  if (!isTextFile(ACTIVE)) { toast('此文件类型不支持编辑', 'er'); return }
   EDITING = ACTIVE;
   apiGet(ACTIVE)
     .then(function(d) { openEditor('✏️ <span style="color:var(--accent2);font-weight:400">' + esc(ACTIVE) + '</span>', b64d(d.content), d.sha) })
@@ -330,8 +359,16 @@ function doEdit() {
 function doPreview() {
   if (!ACTIVE) return;
   apiGet(ACTIVE).then(function(d) {
-    var w = window.open('', '_blank');
-    w.document.open(); w.document.write(b64d(d.content)); w.document.close();
+    var content = b64d(d.content);
+    if (/\.html?$/i.test(ACTIVE)) {
+      var w = window.open('', '_blank');
+      w.document.open(); w.document.write(content); w.document.close();
+    } else {
+      var w = window.open('', '_blank');
+      w.document.open();
+      w.document.write('<!DOCTYPE html><html><head><title>' + esc(ACTIVE) + '</title><style>body{margin:20px;font-family:monospace;white-space:pre-wrap;word-break:break-all;background:#1e1e1e;color:#d4d4d4;line-height:1.6}</style></head><body>' + esc(content) + '</body></html>');
+      w.document.close();
+    }
   }).catch(function() { toast('失败', 'er') });
 }
 
@@ -506,7 +543,7 @@ function closeEditor() {
 }
 
 function doSaveEdit() {
-  var nm = EDITING || ('未命名-' + Date.now().toString(36) + '.html');
+  var nm = EDITING || ('未命名-' + Date.now().toString(36) + '.txt');
   var ct = getEditorContent();
   var fb = document.getElementById('fallbackEditor');
   var sha = (fb && fb.dataset.sha) || null;
@@ -514,7 +551,7 @@ function doSaveEdit() {
   if (!EDITING) {
     var name = prompt('文件名:', nm);
     if (!name) return;
-    nm = name.endsWith('.html') ? name : name + '.html';
+    nm = name;
   }
 
   apiPut(nm, ct, sha)
