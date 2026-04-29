@@ -219,9 +219,10 @@ function view(name) {
   apiGet(name)
     .then(function(d) {
       var content = b64d(d.content);
-      var safe = content.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       mb.innerHTML = '<div class="info"><span>📎 ' + esc(name) + '</span><span>📏 ' + fmtSz(content.length) + '</span></div>' +
-        '<div class="card"><iframe sandbox="" srcdoc="' + safe + '" onload="fitIfr(this)"></iframe></div>';
+        '<div class="card"><iframe sandbox="allow-same-origin allow-scripts" onload="fitIfr(this)"></iframe></div>';
+      var ifr = mb.querySelector('iframe');
+      ifr.srcdoc = content;
       mb.scrollTop = 0;
     })
     .catch(function(e) { mb.innerHTML = '<div style="padding:40px;text-align:center;color:var(--red2)">' + esc(e.message) + '</div>' });
